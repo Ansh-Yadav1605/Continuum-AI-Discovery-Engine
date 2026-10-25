@@ -10,15 +10,16 @@
 *.key
 *.cert
 
-# 2. Local Research Data & Databases (Contains raw participant PII & local SQLite)
-data/
-*.db
+# 2. Local Research Data & Databases
+data/*
+!data/sip_discovery.db
 *.db-wal
 *.db-shm
 *.sqlite
 *.sqlite3
 *.db.bak
 *.bak
+*backup*.db
 
 # 3. Scratch & Temporary Scripts
 scratch/
@@ -28,6 +29,7 @@ _backup_pre_deployment/
 *.csv
 !chrome_extension/*.csv
 !docs/*.csv
+!tests/fixtures/*.csv
 
 # 5. Python Runtime, Caches, & Build Artifacts
 __pycache__/

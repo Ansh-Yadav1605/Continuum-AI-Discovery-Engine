@@ -65,23 +65,27 @@ def get_evidence_gaps() -> Dict[str, Any]:
 
 def generate_interview_questions(
     theme_name: Optional[str] = None,
-    problem_title: Optional[str] = None
+    problem_title: Optional[str] = None,
+    use_ai: bool = False
 ) -> List[Dict[str, str]]:
     """
     Generates neutral, open-ended interview questions for target user interviews.
     Ensures zero leading questions and covers key discovery objectives.
+    Default (use_ai=False) uses instant curated discovery questions.
+    Set use_ai=True to formulate dynamic questions via Groq API.
     """
-    api_key = get_api_key()
-    client = get_client() if api_key and api_key != "your_key_here" else None
+    if use_ai:
+        api_key = get_api_key()
+        client = get_client() if api_key and api_key != "your_key_here" else None
 
-    context_str = f"Theme: {theme_name or 'General First-Time SIP Continuation'}"
-    if problem_title:
-        context_str += f" | Problem Context: {problem_title}"
+        context_str = f"Theme: {theme_name or 'General First-Time SIP Continuation'}"
+        if problem_title:
+            context_str += f" | Problem Context: {problem_title}"
 
-    if client:
-        try:
-            model = get_model_name()
-            prompt = f"""
+        if client:
+            try:
+                model = get_model_name()
+                prompt = f"""
 You are a Senior User Researcher conducting discovery interviews with first-time mutual fund investors on Groww.
 Context: {context_str}
 
@@ -98,30 +102,30 @@ STRICT RULES:
   }}
 ]
 """
-            response = client.chat.completions.create(
-                model=model,
-                messages=[{"role": "user", "content": prompt}],
-                temperature=0.2,
-                response_format={"type": "json_object"}
-            )
-            raw = response.choices[0].message.content.strip()
-            parsed = json.loads(raw)
-            if isinstance(parsed, dict):
-                for v in parsed.values():
-                    if isinstance(v, list):
-                        parsed = v
-                        break
-            if isinstance(parsed, list):
-                # Filter out any accidentally leading questions
-                clean_q = []
-                for item in parsed:
-                    q_text = item.get("question", "")
-                    if not LEADING_WORDS_PATTERN.search(q_text):
-                        clean_q.append(item)
-                if clean_q:
-                    return clean_q
-        except Exception:
-            pass
+                response = client.chat.completions.create(
+                    model=model,
+                    messages=[{"role": "user", "content": prompt}],
+                    temperature=0.2,
+                    response_format={"type": "json_object"}
+                )
+                raw = response.choices[0].message.content.strip()
+                parsed = json.loads(raw)
+                if isinstance(parsed, dict):
+                    for v in parsed.values():
+                        if isinstance(v, list):
+                            parsed = v
+                            break
+                if isinstance(parsed, list):
+                    # Filter out any accidentally leading questions
+                    clean_q = []
+                    for item in parsed:
+                        q_text = item.get("question", "")
+                        if not LEADING_WORDS_PATTERN.search(q_text):
+                            clean_q.append(item)
+                    if clean_q:
+                        return clean_q
+            except Exception:
+                pass
 
     # High-quality neutral curated fallback questions
     return [

@@ -277,7 +277,12 @@ for p in all_problems:
             st.markdown("#### 🎙️ Non-Leading Discovery Interview Questions")
             st.caption("Neutral, open-ended questions designed to test this hypothesis without priming or biasing respondents.")
             
-            questions = generate_interview_questions(problem_title=p["title"])
+            if st.button("🤖 Formulate Custom AI Questions with Groq", key=f"btn_ai_q_{pid}"):
+                with st.spinner("Formulating neutral questions with Groq AI..."):
+                    questions = generate_interview_questions(problem_title=p["title"], use_ai=True)
+            else:
+                questions = generate_interview_questions(problem_title=p["title"], use_ai=False)
+
             for q_idx, q in enumerate(questions, 1):
                 st.markdown(f"**{q_idx}. [{q['area']}]** {q['question']}")
                 st.caption(f"*Rationale:* {q['rationale']}")

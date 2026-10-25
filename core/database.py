@@ -9,6 +9,7 @@ Database path: data/sip_discovery.db (relative to project root).
 import sqlite3
 import os
 import uuid
+import json
 from datetime import datetime, timezone
 from contextlib import contextmanager
 
@@ -288,6 +289,129 @@ def init_db():
                 "INSERT INTO themes (theme_name, theme_definition, is_active, created_at) VALUES (?, ?, 1, ?)",
                 [(name, defn, now) for name, defn in PROVISIONAL_TAXONOMY]
             )
+
+        # Pre-populate candidate problems from candidate_problems.json if empty
+        prob_count = conn.execute("SELECT COUNT(*) FROM problem_statements").fetchone()[0]
+        if prob_count == 0:
+            _seed_candidate_problems(conn)
+
+        # Pre-populate sample records if records table is empty
+        rec_count = conn.execute("SELECT COUNT(*) FROM records").fetchone()[0]
+        if rec_count == 0:
+            _seed_sample_records()
+
+
+def _seed_candidate_problems(conn):
+    """Seed audited candidate problem statements and scores from candidate_problems.json."""
+    json_path = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), "candidate_problems.json")
+    if not os.path.exists(json_path):
+        json_path = "candidate_problems.json"
+    if not os.path.exists(json_path):
+        return
+
+    try:
+        with open(json_path, "r", encoding="utf-8") as f:
+            data = json.load(f)
+
+        now = datetime.now(timezone.utc).isoformat()
+        weights = {
+            "evidence_strength": 0.25,
+            "sip_relevance": 0.25,
+            "user_severity": 0.15,
+            "product_influence": 0.15,
+            "feasibility": 0.10,
+            "safety_compliance": 0.10
+        }
+
+        for item in data.get("candidate_problems", []):
+            pid = item.get("problem_id")
+            title = item.get("title")
+            orig = item.get("original_candidate", {})
+            rev = item.get("revised_candidate", {})
+
+            obs = orig.get("observation", "")
+            interp = orig.get("interpretation", "")
+            hyp = orig.get("hypothesis", "")
+            limitations = orig.get("limitations", "")
+            statement = rev.get("problem_statement", "")
+
+            conn.execute(
+                """
+                INSERT OR IGNORE INTO problem_statements (
+                    problem_id, title, user_segment, journey_stage, observation,
+                    interpretation, hypothesis, user_need, workaround, limitations,
+                    validation_status, is_ai_generated, created_at, updated_at
+                ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+                """,
+                (
+                    pid,
+                    title,
+                    "First-time mutual fund investors",
+                    "Months 1-3 post initial instalment",
+                    obs or statement,
+                    interp,
+                    hyp,
+                    "Predictable expectations & seamless automated investing",
+                    "Manual interventions or premature cancellation",
+                    limitations or "Observational data; requires 1:1 validation.",
+                    "needs_research",
+                    0,
+                    now,
+                    now
+                )
+            )
+
+            raw_scores = orig.get("scores", {})
+            ev_s = min(5, max(1, round(raw_scores.get("evidenceStrength", 80) / 20)))
+            sip_r = min(5, max(1, round(raw_scores.get("relevance", 80) / 20)))
+            sev = min(5, max(1, round(raw_scores.get("severity", 80) / 20)))
+            prod_inf = min(5, max(1, round(raw_scores.get("influence", 80) / 20)))
+            feas = min(5, max(1, round(raw_scores.get("feasibility", 80) / 20)))
+            safe_c = min(5, max(1, round(raw_scores.get("compliance", 80) / 20)))
+
+            weighted = (
+                ev_s * weights["evidence_strength"] +
+                sip_r * weights["sip_relevance"] +
+                sev * weights["user_severity"] +
+                prod_inf * weights["product_influence"] +
+                feas * weights["feasibility"] +
+                safe_c * weights["safety_compliance"]
+            )
+
+            conn.execute(
+                """
+                INSERT OR IGNORE INTO scores (
+                    score_id, problem_id, evidence_strength, sip_relevance,
+                    user_severity, product_influence, feasibility, safety_compliance,
+                    weighted_score, justification, scored_by, created_at
+                ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+                """,
+                (
+                    f"score_{pid}",
+                    pid,
+                    ev_s,
+                    sip_r,
+                    sev,
+                    prod_inf,
+                    feas,
+                    safe_c,
+                    round(weighted, 2),
+                    f"Audited candidate score based on {rev.get('total_verified_records', 10)} verified citations.",
+                    "Audited Baseline",
+                    now
+                )
+            )
+    except Exception:
+        pass
+
+
+def _seed_sample_records():
+    """Load sample datasets into records table if database is completely empty."""
+    try:
+        from tests.sample_data import load_sample_dataset
+        load_sample_dataset()
+    except Exception:
+        pass
 
 
 # ──────────────────────────────────────────────
