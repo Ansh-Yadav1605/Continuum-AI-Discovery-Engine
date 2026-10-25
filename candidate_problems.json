@@ -1,0 +1,621 @@
+{
+  "metadata": {
+    "title": "Audited & Grounded Candidate Problem Statements",
+    "description": "Evidence audit and rigorous revision of AI Discovery candidate problem statements for 12-month SIP continuation on Groww. Fabricated citations, unsupported causal statements, unverified fee figures, and arbitrary churn percentage predictions have been removed. All citations are verified against data/sip_discovery.db (570 total records).",
+    "database_file": "data/sip_discovery.db",
+    "total_records_in_db": 570,
+    "active_secondary_records": 511,
+    "quarantined_vault_records": 59,
+    "audit_completed_at": "2026-10-25T18:15:00+05:30",
+    "score_methodology_disclaimer": "Heuristic discovery scores represent exploratory PM opportunity prioritization based on 6 qualitative dimensions (Evidence Grounding, SIP Relevance, User Severity, Product Influence, Feasibility, and Safety Compliance). They are NOT measured business impact metrics and DO NOT predict empirical churn reduction percentages."
+  },
+  "audit_summary": {
+    "fabricated_references_removed": [
+      "REV-001 (Synthesized quote claiming 'portfolio dropped to ₹2,850 in 3 months... cancelled SIP')",
+      "REV-002 (Synthesized quote claiming '₹295 bank ECS bounce penalty on 5th March')",
+      "REV-004 (Synthesized reference to debit failure without prior notification)",
+      "REV-006 (Synthesized quote claiming 'medical expenses in my family... deleted entire SIP')",
+      "REV-007 (Synthesized reference to drawdown panic)",
+      "REV-011 (Synthesized quote regarding XIRR/CAGR jargon confusion)",
+      "REV-012 (Synthesized review on pause mechanism)",
+      "Trustpilot (15 reviews) (Fabricated secondary source cohort; zero Trustpilot records exist in database)",
+      "RESP-024 (Typo in original candidate; real database record is RESP-0024)"
+    ],
+    "unsupported_claims_and_predictions_flagged": [
+      "Exact Fee Amount '₹295': Found zero instances in database. Replaced with verified qualitative evidence of bank transaction delays, automated debit errors, and manual workarounds.",
+      "Arbitrary 25% Churn Drop Prediction in prob-1: Removed. Replaced with testable hypothesis and controlled experiment metrics (90-day post-drawdown continuation rate).",
+      "Arbitrary 40% Churn Drop Prediction in prob-2: Removed. Replaced with defensible experiment metrics (instalment retry recovery rate).",
+      "Conflation of Failed Instalment vs Mandate Deletion vs SIP Discontinuation in prob-2: Disentangled. Real database evidence demonstrates that debit glitches primarily cause delayed unit allotments and switch to manual payment workarounds, not immediate mandate deletion.",
+      "Conflation of Stated Preference vs Observed Behavior in prob-3: Disentangled. While respondents state a desire for 'pay later' or 'pause' options, there is no longitudinal data proving that pausing prevents churn rather than deferring permanent abandonment."
+    ]
+  },
+  "candidate_problems": [
+    {
+      "problem_id": "prob-1",
+      "title": "Early-Tenure Market Drawdown Anxiety & Ambiguous Return Expectations",
+      "original_candidate": {
+        "id": "prob-1",
+        "title": "Early-Tenure Market Drawdown Panic Churn",
+        "status": "Candidate Hypothesis",
+        "compositeScore": 86,
+        "scores": {
+          "evidenceStrength": 90,
+          "relevance": 95,
+          "severity": 85,
+          "influence": 80,
+          "feasibility": 85,
+          "compliance": 80
+        },
+        "observation": "11 primary survey responses, 8 Play Store reviews, and the SEBI retail study report first-year SIP cancellations triggered by paper portfolio drawdowns during market corrections.",
+        "interpretation": "Beginners lack volatility conditioning. When investment apps display red return figures without historical recovery context, users interpret temporary paper dips as permanent capital destruction.",
+        "hypothesis": "If the platform introduces visual 3-5 year volatility corridors and milestone progress tracking, first-time investor panic churn during market downturns will decrease by 25%.",
+        "limitations": "Observational public reviews over-represent vocal complainers. Requires validation through 1-on-1 drawdown reaction interviews.",
+        "followUpInterview": "INT-Q2 (Reaction to drawdown alerts)"
+      },
+      "audit_trail": {
+        "fabricated_or_unverified_citations_removed": [
+          "REV-001 (Mock quote: 'portfolio dropped to ₹2,850 in 3 months... cancelled my SIP')",
+          "REV-007 (Unverified Play Store reference)",
+          "RESP-024 (Typo; corrected to RESP-0024)"
+        ],
+        "unsupported_claims_flagged": [
+          "Claim that market drawdowns directly caused cancellations across 11 survey respondents is unsupported; primary respondents reported hesitation, anxiety, and doubt, but 9 of 11 continued active investments.",
+          "The 25% churn reduction claim is an unsubstantiated numerical impact prediction without experimental proof.",
+          "Confounding factor: In SEBI Study (69fae5bd), first-year drop-offs are attributed jointly to 'market drawdowns and liquidity needs', not market decline in isolation."
+        ],
+        "source_classification": {
+          "unique_primary_survey_respondents": 4,
+          "unique_primary_interviewees": 3,
+          "unique_secondary_reviews": 3,
+          "regulatory_and_desk_studies": 1,
+          "duplicate_records": 0
+        }
+      },
+      "revised_candidate": {
+        "problem_statement": "First-time mutual fund SIP investors facing their first unrealized market downturn experience acute psychological anxiety and return ambiguity due to negative or flat portfolio values, leading to doubt and heightened risk of discontinuation when compounded by unexpected personal liquidity needs.",
+        "primary_evidence_count": 7,
+        "secondary_evidence_count": 4,
+        "total_verified_records": 11,
+        "verified_supporting_evidence": [
+          {
+            "research_id": "RESP-0007",
+            "respondent_id": "RESP-0007",
+            "source_type": "Primary Survey (Google Forms)",
+            "platform": "Primary Research — Google Forms",
+            "source_url": null,
+            "quote_or_summary": "Investor with active SIP (tenure 3-6 months) explicitly noted: 'Since 2 years not getting positive result... Market is down day by day.'",
+            "what_source_supports": "Direct observation that prolonged negative/flat returns severely erode investor confidence."
+          },
+          {
+            "research_id": "INT-0001",
+            "respondent_id": "INT-0001",
+            "source_type": "Primary 1:1 User Interview",
+            "platform": "Primary User Interview — Google Forms",
+            "source_url": null,
+            "quote_or_summary": "Priyanka (24, Bangalore): 'In the first 3-6 months, I noticed that my returns were slightly negative or flat because the market was going through a volatile phase. I felt a bit disappointed and wondered whether mutual funds were actually better than a fixed deposit... but I reminded myself that SIP is for the long term.'",
+            "what_source_supports": "Direct evidence of initial disappointment and return ambiguity, alongside cognitive mitigation."
+          },
+          {
+            "research_id": "INT-0002",
+            "respondent_id": "INT-0002",
+            "source_type": "Primary 1:1 User Interview",
+            "platform": "Primary User Interview — Google Forms",
+            "source_url": null,
+            "quote_or_summary": "Trishu (26, Gurgaon): 'I didn't see huge gains right away... when returns looked flat or slightly red, it did make me question if I picked the right funds... I also wondered whether I should withdraw when returns were lower than expected.'",
+            "what_source_supports": "Direct observation of beginner doubt and withdrawal contemplation during flat or red returns."
+          },
+          {
+            "research_id": "INT-0003",
+            "respondent_id": "INT-0003",
+            "source_type": "Primary 1:1 User Interview",
+            "platform": "Primary User Interview — Google Forms",
+            "source_url": null,
+            "quote_or_summary": "Jaan Yadav (Gurgaon): 'Market will feel pressure of US and iran war... Generally a small correction over a period of 1-2 years does not impact my will to continue sip.'",
+            "what_source_supports": "Contradictory / nuance signal showing that market-aware investors are resilient to 1-2 year corrections."
+          },
+          {
+            "research_id": "RESP-0010",
+            "respondent_id": "RESP-0010",
+            "source_type": "Primary Survey (Google Forms)",
+            "platform": "Primary Research — Google Forms",
+            "source_url": null,
+            "quote_or_summary": "Investor who paused/stopped all SIPs within 6-12 months requested an emergency 'pay later' feature, demonstrating interaction between financial stress and drop-off.",
+            "what_source_supports": "Demonstrates that discontinuation in months 6-12 is often tied to cash flow rather than pure volatility."
+          },
+          {
+            "research_id": "RESP-0011",
+            "respondent_id": "RESP-0011",
+            "source_type": "Primary Survey (Google Forms)",
+            "platform": "Primary Research — Google Forms",
+            "source_url": null,
+            "quote_or_summary": "Stopped all SIPs after 12 months due to irregular cash flows and the need to re-evaluate financial goals.",
+            "what_source_supports": "Shows goal re-evaluation and cash flow irregularity as co-occurring churn factors."
+          },
+          {
+            "research_id": "RESP-0008",
+            "respondent_id": "RESP-0008",
+            "source_type": "Primary Survey (Google Forms)",
+            "platform": "Primary Research — Google Forms",
+            "source_url": null,
+            "quote_or_summary": "Tracks portfolio daily via app notifications, experiencing frequent exposure to short-term NAV movements.",
+            "what_source_supports": "Shows high app check frequency exposing novice users to daily fluctuations."
+          },
+          {
+            "research_id": "69fae5bd-fb2b-4592-833e-cdc614d83d55",
+            "respondent_id": null,
+            "source_type": "Secondary Desk Research (Regulatory Study)",
+            "platform": "SEBI Investor Education & Protection Fund Study",
+            "source_url": "https://www.sebi.gov.in/reports-and-statistics/research/jul-2023/investor-survey_74211.html",
+            "quote_or_summary": "'Empirical survey of 1,200 retail SIP investors in India revealed that 38% of first-time investors discontinued their SIPs within the first 12 months, citing market drawdowns and liquidity needs as primary factors.'",
+            "what_source_supports": "Rigorous quantitative benchmark confirming market drawdowns and liquidity as joint primary factors in first-year churn."
+          },
+          {
+            "research_id": "899a0a03-15a3-4fb6-aec8-b48c7b2896a9",
+            "respondent_id": null,
+            "source_type": "Secondary Review (Google Play Store)",
+            "platform": "Google Play Store — Groww",
+            "source_url": "https://play.google.com/store/apps/details?id=com.nextbillion.groww&reviewId=46213f42-2b45-46a0-b4ee-e06f7bec05bb",
+            "quote_or_summary": "User reported booking losses during market volatility and platform latency, expressing deep dissatisfaction.",
+            "what_source_supports": "Shows user frustration and perceived platform culpability during market loss events."
+          },
+          {
+            "research_id": "5337dcb1-de8a-4238-b200-e0b29ac85bfc",
+            "respondent_id": null,
+            "source_type": "Secondary Review (Google Play Store)",
+            "platform": "Google Play Store — Groww",
+            "source_url": "https://play.google.com/store/apps/details?id=com.nextbillion.groww&reviewId=70cb8a38-7127-4f3f-8fc6-91de5df3397b",
+            "quote_or_summary": "User reported acute anxiety when price triggers occurred unexpectedly during downward market movements.",
+            "what_source_supports": "Demonstrates heightened emotional reactivity when asset values drop."
+          },
+          {
+            "research_id": "5356c6ec-d1de-4ac6-a60e-933f1f0c1c0c",
+            "respondent_id": null,
+            "source_type": "Secondary Review (Google Play Store)",
+            "platform": "Google Play Store — Groww",
+            "source_url": "https://play.google.com/store/apps/details?id=com.nextbillion.groww&reviewId=0e45ab00-3879-4270-8dfa-759571709ec0",
+            "quote_or_summary": "5-star review: 'To add, for a first time investor in the stock market this tool is very simple to understand, gives a lot of confidence.'",
+            "what_source_supports": "Contradictory / alternative evidence showing that clear, intuitive UI directly fosters beginner resilience."
+          }
+        ],
+        "direct_observation": "Empirical retail data (SEBI Study) confirms 38% of first-year drop-offs cite market drawdowns alongside liquidity needs. In primary interviews (INT-0001, INT-0002), first-time investors report questioning fund selection and experiencing emotional disappointment when seeing flat or red returns, but do not necessarily cancel unless personal financial shocks occur concurrently.",
+        "ai_interpretation": "First-time investors enter SIPs anchoring on idealized 12-15% annual compounding. When early instalments coincide with sideways or declining NAVs, they experience cognitive dissonance. Without contextual reassurance framing drawdowns as discounted accumulation phases, novice investors perceive temporary volatility as permanent capital destruction.",
+        "validated_user_need": "Novice investors need clear, non-jargon contextual reassurance during drawdown periods that frames temporary market dips within long-term historical recovery horizons, distinguishing paper volatility from capital loss.",
+        "proposed_intervention": "[Proposed Solution — Separate from Validated Need] Interactive in-app milestone progress visualizations and historical recovery corridors shown during market dips, highlighting units accumulated at lower NAVs rather than solely displaying red negative return badges.",
+        "testable_hypothesis": "If first-time SIP investors are provided with contextual historical recovery framing and unit accumulation milestone indicators during their first portfolio drawdown, their 90-day SIP continuation rate will be significantly higher and panic check frequency significantly lower than those receiving standard uncontextualized red return displays.",
+        "contradictory_or_alternative_evidence": "Multiple interviewed investors (INT-0001, INT-0003) explicitly stated that market drops alone did not cause them to stop; discontinuation was prompted by unforeseen personal emergency expenses or salary delays. Furthermore, disciplined investors (RESP-0005, INT-0003) noted long-term framing completely neutralized short-term drawdowns.",
+        "evidence_limitations": "Primary interview cohort (n=7) is small and displays self-selection bias toward educated salaried professionals. Transactional broker logs linking exact portfolio drawdown percentages (-5%, -10%, -15%) directly to cancellation timestamps are unavailable in public research.",
+        "confidence_and_coverage": {
+          "coverage_level": "High (Multi-Source Triangulated)",
+          "transparent_criteria": {
+            "primary_depth": "4 survey respondents + 3 in-depth 1:1 interview transcripts with explicit drawdown commentary.",
+            "secondary_rigor": "1 landmark regulatory study (SEBI, 1,200 retail investors) + 3 verified Play Store user reviews.",
+            "directness_of_link": "Moderate-High. Correlated in SEBI empirical survey; qualitative interviews reveal drawdown is an anxiety magnifier rather than sole root cause."
+          }
+        },
+        "prioritization_scorecard": {
+          "composite_score": 86,
+          "score_label": "Heuristic Discovery Score: 86/100 (Exploratory PM Prioritization — Not Measured Churn Impact)",
+          "scorecard_dimensions": {
+            "evidence_strength": 90,
+            "sip_relevance": 95,
+            "user_severity": 85,
+            "product_influence": 80,
+            "feasibility": 85,
+            "safety_compliance": 80
+          },
+          "transparent_scoring_rationale": "High score driven by strong SEBI empirical triangulation and acute emotional frustration reported by beginners, with high feasibility of in-app UX messaging adjustments."
+        },
+        "follow_up_interview_questions": [
+          "Can you walk me through the first time your portfolio value showed a negative return—what was your immediate reaction and what did you do next in the app?",
+          "When you see a drop in your portfolio value, what information or reassurance would help you evaluate whether your investment plan is still on track?",
+          "Have you ever considered pausing or stopping your SIP specifically because of falling returns, or were other financial factors involved?"
+        ],
+        "proposed_success_metrics": [
+          {
+            "metric_name": "90-Day Post-Drawdown Continuation Rate",
+            "type": "Primary Outcome",
+            "definition": "Proportion of first-time SIP investors whose portfolio drops by >= 5% who maintain active monthly deductions through the subsequent 3 cycles (treatment vs control)."
+          },
+          {
+            "metric_name": "Contextual Reassurance Engagement Rate",
+            "type": "Engagement",
+            "definition": "Percentage of investors viewing drawdown context cards or unit-accumulation milestones when market drops occur."
+          },
+          {
+            "metric_name": "Unsolicited Cancellation Rate during Market Dips",
+            "type": "Guardrail",
+            "definition": "Weekly rate of voluntary SIP cancellations during market corrections >= 3%."
+          }
+        ]
+      }
+    },
+    {
+      "problem_id": "prob-2",
+      "title": "Mandate Execution Latency, Failure Diagnostics Gaps, and Payment Glitches",
+      "original_candidate": {
+        "id": "prob-2",
+        "title": "Hard-Failure Mandate Friction & Bank Bounce Penalty Shock",
+        "status": "Candidate Hypothesis",
+        "compositeScore": 88,
+        "scores": {
+          "evidenceStrength": 95,
+          "relevance": 95,
+          "severity": 95,
+          "influence": 80,
+          "feasibility": 80,
+          "compliance": 85
+        },
+        "observation": "Over 20 secondary reviews and survey responses report ₹295 bank ECS bounce fees charged when automated SIP debits fail without warning, causing immediate mandate deletion.",
+        "interpretation": "Silent debit failures penalize users financially and destroy faith in automation. Involuntary churn is converted into voluntary resentment towards the broker platform.",
+        "hypothesis": "If the platform provides 48-hour pre-debit balance verification, actionable failure diagnostics, and a 5-day grace retry window, mandate-related churn will fall by 40%.",
+        "limitations": "Grace periods and retry mechanisms depend on partner bank and NPCI e-mandate settlement rails.",
+        "followUpInterview": "INT-Q3 (Mandate failure diagnostics)"
+      },
+      "audit_trail": {
+        "fabricated_or_unverified_citations_removed": [
+          "REV-002 (Mock quote claiming '₹295 bank ECS bounce penalty on 5th March')",
+          "REV-004 (Unverified Play Store reference)",
+          "Trustpilot (15 reviews) (Fabricated secondary source cohort; zero Trustpilot records exist in database)"
+        ],
+        "unsupported_claims_flagged": [
+          "Exact fee of '₹295' removed: zero database records mention this figure.",
+          "Unsubstantiated numerical prediction of '40% churn drop' removed.",
+          "Conflation of failed instalment vs mandate deletion vs SIP discontinuation: Audited records reveal that payment glitches cause processing delays (3-7 days), unallotted units, and prompt users to switch to manual payments (INT-0003, INT-0006), rather than causing immediate mandate deletion."
+        ],
+        "source_classification": {
+          "unique_primary_survey_respondents": 2,
+          "unique_primary_interviewees": 3,
+          "unique_secondary_reviews": 7,
+          "regulatory_and_desk_studies": 0,
+          "duplicate_records": 0
+        }
+      },
+      "revised_candidate": {
+        "problem_statement": "First-time SIP investors encounter opaque payment execution delays, silent debit failures, and confusing error notifications during monthly auto-debits, causing unallotted units and eroding trust in platform automation, which forces users into manual payment workarounds or abandonment.",
+        "primary_evidence_count": 5,
+        "secondary_evidence_count": 7,
+        "total_verified_records": 12,
+        "verified_supporting_evidence": [
+          {
+            "research_id": "RESP-0003",
+            "respondent_id": "RESP-0003",
+            "source_type": "Primary Survey (Google Forms)",
+            "platform": "Primary Research — Google Forms",
+            "source_url": null,
+            "quote_or_summary": "Explicitly requested: 'Clear notifications about SIP failure reasons (e.g., bank server down vs low balance) along with simple steps to fix them and retry.'",
+            "what_source_supports": "Direct evidence of missing failure diagnostics and user need for clear retry mechanisms."
+          },
+          {
+            "research_id": "INT-0003",
+            "respondent_id": "INT-0003",
+            "source_type": "Primary 1:1 User Interview",
+            "platform": "Primary User Interview — Google Forms",
+            "source_url": null,
+            "quote_or_summary": "Jaan Yadav (Gurgaon): 'Yes many times payment are not deduction until 1 day pass the scheduled sip date and hence I have switched for manual process of payment.'",
+            "what_source_supports": "Direct observation that mandate execution delays drive users away from automated SIP to manual payments."
+          },
+          {
+            "research_id": "INT-0006",
+            "respondent_id": "INT-0006",
+            "source_type": "Primary 1:1 User Interview",
+            "platform": "Primary User Interview — Google Forms",
+            "source_url": null,
+            "quote_or_summary": "Mukesh (25, Delhi): 'Sometimes I get messages saying my SIP didn't go through despite having enough money, and the units weren't allotted. I usually have to check if it was a system glitch or an autopay error before I just pay it manually.'",
+            "what_source_supports": "Direct observation of false-positive balance errors, unallotted units, and forced manual workarounds."
+          },
+          {
+            "research_id": "INT-0002",
+            "respondent_id": "INT-0002",
+            "source_type": "Primary 1:1 User Interview",
+            "platform": "Primary User Interview — Google Forms",
+            "source_url": null,
+            "quote_or_summary": "Trishu (26, Gurgaon): Noted that bank auto-debit notifications arrive late, creating uncertainty over whether the instalment succeeded or bounced.",
+            "what_source_supports": "Direct observation of user anxiety over unclear mandate status."
+          },
+          {
+            "research_id": "RESP-0002",
+            "respondent_id": "RESP-0002",
+            "source_type": "Primary Survey (Google Forms)",
+            "platform": "Primary Research — Google Forms",
+            "source_url": null,
+            "quote_or_summary": "Reported confusion over mandate deduction timing and requested proactive reminders before debits occur.",
+            "what_source_supports": "Direct evidence supporting need for pre-debit notifications."
+          },
+          {
+            "research_id": "109be859-6573-4622-9071-3bf90046d4cc",
+            "respondent_id": null,
+            "source_type": "Secondary Review (Google Play Store)",
+            "platform": "Google Play Store — Zerodha Coin",
+            "source_url": "https://play.google.com/store/apps/details?id=com.zerodha.coin&reviewId=759094e9-931c-4240-bcab-9fc81c724c02",
+            "quote_or_summary": "'The payment process takes 3–4 days, which is too long. Today was my installment due date, but the AutoPay didn't work. After contacting support, they said payments take 3–4 days...'",
+            "what_source_supports": "Verified secondary evidence of multi-day auto-debit latency and customer support friction."
+          },
+          {
+            "research_id": "7745e1c1-ae5a-443f-bdc8-a74c3fa64a44",
+            "respondent_id": null,
+            "source_type": "Secondary Review (Google Play Store)",
+            "platform": "Google Play Store — Groww",
+            "source_url": "https://play.google.com/store/apps/details?id=com.nextbillion.groww&reviewId=3f550c44-4ea3-47ed-9528-dbdf81a1c5b9",
+            "quote_or_summary": "'Frustrating payment loop—money stays blocked but app says failed. Zero stars for payment reliability. Whether I use bank or UPI, it says processing then transaction failed.'",
+            "what_source_supports": "Verified evidence of blocked funds, failed transaction loops, and payment reliability failures on Groww."
+          },
+          {
+            "research_id": "be42f7e2-0ab4-4a8c-bf8f-4a80255b90e5",
+            "respondent_id": null,
+            "source_type": "Secondary Review (Google Play Store)",
+            "platform": "Google Play Store — Zerodha Coin",
+            "source_url": "https://play.google.com/store/apps/details?id=com.zerodha.coin&reviewId=5b4d08f5-b408-45e6-9fd0-6c649ec30eb7",
+            "quote_or_summary": "'Please add notifications to pay for the SIP, and alerts if not paid till the last date, My SIPs keep getting missed and no I don't want to use mandates. thanks'",
+            "what_source_supports": "Shows users actively avoiding mandates due to fear of missed dates and failed debits."
+          },
+          {
+            "research_id": "9f0992e1-781b-4c36-95fe-886db5a7c021",
+            "respondent_id": null,
+            "source_type": "Secondary Review (Google Play Store)",
+            "platform": "Google Play Store — Zerodha Coin",
+            "source_url": "https://play.google.com/store/apps/details?id=com.zerodha.coin&reviewId=d99ade80-68a9-4848-aafb-3a232fe846e5",
+            "quote_or_summary": "'for SIP with automated mandate also it's taking 7+ days for processing'",
+            "what_source_supports": "Direct evidence of 7+ day settlement and unit allocation delays even with active mandates."
+          },
+          {
+            "research_id": "01c9d011-146c-42bc-9c8b-233a512e973b",
+            "respondent_id": null,
+            "source_type": "Secondary Review (Google Play Store)",
+            "platform": "Google Play Store — Zerodha Coin",
+            "source_url": "https://play.google.com/store/apps/details?id=com.zerodha.coin&reviewId=d541dfc5-2279-4ddc-be5c-bf9ddceaa9a7",
+            "quote_or_summary": "'I added mandate and it took them around 15 days to activate it... My money got debited but still waiting for the units to be alloted.'",
+            "what_source_supports": "Shows extreme mandate activation friction and unallotted units post-debit."
+          },
+          {
+            "research_id": "1cca7f2d-273f-469c-ab23-142b1ec87de7",
+            "respondent_id": null,
+            "source_type": "Secondary Review (Google Play Store)",
+            "platform": "Google Play Store — Paytm Money",
+            "source_url": "https://play.google.com/store/apps/details?id=com.paytmmoney&reviewId=78686b14-ae00-4f06-b2c1-a7229898a517",
+            "quote_or_summary": "'Money is deducted but not able to buy mutual funds, a regular sip is not working means money is not deducting from an account for an existing sip.'",
+            "what_source_supports": "Cross-platform verification of money deduction without MF unit allocation."
+          },
+          {
+            "research_id": "74ac492e-bd63-4c22-bdd6-14de178f6fc8",
+            "respondent_id": null,
+            "source_type": "Secondary Review (Google Play Store)",
+            "platform": "Google Play Store — Angel One",
+            "source_url": "https://play.google.com/store/apps/details?id=com.msf.angelmobile&reviewId=cce86865-e058-4554-9758-c5c03535bf13",
+            "quote_or_summary": "'If an SIP cancellation is in progress or AutoPay isn't enabled, the app completely blocks normal payment buttons instead of offering a clear workaround.'",
+            "what_source_supports": "Shows app workflows blocking manual payment fallbacks when autopay has friction."
+          }
+        ],
+        "direct_observation": "Multiple primary respondents (RESP-0003, INT-0003, INT-0006) and verified Play Store reviews report debits taking 3–7 days to process, occasional false-positive failure notices despite sufficient funds, and units remaining unallotted. In response, investors switch from automated mandates to manual monthly payments, but do not necessarily suffer immediate mandate deletion.",
+        "ai_interpretation": "Automated investment habit relies on psychological peace of mind. When users experience debit latency or silent failures without actionable diagnostics, their confidence in automated systems breaks down. Transitioning to manual payment significantly increases drop-off friction, as manual instalments require recurring monthly willpower.",
+        "validated_user_need": "Investors need transparent real-time status tracking for automated debits, unambiguous failure diagnostics (distinguishing bank server downtime from insufficient balance), and immediate 1-tap manual retry options before installment due dates expire.",
+        "proposed_intervention": "[Proposed Solution — Separate from Validated Need] 48-hour pre-debit push notifications, granular error categorization (Bank Server vs Balance vs NPCI), and a seamless 1-tap instant UPI retry button embedded directly in the failure alert.",
+        "testable_hypothesis": "Providing transparent root-cause failure diagnostics and an immediate 1-tap manual UPI retry flow will result in significantly higher 72-hour instalment recovery rates compared to automated mandate re-attempts without diagnostic clarity.",
+        "contradictory_or_alternative_evidence": "Some respondents report reliable execution and prefer fully hands-off mandates without notifications (INT-0004, INT-0007). In addition, partner bank retry mechanisms vary substantially; certain banks auto-retry within 48 hours without penalizing the user.",
+        "evidence_limitations": "Direct bank penalty fee statements could not be verified in the database records. Technical mandate log data (NPCI rejection codes, bank API latency) is inaccessible through public reviews and self-reported surveys.",
+        "confidence_and_coverage": {
+          "coverage_level": "High (Multi-Source Triangulated)",
+          "transparent_criteria": {
+            "primary_depth": "2 survey respondents + 3 primary interview transcripts documenting delayed debits and manual switching.",
+            "secondary_rigor": "7 verified public reviews across Groww, Zerodha Coin, Paytm Money, and Angel One confirming recurring mandate latency and unallotted units.",
+            "directness_of_link": "High. Mandate failure directly interrupts the monthly SIP continuation sequence."
+          }
+        },
+        "prioritization_scorecard": {
+          "composite_score": 88,
+          "score_label": "Heuristic Discovery Score: 88/100 (Exploratory PM Prioritization — Not Measured Churn Impact)",
+          "scorecard_dimensions": {
+            "evidence_strength": 95,
+            "sip_relevance": 95,
+            "user_severity": 95,
+            "product_influence": 80,
+            "feasibility": 80,
+            "safety_compliance": 85
+          },
+          "transparent_scoring_rationale": "High score due to extensive cross-platform validation and high severity of broken payment automation, balanced by dependencies on banking partner settlement rails."
+        },
+        "follow_up_interview_questions": [
+          "Can you walk me through what happened the last time your SIP auto-debit was processed—did you receive advance notice or status updates?",
+          "If an auto-debit payment failed or was delayed, what specific information did the app provide, and what steps did you take to resolve it?",
+          "Did a payment failure ever lead you to switch to manual payments or stop your SIP completely?"
+        ],
+        "proposed_success_metrics": [
+          {
+            "metric_name": "72-Hour Failed Instalment Recovery Rate",
+            "type": "Primary Outcome",
+            "definition": "Percentage of failed monthly SIP debits successfully resolved via instant manual retry or secondary mandate debit within 72 hours."
+          },
+          {
+            "metric_name": "Autopay to Manual Churn Migration Rate",
+            "type": "Behavioral",
+            "definition": "Proportion of active mandate users who switch to manual payments following an auto-debit failure event."
+          },
+          {
+            "metric_name": "Payment Failure Support Ticket Volume",
+            "type": "Operational",
+            "definition": "Total volume of customer support tickets tagged under 'SIP Payment / Mandate Failure' per 10,000 active SIPs."
+          }
+        ]
+      }
+    },
+    {
+      "problem_id": "prob-3",
+      "title": "Inflexible Contribution Scheduling & Cash Flow Friction During Short-Term Liquidity Crunches",
+      "original_candidate": {
+        "id": "prob-3",
+        "title": "Inflexible Mandates & Lack of Temporary Pause Mechanism",
+        "status": "Candidate Hypothesis",
+        "compositeScore": 82,
+        "scores": {
+          "evidenceStrength": 85,
+          "relevance": 90,
+          "severity": 80,
+          "influence": 85,
+          "feasibility": 85,
+          "compliance": 80
+        },
+        "observation": "5 primary survey responses (RESP-0010) and multiple Play Store reviews (REV-006) report users deleting entire SIPs when facing short-term cash flow crunches because no simple pause mechanism existed.",
+        "interpretation": "Rigid monthly debits force users into an all-or-nothing choice during financial emergencies, creating high friction for eventual resumption.",
+        "hypothesis": "If users are given a 1-tap 'Pause for 1–3 Months' control that clearly preserves accumulated fund units, voluntary drop-offs due to temporary cash flow stress will drop significantly.",
+        "limitations": "Must comply with AMC mandate regulations regarding maximum consecutive pause intervals.",
+        "followUpInterview": "INT-Q4 (Cash flow emergencies)"
+      },
+      "audit_trail": {
+        "fabricated_or_unverified_citations_removed": [
+          "REV-006 (Mock quote: 'medical expenses in my family... deleted entire SIP')",
+          "REV-012 (Unverified Play Store reference)"
+        ],
+        "unsupported_claims_flagged": [
+          "Conflation of stated preference vs observed behavior: While respondents state that a 'pay later' or 'pause' feature would help (RESP-0010, INT-0001, INT-0002), there is no longitudinal behavioral proof that pausing prevents permanent abandonment versus institutionalizing dormancy.",
+          "Audit revealed real Groww review (eca615a7) where an existing 'skip' feature already exists, but failed because the app required skip requests more than 2 days before the SIP date, leaving users in medical emergencies unprotected.",
+          "Unsubstantiated claim that 5 primary respondents deleted SIPs purely for lack of pause was ungrounded; primary respondents noted cash flow strain and goal re-evaluation."
+        ],
+        "source_classification": {
+          "unique_primary_survey_respondents": 4,
+          "unique_primary_interviewees": 2,
+          "unique_secondary_reviews": 3,
+          "regulatory_and_desk_studies": 0,
+          "duplicate_records": 0
+        }
+      },
+      "revised_candidate": {
+        "problem_statement": "First-time SIP investors experiencing short-term liquidity stress (medical emergencies, unexpected household expenses, or delayed salary credits) struggle with rigid debit schedules and restrictive skip cutoff windows, creating pressure to cancel SIPs entirely rather than temporarily postponing an instalment.",
+        "primary_evidence_count": 6,
+        "secondary_evidence_count": 3,
+        "total_verified_records": 9,
+        "verified_supporting_evidence": [
+          {
+            "research_id": "RESP-0010",
+            "respondent_id": "RESP-0010",
+            "source_type": "Primary Survey (Google Forms)",
+            "platform": "Primary Research — Google Forms",
+            "source_url": null,
+            "quote_or_summary": "Investor who stopped all SIPs within 6-12 months explicitly suggested: 'option for pay later in the app where I don't have money to pay.'",
+            "what_source_supports": "Direct evidence of cash flow deficit leading to SIP discontinuation and explicit stated need for flexible payment timing."
+          },
+          {
+            "research_id": "INT-0001",
+            "respondent_id": "INT-0001",
+            "source_type": "Primary 1:1 User Interview",
+            "platform": "Primary User Interview — Google Forms",
+            "source_url": null,
+            "quote_or_summary": "Priyanka (24, Bangalore): 'Yes, I have considered pausing or stopping my SIP during months when I had high unexpected expenses or emergencies... I wished there was a simple way to pause for 1-2 months without having to cancel the whole SIP.'",
+            "what_source_supports": "Direct stated preference for a 1-2 month pause mechanism during unexpected personal expenses."
+          },
+          {
+            "research_id": "INT-0002",
+            "respondent_id": "INT-0002",
+            "source_type": "Primary 1:1 User Interview",
+            "platform": "Primary User Interview — Google Forms",
+            "source_url": null,
+            "quote_or_summary": "Trishu (26, Gurgaon): 'Yes, I have considered reducing or pausing my SIP when my monthly expenses increased or I needed extra cash for emergencies.'",
+            "what_source_supports": "Direct observation of liquidity-driven temptation to reduce or pause SIP contributions."
+          },
+          {
+            "research_id": "RESP-0011",
+            "respondent_id": "RESP-0011",
+            "source_type": "Primary Survey (Google Forms)",
+            "platform": "Primary Research — Google Forms",
+            "source_url": null,
+            "quote_or_summary": "Stopped all SIPs citing irregular cash flows and the necessity to balance personal budgets.",
+            "what_source_supports": "Corroborates cash flow volatility as a primary driver of voluntary SIP termination."
+          },
+          {
+            "research_id": "RESP-0004",
+            "respondent_id": "RESP-0004",
+            "source_type": "Primary Survey (Google Forms)",
+            "platform": "Primary Research — Google Forms",
+            "source_url": null,
+            "quote_or_summary": "Active investor noting that seasonal expenditure spikes (festivals, medical bills) force manual budgeting compromises.",
+            "what_source_supports": "Shows liquidity friction experienced even among retained, active investors."
+          },
+          {
+            "research_id": "RESP-0020",
+            "respondent_id": "RESP-0020",
+            "source_type": "Primary Survey (Google Forms)",
+            "platform": "Primary Research — Google Forms",
+            "source_url": null,
+            "quote_or_summary": "Noted tension when salary credit timing fluctuates relative to fixed SIP debit dates.",
+            "what_source_supports": "Shows salary date mismatch contributing to liquidity pressure."
+          },
+          {
+            "research_id": "eca615a7-2a72-442c-959c-701222b1fc8d",
+            "respondent_id": null,
+            "source_type": "Secondary Review (Google Play Store)",
+            "platform": "Google Play Store — Groww",
+            "source_url": "https://play.google.com/store/apps/details?id=com.nextbillion.groww&reviewId=e10390c4-9c4e-4406-a83d-bda8dc96ce29",
+            "quote_or_summary": "'Giving 1 star just because I tried a lot to skip my sips for a month and it shows it can be done 2 days before sip date, but even before 2 days it doesn't work. I recently got operated on my knee and I'm not able to go for work due to which I'm facing financial issues and just need one month to get back on track and so tried to skip one installment but the useless feature doesn't work... in emergency groww won't help you at all.'",
+            "what_source_supports": "Real verified user review documenting medical surgery, severe cash flow crunch, and failure of the existing skip workflow due to rigid cutoff rules."
+          },
+          {
+            "research_id": "1e86ae0f-c509-474d-bac4-2538ae7b662a",
+            "respondent_id": null,
+            "source_type": "Secondary Review (Google Play Store)",
+            "platform": "Google Play Store — Paytm Money",
+            "source_url": "https://play.google.com/store/apps/details?id=com.paytmmoney&reviewId=0ca50eb4-2aa4-4efc-8a02-de9906ce58f6",
+            "quote_or_summary": "'wanted to start a new investment and SIP, Paytm money is forcing for autopay feature, this should be a choice to the users, not something that you force, there is no way to skip the option either, hence I'm now using different app which gives users an option to choose their strategy'",
+            "what_source_supports": "Shows rigid auto-debit mandates causing users to switch away to competing apps when flexibility is denied."
+          },
+          {
+            "research_id": "7ea90a1d-69e9-4274-9a14-5cf7dc19b1e3",
+            "respondent_id": null,
+            "source_type": "Secondary Review (Google Play Store)",
+            "platform": "Google Play Store — Paytm Money",
+            "source_url": "https://play.google.com/store/apps/details?id=com.paytmmoney&reviewId=8d4ce078-3dcb-45af-8e38-4c1ad8f10d6a",
+            "quote_or_summary": "'It also does not give options to skip your SIP or pause which is quite simpler in other app like Groww and Zerodha.'",
+            "what_source_supports": "Demonstrates cross-platform user expectation for skip and pause options as standard competitive hygiene."
+          }
+        ],
+        "direct_observation": "In primary surveys and interviews (RESP-0010, INT-0001, INT-0002), users repeatedly state that cash flow emergencies (medical costs, delayed salary) tempt them to stop SIPs, and they explicitly request pause or pay-later options. Review eca615a7 shows that even where a skip button exists, rigid cutoff rules (2-day advance requirement) prevent users in sudden emergencies from utilizing it.",
+        "ai_interpretation": "A binary system design (Active vs Cancelled) forces users undergoing temporary cash flow pinches into an irrevocable exit. Users who merely intended to skip 1-2 months are forced to cancel their SIP or endure failed debits, which creates high activation inertia for restarting once financial stability returns.",
+        "validated_user_need": "Investors facing temporary cash flow crunches need a transparent, penalty-free method to postpone or skip an individual monthly instalment with relaxed cutoff constraints, accompanied by explicit reassurance that their existing accumulated investment remains safe.",
+        "proposed_intervention": "[Proposed Solution — Separate from Validated Need] An accessible 'Skip Next Instalment' or 'Pause for 1–2 Months' workflow featuring dynamic cutoff buffers, calendar-sync reminders, and automatic resumption scheduling.",
+        "testable_hypothesis": "If first-time SIP investors who attempt to cancel their SIP during a cash flow pinch are offered a flexible 1-2 month pause alternative with clear preservation confirmation, a measurable proportion will opt to pause rather than cancel, and at least 50% of paused investors will successfully resume monthly contributions within 3 cycles.",
+        "contradictory_or_alternative_evidence": "Habitual discipline advocates (RESP-0005, RESP-0017) note that unassisted automation is critical to long-term wealth building, and that introducing easy pause controls may inadvertently erode the savings habit and increase permanent dormancy. Stated user preference for pausing does not guarantee eventual resumption.",
+        "evidence_limitations": "Existing research database contains stated preferences and retrospective reviews, but lacks longitudinal behavioral cohort data tracking actual resumption rates of users who utilize pause features. AMC and banking regulations mandate limits on maximum consecutive pause durations.",
+        "confidence_and_coverage": {
+          "coverage_level": "Medium-High (Triangulated Need, Unproven Long-Term Resumption)",
+          "transparent_criteria": {
+            "primary_depth": "4 survey respondents + 2 detailed 1:1 interview statements citing cash flow emergencies and pause preferences.",
+            "secondary_rigor": "3 verified Play Store reviews across Groww and Paytm Money confirming customer demand and cutoff friction.",
+            "directness_of_link": "High for near-term instalment deferral; unverified for long-term 12-month net retention."
+          }
+        },
+        "prioritization_scorecard": {
+          "composite_score": 82,
+          "score_label": "Heuristic Discovery Score: 82/100 (Exploratory PM Prioritization — Not Measured Churn Impact)",
+          "scorecard_dimensions": {
+            "evidence_strength": 85,
+            "sip_relevance": 90,
+            "user_severity": 80,
+            "product_influence": 85,
+            "feasibility": 85,
+            "safety_compliance": 80
+          },
+          "transparent_scoring_rationale": "High product influence and feasibility, with strong user empathy during emergency life events; scored lower on evidence strength regarding long-term retention impact."
+        },
+        "follow_up_interview_questions": [
+          "Have you ever experienced a month where your bank balance was too tight to cover your SIP—what decision did you make and what did you do in the app?",
+          "If you had the option to pause your SIP for 1 to 2 months during a cash pinch, what would help ensure you remembered to resume investing afterward?",
+          "What difference do you see between pausing an SIP and stopping it completely?"
+        ],
+        "proposed_success_metrics": [
+          {
+            "metric_name": "90-Day Post-Pause Resumption Rate",
+            "type": "Primary Outcome",
+            "definition": "Percentage of paused SIPs that successfully execute their scheduled monthly deduction within 90 days of pause initiation."
+          },
+          {
+            "metric_name": "Pause vs Cancellation Deflection Rate",
+            "type": "Funnel",
+            "definition": "Proportion of users entering the 'Cancel SIP' flow who select 'Pause SIP' when presented as an alternative."
+          },
+          {
+            "metric_name": "12-Month Net Invested Capital Cohort Comparison",
+            "type": "Guardrail",
+            "definition": "Average cumulative capital invested over 12 months for users who utilized a pause feature vs users who faced rigid debits."
+          }
+        ]
+      }
+    }
+  ]
+}

@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>SIP Discovery Assistant</title>
+  <link rel="stylesheet" href="popup.css">
+</head>
+<body>
+  <div class="header">
+    <div class="title-wrap">
+      <span class="icon">📈</span>
+      <span class="title">SIP Discovery</span>
+    </div>
+    <button id="btn-toggle-settings" class="icon-btn" title="Settings">⚙️</button>
+  </div>
+
+  <!-- Main Evidence Capture Section -->
+  <div id="capture-section">
+    <div class="field-group">
+      <label for="input-text">Selected Evidence Quote</label>
+      <textarea id="input-text" placeholder="Highlight text on the webpage before clicking the extension, or paste quote here..." rows="4"></textarea>
+      <div id="char-counter" class="subtext">0 / 10,000 chars</div>
+    </div>
+
+    <div class="field-group">
+      <label for="input-source-label">Source Platform</label>
+      <input type="text" id="input-source-label" placeholder="e.g. Google Play Store, Reddit, Groww Community">
+    </div>
+
+    <div class="field-group">
+      <label for="input-source-url">Source URL</label>
+      <input type="text" id="input-source-url" readonly class="readonly-input">
+    </div>
+
+    <div class="button-row">
+      <button id="btn-approve" class="primary-btn">Approve & Save</button>
+      <button id="btn-discard" class="secondary-btn">Discard</button>
+    </div>
+
+    <div id="status-bar" class="status-msg hidden"></div>
+  </div>
+
+  <!-- Settings Drawer Section -->
+  <div id="settings-section" class="hidden">
+    <h3>Local Server Configuration</h3>
+    <div class="field-group">
+      <label for="input-server-url">Receiver Endpoint URL</label>
+      <input type="text" id="input-server-url" value="http://127.0.0.1:8000">
+    </div>
+
+    <div class="field-group">
+      <label for="input-auth-token">Extension Auth Token</label>
+      <input type="password" id="input-auth-token" value="sip_dev_token_groww_2026">
+      <div class="subtext">Matches EXTENSION_AUTH_TOKEN in your .env file</div>
+    </div>
+
+    <button id="btn-save-settings" class="primary-btn">Save Settings</button>
+    <div id="settings-status" class="status-msg hidden"></div>
+  </div>
+
+  <div class="footer">
+    <span>SIP Continuation Engine • Local Only</span>
+  </div>
+
+  <script src="popup.js"></script>
+</body>
+</html>

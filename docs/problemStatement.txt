@@ -1,0 +1,863 @@
+# FINAL ANTIGRAVITY IMPLEMENTATION PROMPT
+## AI-Powered SIP Continuation Discovery Engine — Grok API + Chrome Extension Edition
+
+## 1. Your role and working constraints
+
+Act as my senior full-stack engineer, AI engineer, product discovery partner, UX designer, and technical mentor.
+
+Build a functional, beginner-friendly web application called the **SIP Continuation Discovery Engine**.
+
+This application supports my Product Management fellowship assignment focused on the Groww investment platform.
+
+### My constraints
+
+- I prefer free or low-cost tools.
+- I am a coding beginner and need simple, step-by-step explanations.
+- I can dedicate approximately 3–4 hours per day over three weeks.
+- I will provide a Grok API key and want the official xAI API to be the primary AI provider.
+- I do not haveee confirmed access to Groww's internal data, APIs, systems, or customers.
+- I want a local application first, running on my computer.
+- I want a Chrome extension that can collect permitted research text from supported webpages and send approved records directly to the local application without requiring CSV upload.
+- I also plan to collect primary research using Google Forms.
+- Do not assume the underlying user problem is already known.
+
+The final investor-facing solution must not recommend specific funds or stocks, provide personalised investment advice, or use fear, FOMO, shame, guilt, or urgency-based nudges.
+
+Do not just provide a plan or pseudocode. Build, test, and document the application in the available workspace after I approve the initial implementation plan.
+
+Explain technical concepts in simple English. Do not assume I understand coding, APIs, environment variables, databases, Chrome extensions, or deployment.
+
+## 2. Business objective
+
+The assignment's goal is:
+
+**Increase the percentage of first-time mutual fund investors who still have an active SIP 12 months after starting their first SIP.**
+
+For this assignment, an active SIP means having at least one successful instalment in the last 30 days.
+
+The underlying reasons for difficulty continuing SIPs are unknown.
+
+Potential investigation areas include:
+
+- Payment and mandate friction.
+- Expectations versus actual experience.
+- Uncertainty and confidence.
+- Changing personal or financial circumstances, when explicitly reported.
+- Trust and transparency.
+- Support and issue resolution.
+- Product usability.
+- SIP awareness and understanding.
+- Mutual fund and investment-process understanding.
+- Habits and recurring behaviour.
+- Information needs and existing workarounds.
+
+These are hypotheses, not established findings.
+
+The application must help a Product Manager discover potential problems through real evidence. Do not assume that market declines, disappointing returns, low financial literacy, lack of reminders, or any other single factor causes SIP discontinuation.
+
+Public feedback and survey responses cannot independently establish Groww's actual 12-month continuation rate. Do not claim access to internal Groww metrics or production data.
+
+## 3. What we are building
+
+Build a research assistant that helps a Product Manager:
+
+1. Import permitted public reviews and discussions through CSV.
+2. Import anonymised Google Forms survey responses through CSV.
+3. Collect selected research text through a Chrome extension, where the source and collection method permit it.
+4. Store all approved records in one research database.
+5. Identify feedback relevant to SIP continuation.
+6. Use Grok to classify feedback and extract evidence.
+7. Group feedback into themes.
+8. Identify supporting and contradictory evidence.
+9. Draft candidate problem statements grounded in available data.
+10. Highlight unanswered questions for interviews.
+11. Compare potential opportunities transparently.
+12. Correct AI outputs and document corrections.
+13. Evaluate AI quality against manually labelled examples.
+14. Export findings, evidence, methodology, and evaluation results.
+
+This is a **discovery engine**, not an investor-facing chatbot or investment-advice product.
+
+Do not build the final investor-facing solution before the underlying problem has been researched and validated.
+
+### Research questions
+
+The discovery engine should help investigate:
+
+1. Why do people start a SIP, and what do they expect?
+2. What changes in their behaviour after starting?
+3. What leads investors to consider pausing, reducing, or stopping a SIP?
+4. What do investors check after starting, and how often?
+5. What confuses or worries them inside an investing app?
+6. What do they do outside the app when they feel unsure?
+7. What differences appear between people who report continuing and those who report stopping?
+8. How might experiences differ across segments when relevant information is explicitly and appropriately available?
+9. What unmet needs and workarounds emerge from the evidence?
+10. Which potential problems could a product realistically influence?
+11. What evidence is missing before selecting a problem?
+
+The workflow must go beyond summarising reviews or performing sentiment analysis. It should help identify, quantify where appropriate, compare, and investigate potential opportunity areas relevant to the business objective.
+
+It must demonstrate how data is collected, how themes are identified, how insights are generated, and how insight quality is evaluated through the AI Evidence Log.
+
+### Research evidence and segmentation rules
+
+The discovery engine must distinguish between what the data establishes and what still requires research.
+
+- Public reviews and discussions may reveal potential difficulties, expectations, workarounds, and unmet needs.
+- Public feedback generally cannot establish whether the author is a first-time investor, whether their SIP remained active 12 months later, or whether a particular experience caused discontinuation.
+- Never infer age, income, financial circumstances, source of investment money, or personal influences from writing style or indirect clues.
+- Analyse segments only when relevant information is explicitly available, lawfully usable, and appropriate for the research.
+- Use anonymised, voluntarily provided survey or interview information where appropriate.
+- Mark missing information as unknown.
+- Treat recurring themes as potential problem areas, not proof of root causes.
+- Preserve supporting evidence, contradictory evidence, alternative explanations, and unresolved questions.
+- Use 5–6 real user interviews to investigate whether public-feedback patterns apply to the intended population.
+- Never claim that a problem has been validated or causes lower 12-month SIP continuation without sufficient evidence.
+
+### Implementation priority
+
+The project must remain achievable within three weeks for a coding beginner.
+
+Build in this order:
+
+1. Local research application, CSV import, validation, source preservation, and database.
+2. Grok API connection and small-batch analysis.
+3. Evidence-grounded classification and human review.
+4. Google Forms survey-response support.
+5. Theme exploration, candidate problem statements, and AI Evidence Log.
+6. Evaluation against manually labelled examples.
+7. Chrome extension for permitted browser-assisted collection.
+8. Additional prioritisation, synthesis, interface improvements, and optional integrations.
+
+The Chrome extension is a **second-phase feature**, not a prerequisite for the initial discovery engine.
+
+CSV import must remain available even after browser collection is implemented.
+
+Both CSV-imported and Chrome-collected records must feed into the same research database and analysis pipeline.
+
+If time becomes limited, prioritise the functioning research workflow, real user research, credible evidence, AI evaluation, and fellowship deliverables over optional features.
+
+## 4. Mandatory AI configuration: Grok via xAI API
+
+Use the official xAI API as the primary AI provider.
+
+Configuration:
+
+- API base URL: `https://api.x.ai/v1`
+- API key environment variable: `XAI_API_KEY`
+- Model environment variable: `XAI_MODEL`
+- API endpoint, model name, and request format must be configurable.
+
+Verify the currently supported model name, endpoint, and API requirements against the official documentation before implementation.
+
+Official documentation:
+
+- Quickstart: https://docs.x.ai/developers/quickstart
+- Pricing: https://docs.x.ai/developers/pricing
+
+Do not hard-code an outdated model name or assume a model is available to my account.
+
+### API key and cost requirements
+
+I intend to provide a Grok API key and prefer free usage. Do not assume the key automatically includes free API credits or unrestricted access.
+
+Implement a connection check that verifies, when possible:
+
+- Whether the key is configured.
+- Whether the API can be reached.
+- Whether authentication succeeds.
+- Whether the selected model is available.
+- Whether a small test request succeeds.
+
+Explain that a successful connection test does not guarantee all subsequent usage will be free.
+
+Keep usage economical:
+
+- Start with small batches.
+- Avoid reprocessing unchanged records.
+- Provide configurable batch sizes.
+- Limit unnecessary prompt and response tokens.
+- Analyse only records selected by the user or eligible for analysis.
+- Cache completed results locally where appropriate.
+- Display request status and usage information if available.
+- Never silently switch to another paid provider.
+
+Do not call the API automatically when the application opens.
+
+If the API key is invalid, credits are unavailable, rate limits are reached, or the API fails, explain the problem clearly and preserve existing data.
+
+### API key security
+
+Never hard-code the key into source code, frontend code, the Chrome extension, public repositories, or logs.
+
+Use a local `.env` file or another suitable secret-management mechanism. Add `.env` to `.gitignore` and provide `.env.example` with placeholder values only.
+
+Example:
+
+`XAI_API_KEY=your_key_here`
+
+`XAI_MODEL=your_supported_model_name`
+
+All Grok requests must run server-side.
+
+Explain exactly where I should configure my key.
+
+### Manual fallback
+
+If Grok cannot be used, the application must remain usable for import, browsing, manual review, editing, and export.
+
+Provide a clearly labelled manual-analysis mode. Never present manual outputs as AI-generated or claim that AI evaluation was completed when the API was unavailable.
+
+## 5. Recommended technology stack
+
+Inspect the available workspace and use the simplest practical stack.
+
+Preferred starting point:
+
+- Python.
+- Pandas for data processing.
+- Streamlit for the research interface.
+- FastAPI only if a separate local HTTP endpoint is needed for Chrome extension integration.
+- Official xAI API or a compatible client.
+- SQLite for lightweight persistence.
+- CSV for import and export.
+- Chrome Manifest V3 for the browser extension.
+- Git for version control.
+
+Prefer free and low-cost tools.
+
+Avoid unnecessary cloud infrastructure, vector databases, orchestration frameworks, paid subscriptions, and complex authentication.
+
+Reuse existing working code where sensible. Do not rewrite the project unnecessarily.
+
+## 6. CSV ingestion and source traceability
+
+CSV upload is the initial and required ingestion method.
+
+Support fields such as:
+
+- Record ID.
+- Source platform or research method.
+- Original text.
+- Original URL, if available.
+- Publication date, if available.
+- Rating, if available.
+- Collection date.
+- Anonymous respondent ID, when applicable.
+- Record type, such as public review, survey response, or interview note.
+
+Build a straightforward field-mapping interface.
+
+The application must:
+
+- Validate records.
+- Identify empty or invalid text.
+- Remove exact duplicates.
+- Flag possible near-duplicates for human review.
+- Preserve original text and source references.
+- Report imported, rejected, deduplicated, and retained record counts.
+- Maintain a source register with collection method and known limitations.
+- Represent missing information as unknown.
+- Keep synthetic demonstration records separate from real research data.
+
+Only use data collected through permitted methods. Do not bypass access restrictions or assume public visibility means unrestricted permission for automated collection, storage, or AI processing.
+
+### Google Forms survey data support
+
+Support importing anonymised responses from Google Forms through a CSV exported from Google Sheets.
+
+Survey responses must be identified as **primary research**, separate from public reviews and discussions.
+
+Support:
+
+- Mapping Google Forms questions to research fields.
+- Preserving original questions and answers.
+- Grouping answers belonging to the same respondent using an anonymous respondent ID.
+- Handling multiple-choice, checkbox, and open-text responses.
+- Filtering responses by self-reported SIP experience and continuation status.
+- Analysing open-text responses through Grok while preserving respondent context.
+- Comparing survey themes with public-review themes without treating the evidence types as equivalent.
+
+For checkbox responses, preserve individual selections without losing the original answer.
+
+Do not infer missing demographic or financial details.
+
+Do not treat survey responses as verified Groww transaction data or proof of 12-month SIP continuation.
+
+Do not send identifying or sensitive respondent information to Grok.
+
+Clearly distinguish survey findings, interview findings, and public-review findings in dashboards and exports.
+
+Do not require direct Google account integration for the first version. A CSV export from Google Sheets is sufficient.
+
+## 7. Grok-powered analysis pipeline
+
+Use structured, validated AI outputs.
+
+### A. Relevance classification
+
+Classify each record as:
+
+- Directly relevant.
+- Indirectly relevant.
+- Not relevant.
+- Ambiguous; requires human review.
+
+Explain each classification briefly and provide a supporting evidence excerpt.
+
+A general complaint about Groww is not automatically relevant to SIP continuation.
+
+### B. Multi-label theme classification
+
+Use this provisional taxonomy:
+
+1. Expectations versus actual experience.
+2. SIP or investment-process understanding.
+3. Uncertainty and confidence.
+4. Instalment, payment, or mandate friction.
+5. Changing circumstances, when explicitly mentioned.
+6. Habits, attention, and routine.
+7. Trust and transparency.
+8. Support and issue resolution.
+9. Conflicting information or misunderstanding.
+10. Product usability.
+11. Explicitly reported reasons for continuing.
+12. Explicitly reported reasons for pausing or stopping.
+13. Other emerging themes.
+14. Unclear or insufficient evidence.
+
+Allow multiple labels per record.
+
+Keep the taxonomy configurable. Do not silently relabel reviewed records when it changes.
+
+### C. Evidence extraction
+
+For each record, extract:
+
+- Relevance classification.
+- Theme labels.
+- A short, faithful evidence excerpt.
+- Observable behaviour or difficulty, where supported.
+- Potential user need, where supported.
+- Reported workaround, where available.
+- Journey stage, where supported.
+- Whether continuation, pausing, stopping, or reactivation is explicitly mentioned.
+- Missing context.
+- AI explanation.
+- Review status.
+
+Never invent quotations, motivations, events, user attributes, or outcomes.
+
+Every evidence excerpt must be traceable to its original record.
+
+If the source does not establish whether someone is a first-time investor or has stopped an SIP, preserve that uncertainty.
+
+### D. Uncertainty and prompt-injection handling
+
+Flag ambiguous, misleading, contradictory, or insufficiently supported records.
+
+Treat imported text as untrusted data. Text inside reviews must never override system instructions or be executed as code.
+
+Do not treat a model's self-reported confidence as proof of correctness.
+
+## 8. Theme analysis
+
+Group analysed records into potential problem areas.
+
+For each theme, show:
+
+- Theme name and definition.
+- Number of records.
+- Number of distinct sources, where identifiable.
+- Representative evidence excerpts.
+- Original source links.
+- Supporting experiences.
+- Contradictory or different experiences.
+- Potential user needs.
+- What the evidence does not establish.
+- Questions requiring further research.
+
+Allow the user to open each underlying record.
+
+Clearly distinguish record counts from unique users.
+
+Do not present theme frequency as proof that a theme causes SIP discontinuation. Do not use sentiment alone as a proxy for user need or business impact.
+
+Keep evidence from public reviews, surveys, and interviews identifiable by source type.
+
+## 9. Candidate problem statements
+
+Use Grok to draft candidate problem statements based on available evidence.
+
+Each candidate must include:
+
+- Potential user segment.
+- Situation or journey stage.
+- Observed behaviour or difficulty.
+- Supporting evidence and source references.
+- Possible underlying need.
+- Existing workaround, if observed.
+- Potential user consequence.
+- Possible relationship to SIP continuation.
+- Alternative explanations.
+- Contradictory evidence.
+- Evidence limitations.
+- Unanswered questions.
+- Suggested neutral interview questions.
+
+Clearly distinguish:
+
+- **Observation:** What the source actually says.
+- **Interpretation:** What it may suggest.
+- **Hypothesis:** What still needs validation.
+- **Validated finding:** What research supports after appropriate review.
+
+An AI-generated candidate must not automatically be labelled validated.
+
+Do not select a problem solely because it has the most mentions.
+
+Require human review before a candidate is chosen.
+
+Allow the user to mark candidates as:
+
+- Needs research.
+- Supported by current evidence.
+- Challenged by evidence.
+- Requires primary validation.
+
+## 10. Opportunity prioritisation
+
+Provide a configurable, provisional scorecard.
+
+| Factor | Weight |
+|---|---:|
+| Evidence strength | 25% |
+| Relevance to SIP continuation | 25% |
+| User difficulty or severity | 15% |
+| Potential product influence | 15% |
+| Feasibility within the project | 10% |
+| Safety and compliance suitability | 10% |
+
+Use scores from 1 to 5.
+
+Formula:
+
+Weighted score out of 100 = sum of (factor weight × factor score ÷ 5).
+
+Display a justification and evidence for every score.
+
+If evidence is insufficient, mark the factor unknown and do not create a misleading final ranking.
+
+Safety and compliance must act as a constraint, not a factor that can be offset by high scores elsewhere. High feasibility must not compensate for weak evidence.
+
+## 11. Primary research support
+
+The discovery engine must support, not replace, interviews with 5–6 real users.
+
+Generate neutral questions based on evidence gaps, including:
+
+- Why the participant started their first SIP.
+- What they expected.
+- What actually happened.
+- Whether they considered changing their behaviour.
+- The specific situation behind that consideration.
+- What information they consulted.
+- What they found difficult to understand.
+- How they tried to resolve the issue.
+- What helped or prevented continuation.
+- Existing workarounds.
+
+Avoid leading questions.
+
+Allow anonymised notes from actual interviews to be entered later.
+
+Keep interview evidence separate from public-source and survey evidence.
+
+Never fabricate interviews, participant quotes, or participant-level findings.
+
+Google Forms survey responses can help recruit willing interview participants if respondents separately and voluntarily agree to be contacted. Keep contact information separate from survey answers and research analysis.
+
+## 12. AI Evidence Log and evaluation
+
+Create an exportable CSV or spreadsheet containing:
+
+- Record ID.
+- Source reference.
+- Original text or permitted evidence excerpt.
+- AI relevance label.
+- Human relevance label.
+- AI theme labels.
+- Human theme labels.
+- AI evidence extraction.
+- Human-reviewed evidence.
+- Agreement or disagreement.
+- Error category.
+- Actual human correction or rejection.
+- Final reviewed label.
+- Reviewer notes.
+- Review date.
+
+Provide a workflow for approximately 20 real examples manually labelled by a human.
+
+Include clear, irrelevant, ambiguous, multi-theme, contradictory, missing-context, and overinterpretation cases.
+
+Calculate:
+
+- Number of examples evaluated.
+- Exact agreement.
+- Per-theme precision, recall, and F1 where meaningful.
+- Error categories.
+- Actual human corrections or rejections.
+- Known limitations.
+
+Define proposed acceptance thresholds before evaluation. Label them as targets until tests are completed.
+
+Do not fabricate data, corrections, or performance metrics.
+
+Preserve both AI and human labels in an audit trail.
+
+If the dataset is too small or lacks sufficient examples for a meaningful metric, explain the limitation rather than reporting misleading scores.
+
+## 13. User interface
+
+Build a straightforward, responsive application with these sections.
+
+### Dashboard
+
+Show dataset status, import counts, analysis status, relevance distribution, themes, records awaiting review, and source coverage.
+
+If no data is imported, show a setup checklist instead of fabricated charts.
+
+### Import Data
+
+Provide CSV upload, field mapping, validation, duplicate handling, and import results.
+
+### Research Explorer
+
+Allow search and filtering by source, relevance, theme, date, record type, and review status.
+
+Show original text, source links, AI labels, evidence, and human-review controls.
+
+### Theme Analysis
+
+Show themes, evidence counts, supporting and contradictory examples, limitations, and links to underlying records.
+
+### Problem Statements
+
+Show candidate problems, supporting evidence, assumptions, counterevidence, open questions, and prioritisation where justified.
+
+### AI Evaluation
+
+Provide manual labels, AI-versus-human comparison, correction tracking, evaluation metrics, and Evidence Log export.
+
+### Browser Collection
+
+Provide a status view for the Chrome extension integration, including recently received records, approval status, duplicate flags, and connection errors.
+
+The research app must not require the extension to function.
+
+### Export and Methodology
+
+Allow export of the source register, research data, Evidence Log, themes, problem statements, and evaluation results.
+
+Explain the methodology, data sources, and limitations.
+
+Keep the interface simple. Functionality and evidence traceability matter more than visual complexity.
+
+## 14. Privacy and financial safety
+
+The application must:
+
+- Never request PAN details, account numbers, or portfolio screenshots.
+- Avoid collecting unnecessary sensitive personal information.
+- Redact personal identifiers when appropriate.
+- Avoid inferring personal characteristics from public feedback.
+- Never recommend specific mutual funds or stocks.
+- Never provide personalised investment advice.
+- Never use fear, FOMO, shame, guilt, or urgency-based nudges.
+- Protect API keys and imported data.
+- Display uncertainty and research limitations.
+- Preserve source traceability.
+- Allow human corrections and record exclusions.
+- Never imply access to Groww's internal data or production systems.
+
+Treat browser-collected content as untrusted input.
+
+Never send personal information, browser cookies, passwords, or unrelated browsing data to Grok.
+
+## 15. Explicitly out of scope
+
+Do not build:
+
+- An investor-facing chatbot.
+- A personalised financial adviser.
+- A fund recommendation engine.
+- A system that changes or manages SIPs.
+- Individual investor churn prediction.
+- Unrestricted automated web scraping.
+- A system that claims to calculate actual Groww continuation rates without authorised internal data.
+- The final investor-facing MVP before the underlying problem is validated.
+- Unnecessary cloud infrastructure for the first version.
+- Background monitoring of Chrome browsing activity.
+
+## 15A. Chrome extension for browser-assisted research collection
+
+### Objective
+
+Build a lightweight Chrome extension that connects to the locally running SIP Continuation Discovery Engine.
+
+The extension should reduce repetitive manual data entry while keeping the researcher in control of what is collected.
+
+This is a browser-assisted collection tool, not an unrestricted web scraper.
+
+Implement this feature only after the core research application works.
+
+### A. Supported collection workflow
+
+1. Build a Chrome extension using Manifest V3.
+2. Add a popup with a **Collect Selected Text** button.
+3. Require the user to open a supported webpage and explicitly select the text to collect.
+4. When the user clicks the button, capture only the selected text, current page URL, collection timestamp, and supported source label.
+5. Do not automatically capture the whole webpage, browser history, cookies, usernames, email addresses, or unrelated personal information.
+6. Show a preview before sending the record to the local research app.
+7. Let the user approve, edit, or discard the record.
+8. Show a clear success or failure message after the submission attempt.
+
+### B. Source and permission restrictions
+
+Begin with manually selected research text from sources whose applicable terms permit the intended collection and research use.
+
+Do not assume publicly visible content can automatically be bulk collected, copied, stored, or sent to an AI provider without restrictions.
+
+Do not implement bulk extraction from Google Play, Apple App Store, or another platform until the applicable access method and terms have been checked.
+
+Do not bypass:
+
+- Logins.
+- CAPTCHAs.
+- Access controls.
+- Rate limits.
+- Technical protections.
+
+Do not collect reviewer names or account identifiers unless explicitly required, permitted, and justified. The default is to exclude them.
+
+Preserve source URLs and provenance for every approved record.
+
+If permission or access is uncertain, disable collection for that source and explain the limitation.
+
+The first version must not promise support for every website.
+
+### C. Local application integration
+
+Keep the existing Streamlit research app and its database.
+
+Add a small local backend endpoint for receiving approved records from the extension. Use FastAPI if a separate HTTP service is needed.
+
+Store approved records in the same SQLite database used by the research app.
+
+Validate and normalise incoming data, enforce reasonable text-size limits, and deduplicate records.
+
+Use local-only network binding, request validation, and an appropriate local authentication mechanism.
+
+Restrict cross-origin requests to the required extension origin or another narrowly defined secure mechanism. Do not assume CORS alone provides authentication.
+
+Do not expose the local endpoint to the public internet.
+
+Do not place the Grok API key in the extension or send it to the browser.
+
+Do not allow arbitrary remote URLs to be passed to the local backend as instructions to fetch or execute content.
+
+### D. Browser-collected record schema
+
+Store at least:
+
+- `record_id`
+- `source`
+- `text`
+- `source_url`
+- `collected_at`
+- `collection_method`
+- `review_status`
+- `duplicate_status`
+
+Allow missing optional metadata without inventing values.
+
+Use stable identifiers and sensible deduplication rules.
+
+Preserve the original text for auditability. If a record is edited by the user, retain the original and edited versions where practical.
+
+### E. Extension user experience
+
+The popup should show:
+
+- Current page eligibility.
+- Selected text preview.
+- Collect Selected Text button.
+- Approve and Save action.
+- Discard action.
+- Clear status and error messages.
+
+The research app should show newly collected records without requiring CSV upload.
+
+Only approved records should enter the research dataset.
+
+Do not automatically send newly collected records to Grok. Require a separate user action to initiate AI analysis.
+
+### F. Fallback
+
+Keep CSV import as a permanent fallback.
+
+If the extension or local endpoint is unavailable, the user must still be able to import CSV files and analyse data.
+
+### G. Security and reliability
+
+- Use Chrome Manifest V3.
+- Request minimum necessary permissions.
+- Prefer user-triggered page access through `activeTab` where feasible.
+- Do not collect data in the background.
+- Do not execute remotely hosted extension code.
+- Treat collected webpage text as untrusted data, never as application or AI instructions.
+- Avoid logging secrets or unnecessary personal information.
+- Test the extension-to-app flow locally before expanding source support.
+- Provide simple installation and troubleshooting instructions suitable for a coding beginner.
+
+### H. Chrome extension acceptance criteria
+
+The extension is complete only when:
+
+1. I can load it into Chrome for local testing.
+2. I can select text on a supported webpage.
+3. I can preview, edit, approve, or discard the selection.
+4. An approved record appears in the research app without CSV upload.
+5. Its source URL and collection metadata are preserved.
+6. Duplicate records are identified.
+7. The extension connects to the existing analysis pipeline.
+8. The Grok API key remains server-side.
+9. Unsupported pages and unavailable local services produce clear messages.
+10. CSV import continues to work independently.
+
+## 16. Three-week implementation plan
+
+I can dedicate approximately 3–4 hours per day. Keep the plan achievable within this limit.
+
+### Week 1 — Working foundation
+
+- Inspect the workspace and existing project.
+- Set up the local application.
+- Implement CSV import, field mapping, validation, and deduplication.
+- Implement SQLite persistence and source traceability.
+- Build the Dashboard and Research Explorer.
+- Configure the Grok API securely.
+- Implement a small-batch classification test.
+- Handle missing credentials and API failures.
+- Add Google Forms CSV compatibility.
+
+**Deliverable:** A working local application that imports real data and analyses a small sample when API access is available.
+
+### Week 2 — Discovery and evaluation
+
+- Implement theme classification and evidence extraction.
+- Add uncertainty and contradiction handling.
+- Build candidate problem statements.
+- Add opportunity prioritisation and human review.
+- Implement the AI Evidence Log and evaluation workflow.
+- Begin actual survey research and 5–6 real user interviews.
+- If the core workflow is stable, build the initial Chrome extension and selected-text collection workflow.
+
+**Deliverable:** An evidence-traceable discovery workflow, an honest AI evaluation process, and an initial extension prototype if feasible.
+
+### Week 3 — Testing and submission preparation
+
+- Test error handling, privacy, security, and usability.
+- Complete actual human-label evaluation and document real corrections.
+- Improve exports and methodology documentation.
+- Connect the Chrome extension to the local database and test it, if the core workflow is complete.
+- Deploy the research engine if feasible and verify the deployment URL.
+- Prepare the one-slide engine explanation and supporting research artefacts.
+
+**Deliverable:** A demonstrable research engine, credible research evidence, documented evaluation, and a tested extension workflow if completed.
+
+### Fellowship deliverables outside this application
+
+The broader assignment separately requires:
+
+- 5–6 real user interviews.
+- A defined and evidence-supported problem.
+- An AI-native MVP addressing the selected problem.
+- At least three real usability tests of that investor-facing MVP.
+- Success metrics and risk mitigation.
+- A final deck of no more than 10 slides.
+
+The discovery engine does not satisfy those separate requirements by itself.
+
+If time is limited, prioritise the core research workflow, actual research, evidence quality, evaluation, and fellowship submission over optional extension enhancements.
+
+## 17. Testing and acceptance criteria
+
+Before declaring the first release ready, verify that:
+
+1. CSV import works.
+2. Invalid and incomplete records are handled correctly.
+3. Source references are preserved.
+4. Google Forms responses can be imported without losing respondent-level context.
+5. Grok authentication and a small test request work when credentials are available.
+6. Missing credentials produce a clear message.
+7. Model outputs are validated against a structured schema.
+8. Ambiguous records can be flagged.
+9. Themes link to supporting evidence.
+10. Contradictory evidence is preserved.
+11. Candidate problem statements include limitations and unanswered questions.
+12. Humans can correct AI labels.
+13. AI and human labels can be compared.
+14. The Evidence Log exports correctly.
+15. API failures do not destroy saved work.
+16. Imported text cannot override system instructions.
+17. The application follows privacy and financial-safety restrictions.
+18. A beginner can follow the setup instructions.
+19. The Chrome extension cannot send unapproved records.
+20. The extension can save an approved record directly into the local research database.
+21. CSV import works even when the extension is unavailable.
+22. A deployment URL is called live only after it has been tested.
+
+Do not mark any acceptance criterion complete without actually testing it.
+
+## 18. How to work with me
+
+Work in small, reviewable stages.
+
+### First step: inspect and propose
+
+Before modifying files:
+
+1. Inspect the available workspace and existing project.
+2. Identify existing files, dependencies, and working functionality.
+3. Identify missing prerequisites and any blockers.
+4. Present a short, plain-English architecture explanation.
+5. Recommend the simplest practical stack.
+6. Present a prioritised implementation plan that fits my three-week timeline and 3–4 hours per day.
+7. Explain how the CSV, Google Forms, Grok API, SQLite database, and future Chrome extension will fit together.
+8. Identify any decisions that genuinely require my approval.
+
+**Do not make major architectural changes or start implementation until I approve the plan.**
+
+Do not ask me to make technical decisions you can reasonably make yourself.
+
+After approval, build the smallest useful version first and test it before adding optional features.
+
+At each milestone, explain:
+
+- What was built.
+- How to run it.
+- What was tested.
+- What succeeded or failed.
+- What remains incomplete.
+- What I should do next.
+
+If the API is unavailable, continue with independent functionality and the manual fallback.
+
+Do not overwrite existing work without explaining why.
+
+Do not claim that research, interviews, evaluation, or deployment has occurred unless it actually has.
+
+**Begin by inspecting the workspace and presenting the implementation plan. Wait for my approval before making major architectural changes.**

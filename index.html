@@ -1,0 +1,2900 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"/>
+  <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+  <title>Continuum AI — SIP Continuation Discovery Engine</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet"/>
+  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" rel="stylesheet"/>
+  <style>
+    @layer base {
+      html, body {
+        margin: 0;
+        padding: 0;
+        background-color: #f8f9ff;
+        color: #0b1c30;
+        font-family: 'Inter', sans-serif;
+      }
+      .pb-safe { padding-bottom: env(safe-area-inset-bottom, 0px); }
+      .pt-safe { padding-top: env(safe-area-inset-top, 0px); }
+    }
+    /* Sleek scrollbar styling for desktop tables and cards */
+    ::-webkit-scrollbar { width: 6px; height: 6px; }
+    ::-webkit-scrollbar-track { background: transparent; }
+    ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 4px; }
+    ::-webkit-scrollbar-thumb:hover { background: #94a3b8; }
+    .no-scrollbar::-webkit-scrollbar { display: none; }
+    .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+  </style>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script id="tailwind-config">
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          colors: {
+            "primary": "#005d42",
+            "primary-container": "#047857",
+            "on-primary": "#ffffff",
+            "primary-fixed": "#97f5cc",
+            "primary-fixed-dim": "#7bd8b1",
+            "on-primary-fixed": "#002115",
+            "on-primary-fixed-variant": "#00513a",
+            "secondary": "#565e74",
+            "secondary-container": "#dae2fd",
+            "on-secondary": "#ffffff",
+            "on-secondary-container": "#5c647a",
+            "tertiary": "#005d3e",
+            "tertiary-container": "#007852",
+            "on-tertiary": "#ffffff",
+            "surface": "#f8f9ff",
+            "surface-dim": "#cbdbf5",
+            "surface-bright": "#f8f9ff",
+            "surface-container-lowest": "#ffffff",
+            "surface-container-low": "#eff4ff",
+            "surface-container": "#e5eeff",
+            "surface-container-high": "#dce9ff",
+            "surface-container-highest": "#d3e4fe",
+            "on-surface": "#0b1c30",
+            "on-surface-variant": "#3e4943",
+            "outline": "#6e7a73",
+            "outline-variant": "#bdc9c1",
+            "error": "#ba1a1a",
+            "error-container": "#ffdad6",
+            "on-error-container": "#93000a"
+          },
+          fontFamily: {
+            body: ["Inter", "sans-serif"]
+          }
+        }
+      }
+    };
+  </script>
+  <!-- Load Baseline Research Data Bundle as Fallback -->
+  <script src="assets/js/config.js"></script>
+  <script src="assets/js/research_data.js"></script>
+</head>
+<body class="bg-surface text-on-surface antialiased min-h-screen flex flex-col lg:flex-row">
+
+  <!-- ==================== DESKTOP SIDEBAR ==================== -->
+  <aside id="desktop-sidebar" class="hidden lg:flex flex-col w-64 bg-surface-container-lowest border-r border-outline-variant/30 fixed inset-y-0 left-0 z-40 select-none">
+    <!-- Brand / Product Header -->
+    <div class="h-16 px-5 flex items-center gap-3 border-b border-outline-variant/20">
+      <div class="w-9 h-9 rounded-xl bg-primary flex items-center justify-center text-on-primary shadow-sm flex-shrink-0">
+        <span class="material-symbols-outlined text-[20px]">auto_awesome</span>
+      </div>
+      <div class="flex flex-col min-w-0">
+        <div class="flex items-center gap-1.5">
+          <span class="text-xs font-bold uppercase tracking-wider text-primary">Continuum AI</span>
+          <span class="text-[10px] bg-secondary-container text-on-secondary-container px-1.5 py-0.5 rounded font-medium">v2.4</span>
+        </div>
+        <span class="text-xs text-on-surface-variant font-medium truncate">SIP Continuation Engine</span>
+      </div>
+    </div>
+
+    <!-- Active Research Cohort Badge -->
+    <div class="p-3 mx-3 my-2.5 bg-surface-container-low rounded-xl border border-outline-variant/30 flex items-center justify-between">
+      <div class="flex items-center gap-2 min-w-0">
+        <span class="material-symbols-outlined text-[18px] text-primary">dataset</span>
+        <div class="truncate">
+          <p class="text-xs font-semibold text-on-surface truncate" id="sidebar-cohort-label">Unified Research</p>
+          <p class="text-[11px] text-on-surface-variant" id="sidebar-cohort-count">Primary + Secondary</p>
+        </div>
+      </div>
+      <span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" title="Database Connected"></span>
+    </div>
+
+    <!-- Navigation Menu Items (All 8 Pages) -->
+    <nav class="flex-1 px-3 py-2 space-y-1 overflow-y-auto no-scrollbar" id="nav-links">
+      <a href="#overview-dashboard" data-page="overview-dashboard" onclick="switchPage('overview-dashboard'); return false;" class="nav-item flex items-center justify-between px-3 py-2.5 rounded-xl text-sm font-medium transition-all text-on-surface-variant hover:bg-surface-container hover:text-on-surface">
+        <div class="flex items-center gap-2.5">
+          <span class="material-symbols-outlined text-[20px]">dashboard</span>
+          <span>Overview</span>
+        </div>
+        <span class="text-[11px] font-semibold px-1.5 py-0.5 rounded bg-surface-container-high text-on-surface-variant" id="sidebar-overview-count">511 rec</span>
+      </a>
+
+      <a href="#research-library" data-page="research-library" onclick="switchPage('research-library'); return false;" class="nav-item flex items-center justify-between px-3 py-2.5 rounded-xl text-sm font-medium transition-all text-on-surface-variant hover:bg-surface-container hover:text-on-surface">
+        <div class="flex items-center gap-2.5">
+          <span class="material-symbols-outlined text-[20px]">local_library</span>
+          <span>Research Library</span>
+        </div>
+        <span class="text-[11px] font-semibold px-1.5 py-0.5 rounded bg-surface-container-high text-on-surface-variant" id="sidebar-library-count">511</span>
+      </a>
+
+      <a href="#ai-discovery" data-page="ai-discovery" onclick="switchPage('ai-discovery'); return false;" class="nav-item flex items-center justify-between px-3 py-2.5 rounded-xl text-sm font-medium transition-all text-on-surface-variant hover:bg-surface-container hover:text-on-surface">
+        <div class="flex items-center gap-2.5">
+          <span class="material-symbols-outlined text-[20px]">insights</span>
+          <span>AI Discovery</span>
+        </div>
+        <span class="text-[11px] font-semibold px-1.5 py-0.5 rounded bg-primary/10 text-primary">4 Themes</span>
+      </a>
+
+      <a href="#evidence-review" data-page="evidence-review" onclick="switchPage('evidence-review'); return false;" class="nav-item flex items-center justify-between px-3 py-2.5 rounded-xl text-sm font-medium transition-all text-on-surface-variant hover:bg-surface-container hover:text-on-surface">
+        <div class="flex items-center gap-2.5">
+          <span class="material-symbols-outlined text-[20px]">fact_check</span>
+          <span>Evidence Review</span>
+        </div>
+        <span id="review-badge-count" class="text-[11px] font-semibold px-1.5 py-0.5 rounded bg-amber-500/15 text-amber-900">4 items</span>
+      </a>
+
+      <a href="#problem-statements" data-page="problem-statements" onclick="switchPage('problem-statements'); return false;" class="nav-item flex items-center justify-between px-3 py-2.5 rounded-xl text-sm font-medium transition-all text-on-surface-variant hover:bg-surface-container hover:text-on-surface">
+        <div class="flex items-center gap-2.5">
+          <span class="material-symbols-outlined text-[20px]">assignment</span>
+          <span>Problem Statements</span>
+        </div>
+        <span class="text-[11px] font-semibold px-1.5 py-0.5 rounded bg-surface-container-high text-on-surface-variant">3 Cards</span>
+      </a>
+
+      <a href="#interview-planner" data-page="interview-planner" onclick="switchPage('interview-planner'); return false;" class="nav-item flex items-center justify-between px-3 py-2.5 rounded-xl text-sm font-medium transition-all text-on-surface-variant hover:bg-surface-container hover:text-on-surface">
+        <div class="flex items-center gap-2.5">
+          <span class="material-symbols-outlined text-[20px]">contact_support</span>
+          <span>Interview Planner</span>
+        </div>
+        <span class="text-[11px] font-semibold px-1.5 py-0.5 rounded bg-surface-container-high text-on-surface-variant">5 Qs</span>
+      </a>
+
+      <a href="#ai-evidence-log" data-page="ai-evidence-log" onclick="switchPage('ai-evidence-log'); return false;" class="nav-item flex items-center justify-between px-3 py-2.5 rounded-xl text-sm font-medium transition-all text-on-surface-variant hover:bg-surface-container hover:text-on-surface">
+        <div class="flex items-center gap-2.5">
+          <span class="material-symbols-outlined text-[20px]">history_edu</span>
+          <span>AI Evidence Log</span>
+        </div>
+        <span class="text-[11px] font-semibold px-1.5 py-0.5 rounded bg-surface-container-high text-on-surface-variant">Audit</span>
+      </a>
+
+      <a href="#research-reports" data-page="research-reports" onclick="switchPage('research-reports'); return false;" class="nav-item flex items-center justify-between px-3 py-2.5 rounded-xl text-sm font-medium transition-all text-on-surface-variant hover:bg-surface-container hover:text-on-surface">
+        <div class="flex items-center gap-2.5">
+          <span class="material-symbols-outlined text-[20px]">summarize</span>
+          <span>Research Reports</span>
+        </div>
+        <span class="text-[11px] font-semibold px-1.5 py-0.5 rounded bg-primary/10 text-primary">Exports</span>
+      </a>
+
+      <a href="#settings" data-page="settings" onclick="switchPage('settings'); return false;" class="nav-item flex items-center justify-between px-3 py-2.5 rounded-xl text-sm font-medium transition-all text-on-surface-variant hover:bg-surface-container hover:text-on-surface">
+        <div class="flex items-center gap-2.5">
+          <span class="material-symbols-outlined text-[20px]">settings</span>
+          <span>Settings &amp; API</span>
+        </div>
+      </a>
+    </nav>
+
+    <!-- Footer User Profile & System Status -->
+    <div class="p-3 border-t border-outline-variant/20 flex items-center justify-between bg-surface-container-lowest">
+      <div class="flex items-center gap-2.5 min-w-0">
+        <div class="w-8 h-8 rounded-full bg-primary/10 text-primary font-bold text-xs flex items-center justify-center">
+          PM
+        </div>
+        <div class="truncate">
+          <p class="text-xs font-semibold text-on-surface truncate">Fellowship Mode</p>
+          <p class="text-[11px] text-on-surface-variant truncate">Groww SIP Retention</p>
+        </div>
+      </div>
+      <button onclick="switchPage('settings')" class="text-on-surface-variant hover:text-primary p-1.5 rounded-lg hover:bg-surface-container transition-colors" title="Settings">
+        <span class="material-symbols-outlined text-[18px]">tune</span>
+      </button>
+    </div>
+  </aside>
+
+  <!-- ==================== MAIN CONTENT WRAPPER ==================== -->
+  <div class="flex-1 lg:pl-64 flex flex-col min-w-0 min-h-screen">
+
+    <!-- Top App Bar (Desktop + Mobile) -->
+    <header class="sticky top-0 z-30 bg-surface/90 backdrop-blur-md border-b border-outline-variant/20 h-16 px-4 lg:px-8 flex items-center justify-between gap-4">
+      <!-- Mobile menu button & breadcrumbs -->
+      <div class="flex items-center gap-3 min-w-0">
+        <button id="mobile-menu-toggle" aria-label="Toggle navigation drawer" class="lg:hidden p-2 rounded-lg text-on-surface-variant hover:bg-surface-container" type="button">
+          <span class="material-symbols-outlined text-[22px]">menu</span>
+        </button>
+        <div class="flex flex-col min-w-0">
+          <div class="flex items-center gap-1.5 text-xs text-on-surface-variant">
+            <span class="font-semibold text-primary">Continuum AI</span>
+            <span>/</span>
+            <span id="header-breadcrumb" class="truncate font-medium text-on-surface">Overview</span>
+          </div>
+          <span class="text-sm font-semibold text-on-surface truncate hidden sm:inline">SIP Continuation Discovery Engine</span>
+        </div>
+      </div>
+
+      <!-- Quick Search & Actions -->
+      <div class="flex items-center gap-2.5">
+        <div class="relative hidden md:block w-64">
+          <span class="material-symbols-outlined absolute left-2.5 top-2.5 text-[18px] text-outline">search</span>
+          <input type="text" id="global-search-input" placeholder="Search research (ID, quote, tag)..." class="w-full h-9 pl-9 pr-3 rounded-xl bg-surface-container-low text-xs border border-transparent focus:border-primary focus:bg-surface-container-lowest focus:outline-none transition-all"/>
+        </div>
+
+        <button onclick="openSecondaryCollectModal()" class="h-9 px-3 bg-secondary-container text-on-secondary-container rounded-xl flex items-center gap-1.5 shadow-sm hover:bg-secondary-container/80 text-xs font-semibold transition-all">
+          <span class="material-symbols-outlined text-[18px]">add_link</span>
+          <span class="hidden sm:inline">+ Collect Secondary</span>
+        </button>
+
+        <button onclick="switchPage('research-library')" class="h-9 px-3 bg-primary-container text-on-primary rounded-xl flex items-center gap-1.5 shadow-sm hover:bg-primary text-xs font-semibold transition-all">
+          <span class="material-symbols-outlined text-[18px]">dataset</span>
+          <span class="hidden sm:inline">Library (<span id="top-bar-count">511</span>)</span>
+        </button>
+
+        <button class="w-9 h-9 flex items-center justify-center rounded-xl text-on-surface-variant hover:bg-surface-container relative transition-colors" title="Audit notifications">
+          <span class="material-symbols-outlined text-[20px]">notifications</span>
+          <span class="absolute top-2 right-2 w-2 h-2 rounded-full bg-error ring-2 ring-surface"></span>
+        </button>
+
+        <div class="w-9 h-9 rounded-xl bg-primary/10 text-primary font-bold text-xs flex items-center justify-center border border-primary/20 flex-shrink-0 select-none shadow-sm" title="Product Manager Workspace">
+          PM
+        </div>
+      </div>
+    </header>
+
+    <!-- Unified Research Notice Banner (Data Integrity Safeguard) -->
+    <div class="bg-amber-500/10 border-b border-amber-300/40 px-4 lg:px-8 py-2 flex items-center justify-between gap-3 text-xs text-amber-950">
+      <div class="flex items-center gap-2 min-w-0">
+        <span class="material-symbols-outlined text-[16px] text-amber-700 shrink-0">science</span>
+        <span class="font-bold uppercase tracking-wider text-[11px] text-amber-900 shrink-0">Unified Evidence Repository:</span>
+        <span class="truncate" id="banner-text">🛡️ Safety Quarantine Vault: 34 Primary 1:1 Review &amp; Interview Records Isolated • Active Public Repository: 511 Secondary Reviews</span>
+      </div>
+      <span class="font-mono text-[10px] bg-amber-500/20 px-2 py-0.5 rounded text-amber-900 font-semibold shrink-0" id="banner-total-badge">Vault: 59 Rec</span>
+    </div>
+
+    <!-- API Disconnected Warning Banner (Hidden by default, shown if API fails) -->
+    <div id="api-error-banner" class="hidden bg-error-container text-on-error-container px-4 lg:px-8 py-2.5 flex items-center justify-between gap-3 text-xs">
+      <div class="flex items-center gap-2">
+        <span class="material-symbols-outlined text-[18px]">cloud_off</span>
+        <span><strong>API Server Degraded / Offline:</strong> <span id="api-error-banner-text">Could not reach backend API. Displaying local cached research.</span></span>
+      </div>
+      <button onclick="loadLiveDatabaseData()" class="px-2.5 py-1 bg-surface text-error rounded-lg font-bold text-[11px] hover:bg-surface-container">Retry</button>
+    </div>
+
+    <!-- ==================== MAIN PAGE CONTAINERS ==================== -->
+    <main class="flex-1 p-4 lg:p-8 max-w-7xl w-full mx-auto pb-24 lg:pb-12">
+
+      <!-- ======================================================== -->
+      <!-- 1. OVERVIEW DASHBOARD PAGE                               -->
+      <!-- ======================================================== -->
+      <section id="page-overview-dashboard" class="page-view space-y-6">
+        <!-- Hero Header -->
+        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+          <div>
+            <div class="flex items-center gap-1.5 text-primary text-xs font-bold uppercase tracking-wider mb-1">
+              <span class="material-symbols-outlined text-[18px]">monitoring</span>
+              <span>Research Synthesis Overview</span>
+            </div>
+            <h1 class="text-2xl lg:text-3xl font-bold text-on-surface">Unified Research Metrics</h1>
+            <p class="text-sm text-on-surface-variant mt-1">
+              Empirical synthesis of primary survey responses and secondary public review feeds (Play Store, Trustpilot, SEBI Studies).
+            </p>
+          </div>
+          <div class="flex items-center gap-2 shrink-0">
+            <button onclick="openSecondaryCollectModal()" class="px-3.5 py-2 bg-secondary-container text-on-secondary-container rounded-xl text-xs font-semibold flex items-center gap-1.5 shadow-sm hover:bg-secondary-container/80 transition-all">
+              <span class="material-symbols-outlined text-[18px]">add_link</span>
+              <span>Fetch Public URL</span>
+            </button>
+            <button onclick="switchPage('ai-discovery')" class="px-3.5 py-2 bg-primary text-on-primary rounded-xl text-xs font-semibold flex items-center gap-1.5 shadow-sm hover:bg-tertiary transition-all">
+              <span class="material-symbols-outlined text-[18px]">psychology</span>
+              <span>Explore AI Discovery</span>
+            </button>
+          </div>
+        </div>
+
+        <!-- 4 Top KPI Cards (Live from DB) -->
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+          <!-- Card 1: Total Records -->
+          <div class="bg-surface-container-lowest p-4 rounded-2xl shadow-sm border border-outline-variant/30 flex flex-col justify-between">
+            <div class="flex items-center justify-between">
+              <span class="text-xs font-bold uppercase tracking-wider text-on-surface-variant">Total Research Records</span>
+              <span class="w-8 h-8 rounded-xl bg-surface-container-low flex items-center justify-center text-primary">
+                <span class="material-symbols-outlined text-[20px]">dataset</span>
+              </span>
+            </div>
+            <div class="mt-3">
+              <div class="flex items-baseline gap-2">
+                <span class="text-3xl font-bold text-on-surface font-mono" id="stat-total-records">511</span>
+                <span class="text-xs text-primary font-semibold">100% verified</span>
+              </div>
+              <p class="text-xs text-on-surface-variant mt-1">Unified Primary + Secondary</p>
+            </div>
+          </div>
+
+          <!-- Card 2: Primary Records -->
+          <div class="bg-surface-container-lowest p-4 rounded-2xl shadow-sm border border-outline-variant/30 flex flex-col justify-between">
+            <div class="flex items-center justify-between">
+              <span class="text-xs font-bold uppercase tracking-wider text-on-surface-variant">Primary Research</span>
+              <span class="w-8 h-8 rounded-xl bg-emerald-500/10 flex items-center justify-center text-emerald-700">
+                <span class="material-symbols-outlined text-[20px]">how_to_reg</span>
+              </span>
+            </div>
+            <div class="mt-3">
+              <div class="flex items-baseline gap-2">
+                <span class="text-3xl font-bold text-amber-900 font-mono" id="stat-primary-records">27</span>
+                <span class="text-xs text-on-surface-variant font-medium">responses</span>
+              </div>
+              <p class="text-xs text-on-surface-variant mt-1">In Safety Quarantine Vault (1:1 Review)</p>
+            </div>
+          </div>
+
+          <!-- Card 3: Secondary Records -->
+          <div class="bg-surface-container-lowest p-4 rounded-2xl shadow-sm border border-outline-variant/30 flex flex-col justify-between">
+            <div class="flex items-center justify-between">
+              <span class="text-xs font-bold uppercase tracking-wider text-on-surface-variant">Secondary Research</span>
+              <span class="w-8 h-8 rounded-xl bg-secondary-container flex items-center justify-center text-on-secondary-container">
+                <span class="material-symbols-outlined text-[20px]">public</span>
+              </span>
+            </div>
+            <div class="mt-3">
+              <div class="flex items-baseline gap-2">
+                <span class="text-3xl font-bold text-on-surface font-mono" id="stat-secondary-records">511</span>
+                <span class="text-xs text-secondary font-semibold">public items</span>
+              </div>
+              <p class="text-xs text-on-surface-variant mt-1">Groww, Zerodha, Paytm, Angel, Dhan, SEBI</p>
+            </div>
+          </div>
+
+          <!-- Card 4: Active Ingestion Channels -->
+          <div class="bg-surface-container-lowest p-4 rounded-2xl shadow-sm border border-outline-variant/30 flex flex-col justify-between">
+            <div class="flex items-center justify-between">
+              <span class="text-xs font-bold uppercase tracking-wider text-on-surface-variant">Ingestion Channels</span>
+              <span class="w-8 h-8 rounded-xl bg-surface-container flex items-center justify-center text-primary">
+                <span class="material-symbols-outlined text-[20px]">hub</span>
+              </span>
+            </div>
+            <div class="mt-3">
+              <div class="flex items-baseline gap-2">
+                <span class="text-3xl font-bold text-primary font-mono" id="stat-active-sources">7</span>
+                <span class="text-xs text-on-surface-variant font-medium">active feeds</span>
+              </div>
+              <p class="text-xs text-on-surface-variant mt-1">Surveys, Stores, Extensions, Web</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- 2 Column Analytics Grid -->
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+          
+          <!-- Column 1: Multi-Channel Ingestion Distribution -->
+          <div class="bg-surface-container-lowest p-5 rounded-2xl border border-outline-variant/30 shadow-sm space-y-4">
+            <div class="flex items-center justify-between">
+              <div class="flex items-center gap-2">
+                <span class="material-symbols-outlined text-primary text-[20px]">pie_chart</span>
+                <h3 class="text-base font-bold text-on-surface">Data Sources Breakdown (Live Database)</h3>
+              </div>
+              <span class="text-[11px] font-semibold text-on-surface-variant bg-surface-container px-2 py-0.5 rounded">SQLite Ingested</span>
+            </div>
+            <p class="text-xs text-on-surface-variant">
+              Breakdown of verified qualitative records by source channel in the running application.
+            </p>
+
+            <div class="space-y-3 pt-1" id="sources-breakdown-container">
+              <!-- Dynamically populated from /api/stats -->
+            </div>
+          </div>
+
+          <!-- Column 2: Reported Difficulties & Churn Signals -->
+          <div class="bg-surface-container-lowest p-5 rounded-2xl border border-outline-variant/30 shadow-sm space-y-4">
+            <div class="flex items-center justify-between">
+              <div class="flex items-center gap-2">
+                <span class="material-symbols-outlined text-primary text-[20px]">report_problem</span>
+                <h3 class="text-base font-bold text-on-surface">Top Continuation Friction Signals</h3>
+              </div>
+              <span class="text-[11px] font-semibold text-on-surface-variant bg-surface-container px-2 py-0.5 rounded">Multi-Source</span>
+            </div>
+            <p class="text-xs text-on-surface-variant">
+              Recurring issues extracted across primary survey respondents and secondary store reviews.
+            </p>
+
+            <div class="space-y-3 pt-1">
+              <div>
+                <div class="flex items-center justify-between text-xs font-medium mb-1">
+                  <span class="text-on-surface flex items-center gap-1.5">
+                    <span class="w-2 h-2 rounded-full bg-error"></span>
+                    Market Volatility &amp; Negative Returns Panic
+                  </span>
+                  <span class="font-mono font-bold text-error">19 records (High)</span>
+                </div>
+                <div class="w-full bg-surface-container-low h-2.5 rounded-full overflow-hidden">
+                  <div class="bg-error h-full rounded-full" style="width: 48%"></div>
+                </div>
+              </div>
+
+              <div>
+                <div class="flex items-center justify-between text-xs font-medium mb-1">
+                  <span class="text-on-surface flex items-center gap-1.5">
+                    <span class="w-2 h-2 rounded-full bg-purple-500"></span>
+                    Failed Payments, Mandate Errors &amp; ECS Penalties
+                  </span>
+                  <span class="font-mono font-bold text-purple-700">26 records (Critical)</span>
+                </div>
+                <div class="w-full bg-surface-container-low h-2.5 rounded-full overflow-hidden">
+                  <div class="bg-purple-500 h-full rounded-full" style="width: 65%"></div>
+                </div>
+              </div>
+
+              <div>
+                <div class="flex items-center justify-between text-xs font-medium mb-1">
+                  <span class="text-on-surface flex items-center gap-1.5">
+                    <span class="w-2 h-2 rounded-full bg-amber-500"></span>
+                    Monthly Cash Flow Stress &amp; Inflexible Pausing
+                  </span>
+                  <span class="font-mono font-bold text-amber-800">11 records</span>
+                </div>
+                <div class="w-full bg-surface-container-low h-2.5 rounded-full overflow-hidden">
+                  <div class="bg-amber-500 h-full rounded-full" style="width: 28%"></div>
+                </div>
+              </div>
+
+              <div>
+                <div class="flex items-center justify-between text-xs font-medium mb-1">
+                  <span class="text-on-surface flex items-center gap-1.5">
+                    <span class="w-2 h-2 rounded-full bg-blue-500"></span>
+                    In-App Guidance Vacuum &amp; Financial Jargon (XIRR/CAGR)
+                  </span>
+                  <span class="font-mono font-bold text-blue-700">17 records</span>
+                </div>
+                <div class="w-full bg-surface-container-low h-2.5 rounded-full overflow-hidden">
+                  <div class="bg-blue-500 h-full rounded-full" style="width: 42%"></div>
+                </div>
+              </div>
+            </div>
+
+            <div class="p-3 bg-surface-container rounded-xl flex items-start gap-2.5 text-xs text-on-surface-variant">
+              <span class="material-symbols-outlined text-[16px] text-primary shrink-0 mt-0.5">verified</span>
+              <span>
+                <strong>Methodological Confirmation:</strong> Secondary public store reviews heavily corroborate primary survey findings regarding mandate auto-debit failure anxiety and temporary pause needs.
+              </span>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ======================================================== -->
+      <!-- 2. RESEARCH LIBRARY PAGE (Unified Primary + Secondary)   -->
+      <!-- ======================================================== -->
+      <section id="page-research-library" class="page-view hidden space-y-5">
+        <!-- Header & Action Bar -->
+        <div class="flex flex-col md:flex-row md:items-center justify-between gap-4">
+          <div>
+            <div class="flex items-center gap-1.5 text-primary text-xs font-bold uppercase tracking-wider mb-1">
+              <span class="material-symbols-outlined text-[18px]">local_library</span>
+              <span>Unified Research Repository</span>
+            </div>
+            <h1 class="text-2xl font-bold text-on-surface" id="library-title-header">Research Library (All Research)</h1>
+            <p class="text-xs text-on-surface-variant mt-0.5">
+              Live unified database query: Browse, search, and inspect primary survey responses and secondary public reviews.
+            </p>
+          </div>
+
+          <div class="flex flex-wrap items-center gap-2">
+            <button onclick="openSecondaryCollectModal()" class="h-9 px-3 bg-primary text-on-primary font-semibold text-xs rounded-xl flex items-center gap-1.5 hover:bg-tertiary transition-colors shadow-sm">
+              <span class="material-symbols-outlined text-[16px]">add_link</span>
+              <span>+ Add Secondary Research</span>
+            </button>
+            <a href="#" data-api-endpoint="/api/reports/export?scope=all&format=csv" onclick="handleApiDownload(event, '/api/reports/export?scope=all&format=csv')" download="continuum_ai_research_active_511.csv" onclick="triggerDirectDownload(this.href, 'continuum_ai_research_active_511.csv')" class="h-9 px-3 bg-primary text-on-primary font-semibold text-xs rounded-xl flex items-center gap-1.5 hover:bg-tertiary transition-colors shadow-sm">
+              <span class="material-symbols-outlined text-[16px]">file_download</span>
+              <span>Export Active Research (CSV)</span>
+            </a>
+          </div>
+        </div>
+
+        <!-- Filter Bar: Working 3-Way Source Filters (All / Primary / Secondary) -->
+        <div class="bg-surface-container-lowest p-4 rounded-2xl border border-outline-variant/30 space-y-3.5 shadow-sm">
+          <!-- Row 1: Source Category Radio Pills -->
+          <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-outline-variant/20 pb-3">
+            <div class="flex items-center gap-2">
+              <span class="text-xs font-bold uppercase tracking-wider text-on-surface-variant">Source Filter:</span>
+              <div class="flex items-center gap-1 bg-surface-container-low p-1 rounded-xl">
+                <button onclick="setSourceTypeFilter('all')" id="btn-filter-all" class="source-toggle-btn active px-3 py-1.5 rounded-lg text-xs font-bold bg-primary text-on-primary shadow-sm transition-all">
+                  Active Research (<span id="count-pill-all">511</span>)
+                </button>
+                <button onclick="setSourceTypeFilter('primary')" id="btn-filter-primary" class="source-toggle-btn px-3 py-1.5 rounded-lg text-xs font-medium text-on-surface-variant hover:bg-surface-container transition-all">
+                  Primary 1:1 Vault (<span id="count-pill-primary">34</span>)
+                </button>
+                <button onclick="setSourceTypeFilter('quarantine')" id="btn-filter-quarantine" class="source-toggle-btn px-3 py-1.5 rounded-lg text-xs font-medium text-on-surface-variant hover:bg-surface-container transition-all">
+                  Full Vault (<span id="count-pill-quarantine">59</span>)
+                </button>
+                <button onclick="setSourceTypeFilter('secondary')" id="btn-filter-secondary" class="source-toggle-btn px-3 py-1.5 rounded-lg text-xs font-medium text-on-surface-variant hover:bg-surface-container transition-all">
+                  Secondary (<span id="count-pill-secondary">511</span>)
+                </button>
+              </div>
+            </div>
+
+            <!-- Total counter tag -->
+            <span class="text-xs font-mono font-semibold px-2.5 py-1 rounded-lg bg-surface-container text-on-surface" id="filter-status-tag">
+              Viewing All Records
+            </span>
+          </div>
+
+          <!-- Row 2: Search input & sub-platform filters -->
+          <div class="flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-3">
+            <div class="relative flex-1">
+              <span class="material-symbols-outlined absolute left-3 top-2.5 text-[18px] text-outline">search</span>
+              <input type="text" id="library-search-input" placeholder="Search across all records by title, text, ID, or source..." class="w-full h-10 pl-9 pr-3 rounded-xl bg-surface-container-low text-xs border border-transparent focus:border-primary focus:bg-surface-container-lowest focus:outline-none transition-all"/>
+            </div>
+
+            <!-- Platform Pills -->
+            <div class="flex items-center gap-1.5 overflow-x-auto no-scrollbar pb-1 sm:pb-0" id="platform-filter-container">
+              <button onclick="filterByPlatform('all')" class="plat-pill active px-3 py-1.5 rounded-lg text-xs font-semibold bg-surface-container-high text-on-surface">All Sources</button>
+              <button onclick="filterByPlatform('interviews')" id="plat-pill-interviews" class="plat-pill px-3 py-1.5 rounded-lg text-xs font-semibold bg-purple-500/10 text-purple-900 border border-purple-300 hover:bg-purple-500/20">🎤 1:1 Interviews (7)</button>
+              <button onclick="filterByPlatform('Google Forms')" id="plat-pill-primary" class="plat-pill px-3 py-1.5 rounded-lg text-xs font-medium bg-amber-500/10 text-amber-900 border border-amber-300 hover:bg-amber-500/20">Primary 1:1 Vault (34)</button>
+              <button onclick="filterByPlatform('Groww')" class="plat-pill px-3 py-1.5 rounded-lg text-xs font-medium bg-surface-container-low text-on-surface-variant hover:bg-surface-container">Groww (180)</button>
+              <button onclick="filterByPlatform('Zerodha')" class="plat-pill px-3 py-1.5 rounded-lg text-xs font-medium bg-surface-container-low text-on-surface-variant hover:bg-surface-container">Zerodha Coin (140)</button>
+              <button onclick="filterByPlatform('Paytm')" class="plat-pill px-3 py-1.5 rounded-lg text-xs font-medium bg-surface-container-low text-on-surface-variant hover:bg-surface-container">Paytm Money (85)</button>
+              <button onclick="filterByPlatform('Angel')" class="plat-pill px-3 py-1.5 rounded-lg text-xs font-medium bg-surface-container-low text-on-surface-variant hover:bg-surface-container">Angel One (65)</button>
+              <button onclick="filterByPlatform('Dhan')" class="plat-pill px-3 py-1.5 rounded-lg text-xs font-medium bg-surface-container-low text-on-surface-variant hover:bg-surface-container">Dhan (40)</button>
+              <button onclick="filterByPlatform('SEBI')" class="plat-pill px-3 py-1.5 rounded-lg text-xs font-medium bg-surface-container-low text-on-surface-variant hover:bg-surface-container">SEBI Study</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Table Container -->
+        <div class="bg-surface-container-lowest rounded-2xl border border-outline-variant/30 overflow-hidden shadow-sm">
+          <!-- Loading Indicator -->
+          <div id="table-loading-spinner" class="hidden p-8 text-center text-xs text-on-surface-variant">
+            <span class="material-symbols-outlined text-[24px] animate-spin text-primary">sync</span>
+            <p class="mt-2 font-medium">Fetching research records from database...</p>
+          </div>
+
+          <div class="overflow-x-auto" id="table-scroll-wrapper">
+            <table class="w-full text-left text-xs" id="unified-research-table">
+              <thead class="bg-surface-container-low border-b border-outline-variant/30 text-on-surface-variant uppercase tracking-wider font-semibold">
+                <tr>
+                  <th class="py-3 px-4">Research ID</th>
+                  <th class="py-3 px-3">Title / Subject</th>
+                  <th class="py-3 px-3">Source Type</th>
+                  <th class="py-3 px-3">Platform</th>
+                  <th class="py-3 px-3">Method / Date</th>
+                  <th class="py-3 px-4">Verbatim Excerpt Preview</th>
+                  <th class="py-3 px-3 text-right">Inspect</th>
+                </tr>
+              </thead>
+              <tbody class="divide-y divide-outline-variant/20" id="unified-research-tbody">
+                <!-- Dynamically populated from API -->
+              </tbody>
+            </table>
+          </div>
+
+          <div class="p-3 border-t border-outline-variant/20 flex items-center justify-between text-xs text-on-surface-variant">
+            <span id="library-count-text">Showing 511 records</span>
+            <span class="text-[11px] text-outline">Click any row to view complete text, citations, and metadata</span>
+          </div>
+        </div>
+      </section>
+
+      <!-- ======================================================== -->
+      <!-- 3. AI DISCOVERY PAGE (Unified Multi-Source Synthesis)    -->
+      <!-- ======================================================== -->
+      <section id="page-ai-discovery" class="page-view hidden space-y-5">
+        <!-- Hero Header -->
+        <header class="flex flex-col gap-3">
+          <div class="flex items-start justify-between gap-3">
+            <div class="flex flex-col">
+              <div class="flex items-center gap-1.5 text-primary mb-0.5">
+                <span class="material-symbols-outlined text-[18px]">auto_awesome</span>
+                <span class="font-bold text-xs uppercase tracking-wider text-primary">Multi-Source Qualitative Synthesis</span>
+              </div>
+              <h1 class="text-2xl lg:text-3xl font-bold text-on-surface tracking-tight">AI Discovery</h1>
+            </div>
+            <div class="w-10 h-10 rounded-full bg-surface-container flex items-center justify-center shrink-0 text-primary shadow-sm">
+              <span class="material-symbols-outlined text-[22px]">bubble_chart</span>
+            </div>
+          </div>
+          <p class="text-xs sm:text-sm text-on-surface-variant leading-relaxed">
+            Recurring friction points, psychological barriers, and banking friction synthesized across both <strong>Primary Survey responses</strong> and <strong>Secondary Public Reviews</strong>.
+          </p>
+
+          
+          <!-- Discovery Score Transparency Disclaimer -->
+          <div class="bg-blue-500/10 border border-blue-400/30 p-3.5 rounded-2xl flex items-start gap-3 text-xs text-blue-900 shadow-sm">
+            <span class="material-symbols-outlined text-[20px] text-blue-700 shrink-0 mt-0.5">verified_user</span>
+            <div class="space-y-1">
+              <p class="font-bold tracking-tight">Prioritization Scorecard Transparency Disclaimer</p>
+              <p class="text-blue-950/80 leading-relaxed">
+                AI Discovery prioritization scores are <strong>exploratory heuristic indices</strong> calculated across 6 qualitative dimensions (Evidence Grounding, SIP Relevance, User Severity, Product Influence, Feasibility, and Safety Compliance). They are designed for discovery sprint planning and are <strong>NOT measured business impact metrics</strong>, conversion predictions, or verified percentage reductions in SIP churn. Interventions are kept strictly distinct from validated user needs.
+              </p>
+            </div>
+          </div>
+
+          <!-- Pre-Analysis Dataset Selector & Audit Counts -->
+          <div class="bg-surface-container-low p-4 rounded-2xl border border-outline-variant/30 space-y-3">
+            <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+              <div class="flex items-center gap-2">
+                <span class="text-xs font-bold uppercase tracking-wider text-on-surface">Synthesis Scope:</span>
+                <div class="flex items-center gap-1 bg-surface-container-lowest p-1 rounded-xl border border-outline-variant/20">
+                  <button onclick="setDiscoveryScope('all')" id="scope-btn-all" class="scope-btn active px-3 py-1 rounded-lg text-xs font-bold bg-primary text-on-primary">
+                    Active Research (511)
+                  </button>
+                  <button onclick="setDiscoveryScope('primary')" id="scope-btn-primary" class="scope-btn px-3 py-1 rounded-lg text-xs font-medium text-on-surface-variant hover:bg-surface-container">
+                    Quarantine Vault (52)
+                  </button>
+                  <button onclick="setDiscoveryScope('secondary')" id="scope-btn-secondary" class="scope-btn px-3 py-1 rounded-lg text-xs font-medium text-on-surface-variant hover:bg-surface-container">
+                    Secondary Only (511)
+                  </button>
+                </div>
+              </div>
+              <button class="h-9 px-4 bg-primary-container text-on-primary rounded-xl flex items-center justify-center gap-2 shadow-sm hover:bg-primary transition-all text-xs font-bold" id="trigger-rerun" type="button">
+                <span class="material-symbols-outlined text-[18px]">psychology</span>
+                <span>Run Synthesis Scan</span>
+              </button>
+            </div>
+
+            <!-- Mandatory Pre-Analysis Record Count Verification -->
+            <div class="grid grid-cols-2 sm:grid-cols-4 gap-2 pt-1 text-xs">
+              <div class="bg-surface-container-lowest p-2.5 rounded-xl border border-outline-variant/20">
+                <span class="text-[10px] uppercase font-bold text-on-surface-variant">Primary Records</span>
+                <p class="text-base font-bold text-amber-900 font-mono mt-0.5" id="disc-primary-count">27 in Vault</p>
+              </div>
+              <div class="bg-surface-container-lowest p-2.5 rounded-xl border border-outline-variant/20">
+                <span class="text-[10px] uppercase font-bold text-on-surface-variant">Secondary Records</span>
+                <p class="text-base font-bold text-on-surface font-mono mt-0.5" id="disc-secondary-count">511 Selected</p>
+              </div>
+              <div class="bg-surface-container-lowest p-2.5 rounded-xl border border-outline-variant/20">
+                <span class="text-[10px] uppercase font-bold text-primary">Total Analysis Input</span>
+                <p class="text-base font-bold text-primary font-mono mt-0.5" id="disc-total-count">511 Records</p>
+              </div>
+              <div class="bg-surface-container-lowest p-2.5 rounded-xl border border-outline-variant/20">
+                <span class="text-[10px] uppercase font-bold text-amber-900">Quarantined Records</span>
+                <p class="text-base font-bold text-amber-900 font-mono mt-0.5" id="disc-excluded-count">52 in Vault</p>
+              </div>
+            </div>
+          </div>
+        </header>
+
+        <!-- 4 Candidate Themes Grounded in Both Primary & Secondary Research -->
+        <section class="space-y-4 pt-1">
+          <div class="flex items-center justify-between">
+            <div class="flex items-center gap-2">
+              <h2 class="text-lg font-bold text-on-surface">Candidate Themes (Multi-Source Grounded)</h2>
+              <span class="px-2 py-0.5 rounded-full bg-primary/10 text-primary text-xs font-mono font-semibold">4 Verified</span>
+            </div>
+          </div>
+
+          <!-- 4 THEME CARDS LIST -->
+          <div class="space-y-4" id="themes-list-container">
+            <!-- Populated dynamically -->
+          </div>
+        </section>
+      </section>
+
+      <!-- ======================================================== -->
+      <!-- 4. EVIDENCE REVIEW PAGE                                  -->
+      <!-- ======================================================== -->
+      <section id="page-evidence-review" class="page-view hidden space-y-6">
+        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+          <div>
+            <div class="flex items-center gap-1.5 text-primary text-xs font-bold uppercase tracking-wider mb-1">
+              <span class="material-symbols-outlined text-[18px]">fact_check</span>
+              <span>Human-In-The-Loop Validation</span>
+            </div>
+            <h1 class="text-2xl font-bold text-on-surface">Evidence Review Board</h1>
+            <p class="text-xs text-on-surface-variant mt-0.5">
+              Review and validate AI-generated candidate themes. Approve, edit, reject, or flag items. Edits are saved locally.
+            </p>
+          </div>
+        </div>
+
+        <div class="space-y-4" id="review-cards-container">
+          <!-- Dynamically generated via script -->
+        </div>
+      </section>
+
+      <!-- ======================================================== -->
+      <!-- 5. PROBLEM STATEMENTS PAGE                               -->
+      <!-- ======================================================== -->
+      <section id="page-problem-statements" class="page-view hidden space-y-6">
+        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+          <div>
+            <div class="flex items-center gap-1.5 text-primary text-xs font-bold uppercase tracking-wider mb-1">
+              <span class="material-symbols-outlined text-[18px]">assignment</span>
+              <span>Discovery to Product Formulation</span>
+            </div>
+            <h1 class="text-2xl font-bold text-on-surface">Candidate Problem Statements</h1>
+            <p class="text-xs text-on-surface-variant mt-0.5">
+              Audited against <code class="font-mono bg-surface-container px-1 py-0.5 rounded text-primary">data/sip_discovery.db</code> (570 records). Validated user needs are strictly segregated from proposed interventions. Prioritization scores represent qualitative PM heuristics, not measured business churn impact.
+            </p>
+          </div>
+          <button onclick="exportProblemsJSON()" class="h-9 px-3 bg-surface-container-high text-on-surface text-xs font-semibold rounded-xl flex items-center gap-1.5 hover:bg-surface-container-highest transition-colors">
+            <span class="material-symbols-outlined text-[16px]">download</span>
+            <span>Export Problems (JSON)</span>
+          </button>
+        </div>
+
+        <div class="space-y-6" id="problem-cards-container">
+          <!-- Rendered dynamically -->
+        </div>
+      </section>
+
+      <!-- ======================================================== -->
+      <!-- 6. INTERVIEW PLANNER PAGE                                -->
+      <!-- ======================================================== -->
+      <section id="page-interview-planner" class="page-view hidden space-y-6">
+        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+          <div>
+            <div class="flex items-center gap-1.5 text-primary text-xs font-bold uppercase tracking-wider mb-1">
+              <span class="material-symbols-outlined text-[18px]">contact_support</span>
+              <span>Qualitative Primary Research Guide</span>
+            </div>
+            <h1 class="text-2xl font-bold text-on-surface">Interview Planner &amp; Script Builder</h1>
+            <p class="text-xs text-on-surface-variant mt-0.5">
+              5 neutral, non-leading interview questions tailored to resolve critical knowledge gaps uncovered in the research.
+            </p>
+          </div>
+          <button onclick="window.print()" class="h-9 px-3 bg-surface-container-high text-on-surface text-xs font-semibold rounded-xl flex items-center gap-1.5 hover:bg-surface-container-highest transition-colors">
+            <span class="material-symbols-outlined text-[16px]">print</span>
+            <span>Print Interview Guide</span>
+          </button>
+        </div>
+
+        <div class="space-y-4" id="interview-questions-container">
+          <!-- Rendered dynamically -->
+        </div>
+
+        <!-- 1:1 Interview Survey Fieldwork Responses -->
+        <div class="mt-8 pt-6 border-t border-outline-variant/30 space-y-4">
+          <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 bg-surface-container-lowest p-5 rounded-2xl border border-outline-variant/30 shadow-sm">
+            <div>
+              <div class="flex items-center gap-1.5 text-primary text-xs font-bold uppercase tracking-wider mb-1">
+                <span class="material-symbols-outlined text-[16px]">record_voice_over</span>
+                <span>Qualitative Fieldwork Submissions</span>
+              </div>
+              <h2 class="text-lg font-bold text-on-surface">Collected 1:1 Interview Responses (7 Submissions)</h2>
+              <p class="text-xs text-on-surface-variant">Real responses collected from first-time SIP investors mapped directly against the 5 discovery script questions.</p>
+            </div>
+            <a href="#" data-api-endpoint="/api/reports/export?scope=primary&format=csv" onclick="handleApiDownload(event, '/api/reports/export?scope=primary&format=csv')" download="interview_responses.csv" class="h-9 px-4 bg-primary text-on-primary text-xs font-semibold rounded-xl flex items-center gap-1.5 shadow-sm hover:bg-primary/90 transition-all shrink-0">
+              <span class="material-symbols-outlined text-[16px]">download</span>
+              <span>Export Responses (CSV)</span>
+            </a>
+          </div>
+
+          <div class="space-y-4" id="interview-responses-container">
+            <!-- Dynamically rendered via renderInterviewResponses() -->
+          </div>
+        </div>
+      </section>
+
+      <!-- ======================================================== -->
+      <!-- 7. AI EVIDENCE LOG PAGE                                  -->
+      <!-- ======================================================== -->
+      <section id="page-ai-evidence-log" class="page-view hidden space-y-6">
+        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+          <div>
+            <div class="flex items-center gap-1.5 text-primary text-xs font-bold uppercase tracking-wider mb-1">
+              <span class="material-symbols-outlined text-[18px]">history_edu</span>
+              <span>Institutional Audit &amp; Evaluation</span>
+            </div>
+            <h1 class="text-2xl font-bold text-on-surface">AI Evidence Log</h1>
+            <p class="text-xs text-on-surface-variant mt-0.5">
+              Traceable audit trail comparing AI classifications with Human verifications across both primary and secondary sources.
+            </p>
+          </div>
+        </div>
+
+        <div class="bg-surface-container-lowest rounded-2xl border border-outline-variant/30 overflow-hidden shadow-sm">
+          <div class="overflow-x-auto">
+            <table class="w-full text-left text-xs">
+              <thead class="bg-surface-container-low border-b border-outline-variant/30 text-on-surface-variant uppercase font-semibold">
+                <tr>
+                  <th class="py-3 px-4">Record ID</th>
+                  <th class="py-3 px-4">Verbatim Excerpt</th>
+                  <th class="py-3 px-4">AI Suggested Labels</th>
+                  <th class="py-3 px-4">Human Verified Labels</th>
+                  <th class="py-3 px-4">Reviewer Notes</th>
+                  <th class="py-3 px-3">Status</th>
+                </tr>
+              </thead>
+              <tbody class="divide-y divide-outline-variant/20" id="evidence-log-tbody">
+                <!-- Rendered dynamically -->
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+
+      <!-- ======================================================== -->
+      <!-- 8. SETTINGS & BACKEND CONFIG PAGE                        -->
+      <!-- ======================================================== -->
+      <section id="page-settings" class="page-view hidden space-y-6">
+        <div>
+          <div class="flex items-center gap-1.5 text-primary text-xs font-bold uppercase tracking-wider mb-1">
+            <span class="material-symbols-outlined text-[18px]">settings</span>
+            <span>Configuration &amp; Storage</span>
+          </div>
+          <h1 class="text-2xl font-bold text-on-surface">Settings &amp; Database Health</h1>
+          <p class="text-xs text-on-surface-variant mt-0.5">
+            Manage your local SQLite database, inspect live research record counts, and configure collection settings.
+          </p>
+        </div>
+
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+          <div class="bg-surface-container-lowest p-5 rounded-2xl border border-outline-variant/30 shadow-sm space-y-4">
+            <div class="flex items-center gap-2 text-on-surface font-bold text-sm">
+              <span class="material-symbols-outlined text-[20px] text-primary">database</span>
+              <span>SQLite Database Connection</span>
+            </div>
+            
+            <div class="space-y-2 text-xs">
+              <div class="flex justify-between py-1.5 border-b border-outline-variant/20">
+                <span class="text-on-surface-variant">Database Path:</span>
+                <span class="font-mono font-semibold text-on-surface">data/sip_discovery.db</span>
+              </div>
+              <div class="flex justify-between py-1.5 border-b border-outline-variant/20">
+                <span class="text-on-surface-variant">Primary Records in DB:</span>
+                <span class="font-mono font-semibold text-amber-900" id="settings-primary-count">27 (in Vault)</span>
+              </div>
+              <div class="flex justify-between py-1.5 border-b border-outline-variant/20">
+                <span class="text-on-surface-variant">Secondary Records in DB:</span>
+                <span class="font-mono font-semibold text-secondary" id="settings-secondary-count">511</span>
+              </div>
+              <div class="flex justify-between py-1.5 border-b border-outline-variant/20">
+                <span class="text-on-surface-variant">Total Active in DB:</span>
+                <span class="font-mono font-bold text-primary" id="settings-total-count">511</span>
+              </div>
+              <div class="flex justify-between py-1.5 border-b border-outline-variant/20">
+                <span class="text-on-surface-variant">Quarantined (Synthetic):</span>
+                <span class="font-mono font-bold text-amber-900" id="settings-quarantine-count">52</span>
+              </div>
+            </div>
+
+            <div class="pt-2 flex flex-wrap gap-2">
+              <button onclick="loadLiveDatabaseData()" class="px-3 py-2 bg-primary text-on-primary rounded-xl text-xs font-semibold hover:bg-tertiary transition-colors">
+                Refresh Database Stats
+              </button>
+              <button onclick="exportSurveyCSV()" class="px-3 py-2 bg-surface-container-high rounded-xl text-xs font-semibold text-on-surface hover:bg-surface-container-highest transition-colors">
+                Export Raw Survey CSV
+              </button>
+            </div>
+          </div>
+
+          <div class="bg-surface-container-lowest p-5 rounded-2xl border border-outline-variant/30 shadow-sm space-y-4">
+            <div class="flex items-center justify-between">
+              <div class="flex items-center gap-2 text-on-surface font-bold text-sm">
+                <span class="material-symbols-outlined text-[20px] text-primary">tune</span>
+                <span>Receiver API Endpoint</span>
+              </div>
+              <span id="receiver-api-badge" class="text-[10px] bg-emerald-500/10 text-emerald-800 px-2 py-0.5 rounded font-bold">127.0.0.1:8000</span>
+            </div>
+
+            <div class="space-y-2 text-xs text-on-surface-variant">
+              <p>Health check endpoint: <code>/api/health</code></p>
+              <p>Research endpoint: <code>/api/records?source_type=all</code></p>
+              <p>URL collection endpoint: <code>/api/fetch-url</code></p>
+            </div>
+
+            <div class="pt-2">
+              <button onclick="testGrokConnection()" id="btn-test-connection" class="w-full h-10 bg-primary-container text-on-primary rounded-xl text-xs font-semibold hover:bg-primary transition-all flex items-center justify-center gap-1.5 shadow-sm">
+                <span class="material-symbols-outlined text-[18px]">cell_tower</span>
+                <span>Test API Health Check</span>
+              </button>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ======================================================== -->
+      <!-- 9. RESEARCH REPORTS & DATASET EXPORTS PAGE                -->
+      <!-- ======================================================== -->
+      <section id="page-research-reports" class="page-view hidden space-y-6">
+        <!-- Reports Header Banner -->
+        <div class="bg-surface-container-lowest rounded-2xl p-6 border border-outline-variant/30 shadow-sm flex flex-col md:flex-row md:items-center justify-between gap-4">
+          <div class="space-y-1">
+            <div class="flex items-center gap-2">
+              <span class="w-8 h-8 rounded-xl bg-primary/10 text-primary flex items-center justify-center font-bold">
+                <span class="material-symbols-outlined text-[20px]">summarize</span>
+              </span>
+              <h2 class="text-xl font-bold text-on-surface">Research Reports &amp; Dataset Exports</h2>
+              <span class="text-[11px] font-bold px-2 py-0.5 rounded-full bg-emerald-500/10 text-emerald-800 border border-emerald-300">Live DB Synchronized</span>
+            </div>
+            <p class="text-xs text-on-surface-variant max-w-2xl">
+              Export verified primary and secondary research datasets in standard CSV and JSON formats. Generate readable analysis reports, evidence citation tables, and candidate problem statements grounded exclusively in active research records.
+            </p>
+          </div>
+
+          <div class="flex flex-wrap items-center gap-2">
+            <button onclick="downloadDataset('all', 'csv')" class="h-9 px-3.5 bg-primary text-on-primary rounded-xl text-xs font-semibold hover:bg-tertiary transition-all flex items-center gap-1.5 shadow-sm">
+              <span class="material-symbols-outlined text-[16px]">file_download</span>
+              <span>Export All Research (CSV)</span>
+            </button>
+            <button onclick="loadReportPreview('methodology')" class="h-9 px-3.5 bg-surface-container-high text-on-surface rounded-xl text-xs font-semibold hover:bg-surface-container-highest transition-colors flex items-center gap-1.5">
+              <span class="material-symbols-outlined text-[16px]">visibility</span>
+              <span>Methodology Disclosure</span>
+            </button>
+          </div>
+        </div>
+
+        <!-- Cohort & Data Integrity Safeguards Status Card -->
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+          <div class="bg-surface-container-lowest p-4 rounded-2xl border border-emerald-300/60 shadow-sm space-y-1">
+            <div class="flex items-center justify-between">
+              <span class="text-[10px] uppercase font-bold text-emerald-800">Active Research Dataset</span>
+              <span class="material-symbols-outlined text-emerald-600 text-[18px]">verified</span>
+            </div>
+            <p class="text-2xl font-bold font-mono text-on-surface" id="reports-active-count">511 Records</p>
+            <p class="text-[11px] text-on-surface-variant">511 Verified Secondary Public Research (Play Store &amp; SEBI)</p>
+          </div>
+
+          <div class="bg-surface-container-lowest p-4 rounded-2xl border border-amber-300/60 shadow-sm space-y-1">
+            <div class="flex items-center justify-between">
+              <span class="text-[10px] uppercase font-bold text-amber-900">Safety Quarantine Vault</span>
+              <span class="material-symbols-outlined text-amber-700 text-[18px]">lock</span>
+            </div>
+            <p class="text-2xl font-mono font-bold text-amber-900" id="reports-quarantine-count">52 Records</p>
+            <p class="text-[11px] text-on-surface-variant">27 Primary 1:1 Review + 25 Test Seeds isolated in safety vault</p>
+          </div>
+
+          <div class="bg-surface-container-lowest p-4 rounded-2xl border border-outline-variant/30 shadow-sm space-y-1">
+            <div class="flex items-center justify-between">
+              <span class="text-[10px] uppercase font-bold text-primary">Export Veracity Guarantee</span>
+              <span class="material-symbols-outlined text-primary text-[18px]">security</span>
+            </div>
+            <p class="text-2xl font-mono font-bold text-primary">100% Traceable</p>
+            <p class="text-[11px] text-on-surface-variant">Zero synthetic records in active export feeds or summaries</p>
+          </div>
+        </div>
+
+        <!-- Section A: Research Dataset Downloads -->
+        <div class="space-y-3">
+          <div class="flex items-center justify-between">
+            <h3 class="text-sm font-bold text-on-surface flex items-center gap-1.5">
+              <span class="material-symbols-outlined text-[18px] text-primary">dataset</span>
+              <span>1. Research Dataset Exports (Raw &amp; Augmented Data)</span>
+            </h3>
+            <span class="text-xs text-on-surface-variant">Direct file downloads streamed from SQLite database</span>
+          </div>
+
+          <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+            <!-- Card 1: Unified Research (Combined) -->
+            <div class="bg-surface-container-lowest p-5 rounded-2xl border border-outline-variant/30 shadow-sm flex flex-col justify-between space-y-3 hover:shadow-md transition-shadow">
+              <div class="space-y-2">
+                <div class="flex items-center justify-between">
+                  <span class="text-[10px] font-bold px-2 py-0.5 rounded bg-primary/10 text-primary">Unified Research</span>
+                  <span class="font-mono text-xs font-bold text-on-surface">511 Records</span>
+                </div>
+                <h4 class="text-sm font-bold text-on-surface">Active Research Dataset</h4>
+                <p class="text-xs text-on-surface-variant leading-relaxed">
+                  Verified active secondary research records across Groww, Zerodha, Paytm, Angel One, Dhan, and SEBI with 100% verified URLs.
+                </p>
+              </div>
+              <div class="space-y-2 pt-2 border-t border-outline-variant/20">
+                <div class="grid grid-cols-2 gap-2">
+                  <a href="#" data-api-endpoint="/api/reports/export?scope=all&format=csv" onclick="handleApiDownload(event, '/api/reports/export?scope=all&format=csv')" download="continuum_ai_research_active_511.csv" onclick="triggerDirectDownload(this.href, 'continuum_ai_research_active_511.csv')" class="h-8 bg-primary text-on-primary rounded-lg text-xs font-semibold hover:bg-tertiary transition-colors flex items-center justify-center gap-1">
+                    <span class="material-symbols-outlined text-[14px]">download</span>
+                    <span>CSV</span>
+                  </a>
+                  <a href="#" data-api-endpoint="/api/reports/export?scope=all&format=json" onclick="handleApiDownload(event, '/api/reports/export?scope=all&format=json')" download="continuum_ai_research_active_511.json" onclick="triggerDirectDownload(this.href, 'continuum_ai_research_active_511.json')" class="h-8 bg-surface-container-high text-on-surface rounded-lg text-xs font-semibold hover:bg-surface-container-highest transition-colors flex items-center justify-center gap-1">
+                    <span class="material-symbols-outlined text-[14px]">data_object</span>
+                    <span>JSON</span>
+                  </a>
+                </div>
+                <button onclick="previewDataset('all')" class="w-full text-center text-[11px] font-medium text-primary hover:underline">
+                  Preview first 5 records &rarr;
+                </button>
+              </div>
+            </div>
+
+            <!-- Card 2: Primary Research (Google Forms) -->
+            <div class="bg-surface-container-lowest p-5 rounded-2xl border border-outline-variant/30 shadow-sm flex flex-col justify-between space-y-3 hover:shadow-md transition-shadow">
+              <div class="space-y-2">
+                <div class="flex items-center justify-between">
+                  <span class="text-[10px] font-bold px-2 py-0.5 rounded bg-amber-500/10 text-amber-900 border border-amber-300">Quarantine Vault: 1:1 Review</span>
+                  <span class="font-mono text-xs font-bold text-amber-900">27 Records</span>
+                </div>
+                <h4 class="text-sm font-bold text-on-surface">Primary 1:1 Review Cohort (Vault)</h4>
+                <p class="text-xs text-on-surface-variant leading-relaxed">
+                  The 27 primary responses collected through 1:1 review &amp; Google Forms (RESP-0001 to RESP-0027), isolated in the Safety Quarantine Vault.
+                </p>
+              </div>
+              <div class="space-y-2 pt-2 border-t border-outline-variant/20">
+                <div class="grid grid-cols-2 gap-2">
+                  <a href="#" data-api-endpoint="/api/reports/export?scope=primary&format=csv" onclick="handleApiDownload(event, '/api/reports/export?scope=primary&format=csv')" download="continuum_ai_primary_1on1_vault_27.csv" onclick="triggerDirectDownload(this.href, 'continuum_ai_primary_1on1_vault_27.csv')" class="h-8 bg-amber-700 text-white rounded-lg text-xs font-semibold hover:bg-amber-800 transition-colors flex items-center justify-center gap-1">
+                    <span class="material-symbols-outlined text-[14px]">lock</span>
+                    <span>CSV</span>
+                  </a>
+                  <a href="#" data-api-endpoint="/api/reports/export?scope=primary&format=json" onclick="handleApiDownload(event, '/api/reports/export?scope=primary&format=json')" download="continuum_ai_primary_1on1_vault_27.json" onclick="triggerDirectDownload(this.href, 'continuum_ai_primary_1on1_vault_27.json')" class="h-8 bg-surface-container-high text-on-surface rounded-lg text-xs font-semibold hover:bg-surface-container-highest transition-colors flex items-center justify-center gap-1">
+                    <span class="material-symbols-outlined text-[14px]">data_object</span>
+                    <span>JSON</span>
+                  </a>
+                </div>
+                <button onclick="previewDataset('primary')" class="w-full text-center text-[11px] font-medium text-emerald-800 hover:underline">
+                  Preview primary survey responses &rarr;
+                </button>
+              </div>
+            </div>
+
+            <!-- Card 3: Secondary Public Research -->
+            <div class="bg-surface-container-lowest p-5 rounded-2xl border border-outline-variant/30 shadow-sm flex flex-col justify-between space-y-3 hover:shadow-md transition-shadow">
+              <div class="space-y-2">
+                <div class="flex items-center justify-between">
+                  <span class="text-[10px] font-bold px-2 py-0.5 rounded bg-secondary-container text-on-secondary-container">Real Public Sources</span>
+                  <span class="font-mono text-xs font-bold text-on-surface">511 Records</span>
+                </div>
+                <h4 class="text-sm font-bold text-on-surface">Secondary Research Dataset</h4>
+                <p class="text-xs text-on-surface-variant leading-relaxed">
+                  Play Store verified reviews across Groww (180), Zerodha Coin (140), Paytm Money (85), Angel One (65), Dhan (40), and SEBI Study (1).
+                </p>
+              </div>
+              <div class="space-y-2 pt-2 border-t border-outline-variant/20">
+                <div class="grid grid-cols-2 gap-2">
+                  <a href="#" data-api-endpoint="/api/reports/export?scope=secondary&format=csv" onclick="handleApiDownload(event, '/api/reports/export?scope=secondary&format=csv')" download="continuum_ai_secondary_research_511.csv" onclick="triggerDirectDownload(this.href, 'continuum_ai_secondary_research_511.csv')" class="h-8 bg-secondary text-white rounded-lg text-xs font-semibold hover:bg-secondary/80 transition-colors flex items-center justify-center gap-1">
+                    <span class="material-symbols-outlined text-[14px]">download</span>
+                    <span>CSV</span>
+                  </a>
+                  <a href="#" data-api-endpoint="/api/reports/export?scope=secondary&format=json" onclick="handleApiDownload(event, '/api/reports/export?scope=secondary&format=json')" download="continuum_ai_secondary_research_511.json" onclick="triggerDirectDownload(this.href, 'continuum_ai_secondary_research_511.json')" class="h-8 bg-surface-container-high text-on-surface rounded-lg text-xs font-semibold hover:bg-surface-container-highest transition-colors flex items-center justify-center gap-1">
+                    <span class="material-symbols-outlined text-[14px]">data_object</span>
+                    <span>JSON</span>
+                  </a>
+                </div>
+                <button onclick="previewDataset('secondary')" class="w-full text-center text-[11px] font-medium text-secondary hover:underline">
+                  Preview public secondary reviews &rarr;
+                </button>
+              </div>
+            </div>
+
+            <!-- Card 4: Filtered Cohort Search & Export -->
+            <div class="bg-surface-container-lowest p-5 rounded-2xl border border-outline-variant/30 shadow-sm flex flex-col justify-between space-y-3 hover:shadow-md transition-shadow">
+              <div class="space-y-2">
+                <div class="flex items-center justify-between">
+                  <span class="text-[10px] font-bold px-2 py-0.5 rounded bg-amber-500/10 text-amber-900 border border-amber-300">Custom Query</span>
+                  <span class="material-symbols-outlined text-amber-800 text-[16px]">filter_alt</span>
+                </div>
+                <h4 class="text-sm font-bold text-on-surface">Filtered Scope Export</h4>
+                <div class="space-y-1.5 text-xs">
+                  <select id="export-filter-scope" class="w-full h-8 px-2 rounded-lg bg-surface-container-low border border-outline-variant/40 text-xs">
+                    <option value="all">Scope: All Active Records (538)</option>
+                    <option value="primary">Scope: Primary Survey (27)</option>
+                    <option value="secondary">Scope: Secondary Sources (511)</option>
+                  </select>
+                  <input type="text" id="export-filter-query" placeholder="Filter keyword (e.g. mandate, market)..." class="w-full h-8 px-2 rounded-lg bg-surface-container-low border border-outline-variant/40 text-xs"/>
+                </div>
+              </div>
+              <div class="pt-2 border-t border-outline-variant/20">
+                <button onclick="downloadFilteredExport()" class="w-full h-8 bg-surface-container-high text-on-surface font-semibold rounded-lg text-xs hover:bg-surface-container-highest transition-colors flex items-center justify-center gap-1">
+                  <span class="material-symbols-outlined text-[14px]">filter_list</span>
+                  <span>Export Filtered (CSV)</span>
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Section B: Analytical Synthesis Reports -->
+        <div class="space-y-3">
+          <div class="flex items-center justify-between">
+            <h3 class="text-sm font-bold text-on-surface flex items-center gap-1.5">
+              <span class="material-symbols-outlined text-[18px] text-primary">analytics</span>
+              <span>2. Discovery &amp; Synthesis Analysis Reports</span>
+            </h3>
+            <span class="text-xs text-on-surface-variant">Structured analytical outputs for stakeholders &amp; audit</span>
+          </div>
+
+          <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+            <!-- Report 1: Methodology Disclosure -->
+            <div class="bg-surface-container-lowest p-5 rounded-2xl border border-outline-variant/30 shadow-sm space-y-3 flex flex-col justify-between">
+              <div class="space-y-1.5">
+                <div class="flex items-center justify-between">
+                  <span class="text-[10px] font-bold px-2 py-0.5 rounded bg-surface-container-high text-on-surface-variant">Methodology</span>
+                  <span class="material-symbols-outlined text-primary text-[18px]">verified_user</span>
+                </div>
+                <h4 class="text-sm font-bold text-on-surface">Research Methodology &amp; Disclosure</h4>
+                <p class="text-xs text-on-surface-variant leading-relaxed">
+                  Full methodological disclosure narrative detailing dataset provenance, sampling limitations, 14-category taxonomy, and compliance non-goals.
+                </p>
+              </div>
+              <div class="pt-3 border-t border-outline-variant/20 flex gap-2">
+                <button onclick="loadReportPreview('methodology')" class="flex-1 h-8 bg-primary/10 text-primary font-bold text-xs rounded-lg hover:bg-primary/20 transition-colors">
+                  View Report
+                </button>
+                <a href="#" data-api-endpoint="/api/reports/analysis?report_type=methodology&format=markdown" onclick="handleApiDownload(event, '/api/reports/analysis?report_type=methodology&format=markdown')" download="continuum_ai_methodology.md" onclick="triggerDirectDownload(this.href, 'continuum_ai_methodology.md')" class="h-8 px-3 bg-surface-container-high text-on-surface font-semibold text-xs rounded-lg hover:bg-surface-container-highest transition-colors flex items-center justify-center" title="Download Markdown">.MD</a>
+              </div>
+            </div>
+
+            <!-- Report 2: SIP Discovery Themes -->
+            <div class="bg-surface-container-lowest p-5 rounded-2xl border border-outline-variant/30 shadow-sm space-y-3 flex flex-col justify-between">
+              <div class="space-y-1.5">
+                <div class="flex items-center justify-between">
+                  <span class="text-[10px] font-bold px-2 py-0.5 rounded bg-surface-container-high text-on-surface-variant">Taxonomy</span>
+                  <span class="material-symbols-outlined text-primary text-[18px]">category</span>
+                </div>
+                <h4 class="text-sm font-bold text-on-surface">SIP Discovery Theme Summary</h4>
+                <p class="text-xs text-on-surface-variant leading-relaxed">
+                  Detailed distribution across all 14 taxonomy categories, record frequencies, distinct sources, and friction indicators.
+                </p>
+              </div>
+              <div class="pt-3 border-t border-outline-variant/20 flex gap-2">
+                <button onclick="loadReportPreview('themes')" class="flex-1 h-8 bg-primary/10 text-primary font-bold text-xs rounded-lg hover:bg-primary/20 transition-colors">
+                  View Report
+                </button>
+                <a href="#" data-api-endpoint="/api/reports/analysis?report_type=themes&format=markdown" onclick="handleApiDownload(event, '/api/reports/analysis?report_type=themes&format=markdown')" download="continuum_ai_themes.md" onclick="triggerDirectDownload(this.href, 'continuum_ai_themes.md')" class="h-8 px-3 bg-surface-container-high text-on-surface font-semibold text-xs rounded-lg hover:bg-surface-container-highest transition-colors flex items-center justify-center" title="Download Markdown">.MD</a>
+                <a href="#" data-api-endpoint="/api/reports/analysis?report_type=themes&format=json" onclick="handleApiDownload(event, '/api/reports/analysis?report_type=themes&format=json')" download="continuum_ai_themes.json" onclick="triggerDirectDownload(this.href, 'continuum_ai_themes.json')" class="h-8 px-3 bg-surface-container-high text-on-surface font-semibold text-xs rounded-lg hover:bg-surface-container-highest transition-colors flex items-center justify-center" title="Download JSON">.JSON</a>
+              </div>
+            </div>
+
+            <!-- Report 3: Evidence Citations -->
+            <div class="bg-surface-container-lowest p-5 rounded-2xl border border-outline-variant/30 shadow-sm space-y-3 flex flex-col justify-between">
+              <div class="space-y-1.5">
+                <div class="flex items-center justify-between">
+                  <span class="text-[10px] font-bold px-2 py-0.5 rounded bg-surface-container-high text-on-surface-variant">Evidence</span>
+                  <span class="material-symbols-outlined text-primary text-[18px]">format_quote</span>
+                </div>
+                <h4 class="text-sm font-bold text-on-surface">Evidence Citations &amp; Quotes Register</h4>
+                <p class="text-xs text-on-surface-variant leading-relaxed">
+                  Direct verbatim investor quotes mapped to behavioral themes, with complete source and respondent references for peer review.
+                </p>
+              </div>
+              <div class="pt-3 border-t border-outline-variant/20 flex gap-2">
+                <button onclick="loadReportPreview('citations')" class="flex-1 h-8 bg-primary/10 text-primary font-bold text-xs rounded-lg hover:bg-primary/20 transition-colors">
+                  View Report
+                </button>
+                <a href="#" data-api-endpoint="/api/reports/analysis?report_type=citations&format=markdown" onclick="handleApiDownload(event, '/api/reports/analysis?report_type=citations&format=markdown')" download="continuum_ai_citations.md" onclick="triggerDirectDownload(this.href, 'continuum_ai_citations.md')" class="h-8 px-3 bg-surface-container-high text-on-surface font-semibold text-xs rounded-lg hover:bg-surface-container-highest transition-colors flex items-center justify-center" title="Download Markdown">.MD</a>
+              </div>
+            </div>
+
+            <!-- Report 4: Contradictions & Signals -->
+            <div class="bg-surface-container-lowest p-5 rounded-2xl border border-outline-variant/30 shadow-sm space-y-3 flex flex-col justify-between">
+              <div class="space-y-1.5">
+                <div class="flex items-center justify-between">
+                  <span class="text-[10px] font-bold px-2 py-0.5 rounded bg-surface-container-high text-on-surface-variant">Behavioral Nuance</span>
+                  <span class="material-symbols-outlined text-primary text-[18px]">compare_arrows</span>
+                </div>
+                <h4 class="text-sm font-bold text-on-surface">Contradictions &amp; Signals Analysis</h4>
+                <p class="text-xs text-on-surface-variant leading-relaxed">
+                  Comparative analysis separating continuation catalysts vs stopping factors to uncover non-obvious retention triggers.
+                </p>
+              </div>
+              <div class="pt-3 border-t border-outline-variant/20 flex gap-2">
+                <button onclick="loadReportPreview('contradictions')" class="flex-1 h-8 bg-primary/10 text-primary font-bold text-xs rounded-lg hover:bg-primary/20 transition-colors">
+                  View Report
+                </button>
+                <a href="#" data-api-endpoint="/api/reports/analysis?report_type=contradictions&format=markdown" onclick="handleApiDownload(event, '/api/reports/analysis?report_type=contradictions&format=markdown')" download="continuum_ai_contradictions.md" onclick="triggerDirectDownload(this.href, 'continuum_ai_contradictions.md')" class="h-8 px-3 bg-surface-container-high text-on-surface font-semibold text-xs rounded-lg hover:bg-surface-container-highest transition-colors flex items-center justify-center" title="Download Markdown">.MD</a>
+              </div>
+            </div>
+
+            <!-- Report 5: Candidate Problems Ranking -->
+            <div class="bg-surface-container-lowest p-5 rounded-2xl border border-outline-variant/30 shadow-sm space-y-3 flex flex-col justify-between">
+              <div class="space-y-1.5">
+                <div class="flex items-center justify-between">
+                  <span class="text-[10px] font-bold px-2 py-0.5 rounded bg-surface-container-high text-on-surface-variant">Problem Cards</span>
+                  <span class="material-symbols-outlined text-primary text-[18px]">assignment_turned_in</span>
+                </div>
+                <h4 class="text-sm font-bold text-on-surface">Candidate Problems &amp; Scoring Ranking</h4>
+                <p class="text-xs text-on-surface-variant leading-relaxed">
+                  Problem cards separating Observation, Interpretation, Hypothesis, and prioritized by weighted feasibility &amp; safety scores.
+                </p>
+              </div>
+              <div class="pt-3 border-t border-outline-variant/20 flex gap-2">
+                <button onclick="loadReportPreview('problems')" class="flex-1 h-8 bg-primary/10 text-primary font-bold text-xs rounded-lg hover:bg-primary/20 transition-colors">
+                  View Report
+                </button>
+                <a href="#" data-api-endpoint="/api/reports/analysis?report_type=problems&format=markdown" onclick="handleApiDownload(event, '/api/reports/analysis?report_type=problems&format=markdown')" download="continuum_ai_problems.md" onclick="triggerDirectDownload(this.href, 'continuum_ai_problems.md')" class="h-8 px-3 bg-surface-container-high text-on-surface font-semibold text-xs rounded-lg hover:bg-surface-container-highest transition-colors flex items-center justify-center" title="Download Markdown">.MD</a>
+                <a href="#" data-api-endpoint="/api/reports/analysis?report_type=problems&format=json" onclick="handleApiDownload(event, '/api/reports/analysis?report_type=problems&format=json')" download="continuum_ai_problems.json" onclick="triggerDirectDownload(this.href, 'continuum_ai_problems.json')" class="h-8 px-3 bg-surface-container-high text-on-surface font-semibold text-xs rounded-lg hover:bg-surface-container-highest transition-colors flex items-center justify-center" title="Download JSON">.JSON</a>
+              </div>
+            </div>
+
+            <!-- Report 6: Quarantine Safety Audit Register -->
+            <div class="bg-surface-container-lowest p-5 rounded-2xl border border-amber-300/40 shadow-sm space-y-3 flex flex-col justify-between">
+              <div class="space-y-1.5">
+                <div class="flex items-center justify-between">
+                  <span class="text-[10px] font-bold px-2 py-0.5 rounded bg-amber-500/10 text-amber-900 border border-amber-300">Compliance Audit</span>
+                  <span class="material-symbols-outlined text-amber-800 text-[18px]">gavel</span>
+                </div>
+                <h4 class="text-sm font-bold text-on-surface">Quarantine Safety Audit Register</h4>
+                <p class="text-xs text-on-surface-variant leading-relaxed">
+                  Full manifest of all 25 synthetic test records quarantined in SQLite safety table. Verifies complete exclusion from active research.
+                </p>
+              </div>
+              <div class="pt-3 border-t border-outline-variant/20 flex gap-2">
+                <button onclick="loadReportPreview('quarantine')" class="flex-1 h-8 bg-amber-600 text-white font-bold text-xs rounded-lg hover:bg-amber-700 transition-colors">
+                  View Quarantined (25)
+                </button>
+                <a href="#" data-api-endpoint="/api/reports/quarantine" onclick="handleApiDownload(event, '/api/reports/quarantine')" download="continuum_ai_quarantine_vault.json" onclick="triggerDirectDownload(this.href, 'continuum_ai_quarantine_vault.json')" class="h-8 px-3 bg-surface-container-high text-on-surface font-semibold text-xs rounded-lg hover:bg-surface-container-highest transition-colors flex items-center justify-center" title="Download JSON">.JSON</a>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Section C: Live Report Previewer Modal / Drawer -->
+        <div id="report-preview-modal" class="fixed inset-0 z-50 bg-black/40 backdrop-blur-sm hidden flex items-center justify-center p-4">
+          <div class="bg-surface-container-lowest w-full max-w-4xl max-h-[85vh] rounded-2xl shadow-2xl border border-outline-variant/30 flex flex-col overflow-hidden">
+            <!-- Header -->
+            <div class="p-4 border-b border-outline-variant/20 flex items-center justify-between bg-surface-container-low">
+              <div class="flex items-center gap-2">
+                <span class="w-8 h-8 rounded-xl bg-primary/10 text-primary flex items-center justify-center font-bold">
+                  <span class="material-symbols-outlined text-[18px]" id="preview-icon">description</span>
+                </span>
+                <div>
+                  <h3 class="text-sm font-bold text-on-surface" id="preview-title">Report Preview</h3>
+                  <p class="text-[11px] text-on-surface-variant" id="preview-subtitle">Generated from live active database records</p>
+                </div>
+              </div>
+              <div class="flex items-center gap-2">
+                <button onclick="downloadCurrentPreviewFile()" class="px-3 py-1.5 bg-primary text-on-primary rounded-lg text-xs font-semibold hover:bg-tertiary transition-colors flex items-center gap-1 shadow-sm">
+                  <span class="material-symbols-outlined text-[16px]">download</span>
+                  <span>Download</span>
+                </button>
+                <button onclick="copyPreviewText()" class="px-3 py-1.5 bg-surface-container-high text-on-surface rounded-lg text-xs font-semibold hover:bg-surface-container-highest transition-colors flex items-center gap-1">
+                  <span class="material-symbols-outlined text-[16px]">content_copy</span>
+                  <span>Copy</span>
+                </button>
+                <button onclick="printPreviewReport()" class="px-3 py-1.5 bg-surface-container-high text-on-surface rounded-lg text-xs font-semibold hover:bg-surface-container-highest transition-colors flex items-center gap-1">
+                  <span class="material-symbols-outlined text-[16px]">print</span>
+                  <span>Print</span>
+                </button>
+                <button onclick="closeReportPreview()" class="p-1.5 rounded-lg text-on-surface-variant hover:bg-surface-container transition-colors">
+                  <span class="material-symbols-outlined text-[20px]">close</span>
+                </button>
+              </div>
+            </div>
+
+            <!-- Content Area -->
+            <div class="p-6 overflow-y-auto flex-1 font-mono text-xs leading-relaxed whitespace-pre-wrap text-on-surface bg-surface-container-lowest" id="preview-content">
+              Loading report...
+            </div>
+          </div>
+        </div>
+      </section>
+
+    <!-- Slide-Over Inspection Drawer for Any Research Record -->
+    <div id="response-drawer" class="fixed inset-0 z-50 bg-black/40 backdrop-blur-sm hidden flex justify-end transition-opacity">
+      <div class="w-full max-w-lg bg-surface-container-lowest h-full shadow-2xl p-6 overflow-y-auto flex flex-col justify-between space-y-4">
+        <div>
+          <!-- Drawer Header -->
+          <div class="flex items-center justify-between border-b border-outline-variant/20 pb-4">
+            <div class="flex items-center gap-2.5">
+              <span class="w-8 h-8 rounded-xl bg-primary/10 text-primary flex items-center justify-center font-bold text-xs" id="drawer-type-icon">
+                ID
+              </span>
+              <div>
+                <h3 class="text-base font-bold text-on-surface truncate max-w-[300px]" id="drawer-resp-id">RESP-0001</h3>
+                <p class="text-[11px] text-on-surface-variant" id="drawer-timestamp">Date: —</p>
+              </div>
+            </div>
+            <button onclick="closeDrawer()" class="p-1.5 rounded-lg text-on-surface-variant hover:bg-surface-container transition-colors">
+              <span class="material-symbols-outlined text-[20px]">close</span>
+            </button>
+          </div>
+
+          <!-- Drawer Body -->
+          <div class="space-y-4 pt-4 text-xs" id="drawer-content">
+            <!-- Dynamically populated -->
+          </div>
+        </div>
+
+        <div class="pt-4 border-t border-outline-variant/20 flex gap-2">
+          <button onclick="copyDrawerQuote()" class="flex-1 h-10 bg-surface-container-high text-on-surface font-semibold text-xs rounded-xl flex items-center justify-center gap-1.5 hover:bg-surface-container-highest transition-colors">
+            <span class="material-symbols-outlined text-[16px]">content_copy</span>
+            <span>Copy Excerpt</span>
+          </button>
+          <button onclick="closeDrawer()" class="px-5 h-10 bg-primary text-on-primary font-semibold text-xs rounded-xl hover:bg-tertiary transition-colors">
+            Close
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Secondary Research Collection Modal -->
+    <div id="secondary-collect-modal" class="fixed inset-0 z-50 bg-black/40 backdrop-blur-sm hidden flex items-center justify-center p-4">
+      <div class="bg-surface-container-lowest w-full max-w-xl rounded-2xl shadow-2xl border border-outline-variant/30 p-6 space-y-4">
+        <div class="flex items-center justify-between border-b border-outline-variant/20 pb-3">
+          <div class="flex items-center gap-2">
+            <div class="w-8 h-8 rounded-xl bg-secondary-container text-on-secondary-container flex items-center justify-center">
+              <span class="material-symbols-outlined text-[18px]">add_link</span>
+            </div>
+            <div>
+              <h3 class="text-base font-bold text-on-surface">Collect Secondary Research</h3>
+              <p class="text-xs text-on-surface-variant">Fetch public articles or paste review excerpts with full attribution</p>
+            </div>
+          </div>
+          <button onclick="closeSecondaryCollectModal()" class="p-1 rounded-lg hover:bg-surface-container text-on-surface-variant">
+            <span class="material-symbols-outlined text-[20px]">close</span>
+          </button>
+        </div>
+
+        <!-- Mode Toggle Tabs -->
+        <div class="flex gap-2 border-b border-outline-variant/20 pb-2">
+          <button onclick="setModalTab('url')" id="tab-btn-url" class="px-3 py-1.5 rounded-lg text-xs font-bold bg-primary text-on-primary">
+            Public Web URL
+          </button>
+          <button onclick="setModalTab('manual')" id="tab-btn-manual" class="px-3 py-1.5 rounded-lg text-xs font-medium text-on-surface-variant hover:bg-surface-container">
+            Manual Review / Text Entry
+          </button>
+        </div>
+
+        <!-- Tab 1: URL Fetch -->
+        <div id="modal-tab-url" class="space-y-3 text-xs">
+          <div>
+            <label class="block font-semibold text-on-surface mb-1">Target Source Platform / Method:</label>
+            <select id="select-fetch-platform" onchange="onPlatformSelectChange()" class="w-full h-10 px-3 rounded-xl bg-surface-container-low border border-outline-variant/40 focus:border-primary focus:outline-none text-xs">
+              <option value="url">Direct Public Web URL (SEBI, News, Reports, Articles)</option>
+              <option value="youtube">YouTube (Official oEmbed Video Metadata)</option>
+              <option value="google_play">Google Play Store Reviews (Package/Store URL)</option>
+              <option value="reddit">Reddit (r/IndiaInvestments Discussions)</option>
+              <option value="trustpilot">Trustpilot (App/Broker Reviews)</option>
+            </select>
+          </div>
+          <div>
+            <label class="block font-semibold text-on-surface mb-1" id="label-fetch-input">Permitted Public URL (http/https):</label>
+            <input type="url" id="input-fetch-url" placeholder="https://www.sebi.gov.in/reports/... or public review page" class="w-full h-10 px-3 rounded-xl bg-surface-container-low border border-outline-variant/40 focus:border-primary focus:outline-none"/>
+          </div>
+          <div>
+            <label class="block font-semibold text-on-surface mb-1">Source Label (Optional):</label>
+            <input type="text" id="input-fetch-source" placeholder="e.g. SEBI Investor Bulletin / Financial News" class="w-full h-10 px-3 rounded-xl bg-surface-container-low border border-outline-variant/40 focus:border-primary focus:outline-none"/>
+          </div>
+          <p class="text-[11px] text-on-surface-variant" id="platform-hint">
+            * SSRF protection active: internal network and localhost requests are blocked. Respects source terms and paywalls.
+          </p>
+          <div id="fetch-error-box" class="hidden p-3 rounded-xl bg-error-container text-on-error-container text-xs"></div>
+          <button onclick="submitFetchUrl()" id="btn-submit-fetch" class="w-full h-10 bg-primary text-on-primary font-bold rounded-xl hover:bg-tertiary transition-all flex items-center justify-center gap-1.5 shadow-sm">
+            <span class="material-symbols-outlined text-[18px]">download</span>
+            <span>Fetch &amp; Persist Secondary Record</span>
+          </button>
+        </div>
+
+        <!-- Tab 2: Manual Text Entry -->
+        <div id="modal-tab-manual" class="hidden space-y-3 text-xs">
+          <div>
+            <label class="block font-semibold text-on-surface mb-1">Document / Review Title:</label>
+            <input type="text" id="input-manual-title" placeholder="e.g. Play Store User Complaint on ECS Charges" class="w-full h-10 px-3 rounded-xl bg-surface-container-low border border-outline-variant/40 focus:border-primary focus:outline-none"/>
+          </div>
+          <div>
+            <label class="block font-semibold text-on-surface mb-1">Source Name:</label>
+            <input type="text" id="input-manual-source" placeholder="e.g. Play Store / Trustpilot / Forum Discussion" class="w-full h-10 px-3 rounded-xl bg-surface-container-low border border-outline-variant/40 focus:border-primary focus:outline-none"/>
+          </div>
+          <div>
+            <label class="block font-semibold text-on-surface mb-1">Source Reference / URL (Optional):</label>
+            <input type="text" id="input-manual-url" placeholder="https://..." class="w-full h-10 px-3 rounded-xl bg-surface-container-low border border-outline-variant/40 focus:border-primary focus:outline-none"/>
+          </div>
+          <div>
+            <label class="block font-semibold text-on-surface mb-1">Research Text / Verbatim Excerpt *:</label>
+            <textarea id="input-manual-text" rows="4" placeholder="Paste excerpt or observation text here (minimum 15 characters)..." class="w-full p-3 rounded-xl bg-surface-container-low border border-outline-variant/40 focus:border-primary focus:outline-none"></textarea>
+          </div>
+          <div id="manual-error-box" class="hidden p-3 rounded-xl bg-error-container text-on-error-container text-xs"></div>
+          <button onclick="submitManualSecondary()" id="btn-submit-manual" class="w-full h-10 bg-primary text-on-primary font-bold rounded-xl hover:bg-tertiary transition-all flex items-center justify-center gap-1.5 shadow-sm">
+            <span class="material-symbols-outlined text-[18px]">save</span>
+            <span>Save Secondary Research Record</span>
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- ==================== MOBILE BOTTOM NAVIGATION ==================== -->
+    <nav class="lg:hidden fixed bottom-0 inset-x-0 z-40 bg-surface/90 backdrop-blur-xl border-t border-outline-variant/20 pb-safe">
+      <div class="h-16 grid grid-cols-5 items-center justify-items-center">
+        <a href="#overview-dashboard" onclick="switchPage('overview-dashboard')" class="mobile-nav-link flex flex-col items-center justify-center gap-0.5 text-primary font-bold transition-colors">
+          <span class="material-symbols-outlined text-[20px]">dashboard</span>
+          <span class="text-[10px] font-semibold">Overview</span>
+        </a>
+        <a href="#research-library" onclick="switchPage('research-library')" class="mobile-nav-link flex flex-col items-center justify-center gap-0.5 text-on-surface-variant hover:text-primary transition-colors">
+          <span class="material-symbols-outlined text-[20px]">local_library</span>
+          <span class="text-[10px] font-semibold">Library</span>
+        </a>
+        <a href="#ai-discovery" onclick="switchPage('ai-discovery')" class="mobile-nav-link flex flex-col items-center justify-center gap-0.5 text-on-surface-variant hover:text-primary transition-colors">
+          <span class="material-symbols-outlined text-[20px]">insights</span>
+          <span class="text-[10px] font-semibold">Discovery</span>
+        </a>
+        <a href="#evidence-review" onclick="switchPage('evidence-review')" class="mobile-nav-link flex flex-col items-center justify-center gap-0.5 text-on-surface-variant hover:text-primary transition-colors">
+          <span class="material-symbols-outlined text-[20px]">fact_check</span>
+          <span class="text-[10px] font-semibold">Review</span>
+        </a>
+        <a href="#problem-statements" onclick="switchPage('problem-statements')" class="mobile-nav-link flex flex-col items-center justify-center gap-0.5 text-on-surface-variant hover:text-primary transition-colors">
+          <span class="material-symbols-outlined text-[20px]">assignment</span>
+          <span class="text-[10px] font-semibold">Problems</span>
+        </a>
+      </div>
+    </nav>
+  </div>
+
+  <!-- ==================== CLIENT SCRIPT & API INTEGRATION ==================== -->
+  <script>
+    let activePage = "overview-dashboard";
+    let currentSourceFilter = "all"; // 'all' | 'primary' | 'secondary'
+    let currentPlatformFilter = "all";
+    let liveRecords = [];
+    let liveStats = { total_records: 538, primary_records: 27, secondary_records: 511, quarantined_records: 25, sources: [] };
+    let reviewDecisions = JSON.parse(localStorage.getItem("continuum_review_decisions") || "{}");
+
+    
+    // Centralized Download Handler for dynamic backend URLs
+    function handleApiDownload(event, endpoint) {
+      event.preventDefault();
+      const targetUrl = window.APP_CONFIG.apiUrl(endpoint);
+      window.location.href = targetUrl;
+    }
+
+    // Initialize application
+    document.addEventListener("DOMContentLoaded", () => {
+      const initialHash = window.location.hash.replace("#", "") || "overview-dashboard";
+      switchPage(initialHash);
+
+      window.addEventListener("hashchange", () => {
+        const hash = window.location.hash.replace("#", "") || "overview-dashboard";
+        if (hash !== activePage) {
+          switchPage(hash);
+        }
+      });
+
+      // Load live data from FastAPI backend
+      loadLiveDatabaseData();
+
+      // Search listeners
+      document.getElementById("library-search-input")?.addEventListener("input", (e) => {
+        renderUnifiedTable(e.target.value);
+      });
+
+      document.getElementById("global-search-input")?.addEventListener("keydown", (e) => {
+        if (e.key === "Enter") {
+          switchPage("research-library");
+          const libInput = document.getElementById("library-search-input");
+          if (libInput) {
+            libInput.value = e.target.value;
+            renderUnifiedTable(e.target.value);
+          }
+        }
+      });
+
+      // Rerun scan micro-interaction
+      document.getElementById("trigger-rerun")?.addEventListener("click", function() {
+        const btn = this;
+        const originalHtml = btn.innerHTML;
+        btn.innerHTML = '<span class="material-symbols-outlined text-[18px] animate-spin">sync</span><span>Scanning All Ingested Records...</span>';
+        btn.classList.add("opacity-80");
+        setTimeout(() => {
+          btn.innerHTML = originalHtml;
+          btn.classList.remove("opacity-80");
+          renderThemes();
+        }, 900);
+      });
+
+      // Mobile drawer toggle
+      document.getElementById("mobile-menu-toggle")?.addEventListener("click", () => {
+        const sidebar = document.getElementById("desktop-sidebar");
+        sidebar.classList.toggle("hidden");
+        sidebar.classList.toggle("flex");
+        sidebar.classList.toggle("w-full");
+      });
+
+      renderThemes();
+      renderReviewCards();
+      renderProblemCards();
+      renderInterviewQuestions();
+      renderEvidenceLog();
+    });
+
+    // Fetch data from FastAPI backend /api/stats and /api/records
+    async function loadLiveDatabaseData() {
+      const backendUrl = window.APP_CONFIG.getBackendUrl();
+      const badgeEl = document.getElementById("receiver-api-badge");
+      if (badgeEl) {
+        badgeEl.textContent = backendUrl ? backendUrl.replace(/^https?:\/\//, '') : "Not Connected";
+      }
+
+      const loadingSpinner = document.getElementById("table-loading-spinner");
+      const errorBanner = document.getElementById("api-error-banner");
+
+      if (loadingSpinner) loadingSpinner.classList.remove("hidden");
+
+      try {
+        // 1. Fetch live stats
+        const statsRes = await fetch(window.APP_CONFIG.apiUrl("/api/stats"));
+        if (!statsRes.ok) throw new Error(`HTTP ${statsRes.status}`);
+        liveStats = await statsRes.json();
+
+        // 2. Fetch full live records (all 570 in DB: 511 active + 59 vault)
+        const recordsRes = await fetch(window.APP_CONFIG.apiUrl("/api/records?source_type=full&limit=1000"));
+        if (!recordsRes.ok) throw new Error(`HTTP ${recordsRes.status}`);
+        const data = await recordsRes.json();
+        liveRecords = data.records || [];
+
+        if (errorBanner) errorBanner.classList.add("hidden");
+        updateStatsUI();
+      } catch (err) {
+        console.warn("Failed to reach live API server, falling back to cached research:", err);
+        if (errorBanner) errorBanner.classList.remove("hidden");
+        // Fallback to bundled dataset if API is temporarily unavailable
+        if (window.RESEARCH_DATA && window.RESEARCH_DATA.metrics) {
+          liveStats.total_records = window.RESEARCH_DATA.metrics.total || 511;
+          liveStats.primary_records = 0;
+          liveStats.secondary_records = 511;
+          liveStats.quarantined_records = 59;
+          liveStats.primary_quarantined_records = 34;
+          liveStats.sources = window.RESEARCH_DATA.metrics.sources || [];
+        }
+      } finally {
+        if (loadingSpinner) loadingSpinner.classList.add("hidden");
+        renderUnifiedTable();
+        renderSourcesBreakdown();
+        renderInterviewResponses();
+      }
+    }
+
+    // Update UI counters across top bar, sidebar, and overview
+    function updateStatsUI() {
+      const total = liveStats.total_records || 511;
+      const primary = liveStats.primary_records || 0;
+      const secondary = liveStats.secondary_records || 511;
+      const quarantined = liveStats.quarantined_records || 59;
+      const primaryVault = liveStats.primary_quarantined_records || 34;
+
+      // Badges & Pills
+      document.getElementById("top-bar-count").textContent = total;
+      document.getElementById("sidebar-overview-count").textContent = `${total} rec`;
+      document.getElementById("sidebar-library-count").textContent = total;
+      document.getElementById("banner-text").innerHTML = `🛡️ Safety Quarantine Vault: ${primaryVault} Primary 1:1 Review &amp; Interview Records Isolated • Active Public Repository (${secondary} reviews)`;
+      document.getElementById("banner-total-badge").textContent = `Vault: ${quarantined}`;
+
+      document.getElementById("count-pill-all").textContent = total;
+      document.getElementById("count-pill-primary").textContent = primaryVault;
+      const pillQuar = document.getElementById("count-pill-quarantine");
+      if (pillQuar) pillQuar.textContent = quarantined;
+      document.getElementById("count-pill-secondary").textContent = secondary;
+
+      const platPillPri = document.getElementById("plat-pill-primary");
+      if (platPillPri) platPillPri.textContent = `Primary 1:1 Vault (${primaryVault})`;
+
+      // Overview KPI Cards
+      document.getElementById("stat-total-records").textContent = total;
+      document.getElementById("stat-primary-records").textContent = `${primaryVault} in Vault`;
+      document.getElementById("stat-secondary-records").textContent = secondary;
+      document.getElementById("stat-active-sources").textContent = (liveStats.sources || []).length || 5;
+
+      // Reports Section Live Counters
+      const repActive = document.getElementById("reports-active-count");
+      if (repActive) repActive.textContent = `${total} Records`;
+      const repQuarantine = document.getElementById("reports-quarantine-count");
+      if (repQuarantine) repQuarantine.textContent = `${quarantined} Records`;
+
+      // Settings counters
+      const setPrimary = document.getElementById("settings-primary-count");
+      if (setPrimary) setPrimary.textContent = primaryVault;
+      const setSecondary = document.getElementById("settings-secondary-count");
+      if (setSecondary) setSecondary.textContent = secondary;
+      const setTotal = document.getElementById("settings-total-count");
+      if (setTotal) setTotal.textContent = total;
+      const setQuarantine = document.getElementById("settings-quarantine-count");
+      if (setQuarantine) setQuarantine.textContent = quarantined;
+
+      // Dynamic discovery buttons & export scope labels
+      const btnAll = document.getElementById("scope-btn-all");
+      if (btnAll) btnAll.textContent = `All Research (${total})`;
+      const btnPri = document.getElementById("scope-btn-primary");
+      if (btnPri) btnPri.textContent = `Primary Only (${primary})`;
+      const btnSec = document.getElementById("scope-btn-secondary");
+      if (btnSec) btnSec.textContent = `Secondary Only (${secondary})`;
+
+      const optAll = document.querySelector("#export-filter-scope option[value='all']");
+      if (optAll) optAll.textContent = `Scope: All Active Records (${total})`;
+      const optPri = document.querySelector("#export-filter-scope option[value='primary']");
+      if (optPri) optPri.textContent = `Scope: Primary Survey (${primary})`;
+      const optSec = document.querySelector("#export-filter-scope option[value='secondary']");
+      if (optSec) optSec.textContent = `Scope: Secondary Sources (${secondary})`;
+
+      // Discovery selection audit counters
+      updateDiscoveryCounts();
+    }
+
+    function renderSourcesBreakdown() {
+      const container = document.getElementById("sources-breakdown-container");
+      if (!container) return;
+
+      const sources = liveStats.sources || (window.RESEARCH_DATA?.metrics?.sources) || [];
+      const total = liveStats.total_records || 90;
+
+      container.innerHTML = sources.map(s => {
+        const pct = total > 0 ? Math.round((s.count / total) * 100) : 0;
+        const isPrimary = (s.category === "primary");
+        const barColor = isPrimary ? "bg-emerald-600" : "bg-secondary";
+        const badgeClass = isPrimary ? "bg-emerald-500/10 text-emerald-800" : "bg-secondary-container text-on-secondary-container";
+
+        return `
+          <div>
+            <div class="flex items-center justify-between text-xs font-medium mb-1">
+              <span class="text-on-surface flex items-center gap-1.5">
+                <span class="px-1.5 py-0.2 rounded text-[10px] font-bold ${badgeClass}">
+                  ${isPrimary ? 'Primary' : 'Secondary'}
+                </span>
+                ${s.source}
+              </span>
+              <span class="font-mono font-bold text-on-surface">${s.count} items (${pct}%)</span>
+            </div>
+            <div class="w-full bg-surface-container-low h-2 rounded-full overflow-hidden">
+              <div class="${barColor} h-full rounded-full" style="width: ${Math.max(pct, 5)}%"></div>
+            </div>
+          </div>
+        `;
+      }).join('');
+    }
+
+    // Hash & Page Switcher
+    function switchPage(pageId) {
+      if (!pageId) pageId = "overview-dashboard";
+      const validPages = [
+        "overview-dashboard", "research-library", "ai-discovery",
+        "evidence-review", "problem-statements", "interview-planner",
+        "ai-evidence-log", "research-reports", "settings"
+      ];
+      if (!validPages.includes(pageId)) pageId = "overview-dashboard";
+
+      activePage = pageId;
+      if (window.location.hash !== "#" + pageId) {
+        history.replaceState(null, "", "#" + pageId);
+      }
+
+      document.querySelectorAll(".page-view").forEach(el => el.classList.add("hidden"));
+      const targetPage = document.getElementById(`page-${pageId}`);
+      if (targetPage) targetPage.classList.remove("hidden");
+
+      // Sidebar styling
+      document.querySelectorAll(".nav-item").forEach(el => {
+        if (el.getAttribute("data-page") === pageId) {
+          el.className = "nav-item flex items-center justify-between px-3 py-2.5 rounded-xl text-sm font-bold bg-primary text-on-primary shadow-sm";
+          const badge = el.querySelector("span:last-child");
+          if (badge) badge.className = "text-[11px] font-bold px-1.5 py-0.5 rounded bg-on-primary/20 text-on-primary";
+        } else {
+          el.className = "nav-item flex items-center justify-between px-3 py-2.5 rounded-xl text-sm font-medium transition-all text-on-surface-variant hover:bg-surface-container hover:text-on-surface";
+          const badge = el.querySelector("span:last-child");
+          if (badge && !badge.classList.contains("bg-primary/10")) {
+            badge.className = "text-[11px] font-semibold px-1.5 py-0.5 rounded bg-surface-container-high text-on-surface-variant";
+          }
+        }
+      });
+
+      // Mobile nav
+      document.querySelectorAll(".mobile-nav-link").forEach(link => {
+        if (link.getAttribute("href") === `#${pageId}`) {
+          link.className = "mobile-nav-link flex flex-col items-center justify-center gap-0.5 text-primary font-bold transition-colors";
+        } else {
+          link.className = "mobile-nav-link flex flex-col items-center justify-center gap-0.5 text-on-surface-variant hover:text-primary transition-colors";
+        }
+      });
+
+      const pageNames = {
+        "overview-dashboard": "Overview Dashboard",
+        "research-library": "Research Library",
+        "ai-discovery": "AI Discovery",
+        "evidence-review": "Evidence Review",
+        "problem-statements": "Problem Statements",
+        "interview-planner": "Interview Planner",
+        "ai-evidence-log": "AI Evidence Log",
+        "research-reports": "Research Reports & Dataset Exports",
+        "settings": "Settings & API"
+      };
+      const breadcrumb = document.getElementById("header-breadcrumb");
+      if (breadcrumb) breadcrumb.textContent = pageNames[pageId] || "Overview";
+
+      // Ensure view-specific content renders on switch
+      if (pageId === "interview-planner") {
+        renderInterviewQuestions();
+        renderInterviewResponses();
+      }
+      if (pageId === "ai-evidence-log") renderEvidenceLog();
+      if (pageId === "ai-discovery") { renderThemes(); updateDiscoveryCounts(); }
+      if (pageId === "evidence-review") renderReviewCards();
+      if (pageId === "problem-statements") renderProblemCards();
+
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    }
+
+    // Multi-Way Working Source Filter
+    function setSourceTypeFilter(type, resetPlatform = true) {
+      currentSourceFilter = type;
+      document.querySelectorAll(".source-toggle-btn").forEach(btn => {
+        btn.className = "source-toggle-btn px-3 py-1.5 rounded-lg text-xs font-medium text-on-surface-variant hover:bg-surface-container transition-all";
+      });
+
+      const activeBtn = document.getElementById(`btn-filter-${type}`);
+      if (activeBtn) {
+        activeBtn.className = "source-toggle-btn active px-3 py-1.5 rounded-lg text-xs font-bold bg-primary text-on-primary shadow-sm transition-all";
+      }
+
+      if (resetPlatform && currentPlatformFilter !== "all") {
+        currentPlatformFilter = "all";
+        document.querySelectorAll(".plat-pill").forEach(p => {
+          p.className = "plat-pill px-3 py-1.5 rounded-lg text-xs font-medium bg-surface-container-low text-on-surface-variant hover:bg-surface-container";
+        });
+        const allPlat = document.querySelector(".plat-pill");
+        if (allPlat) allPlat.className = "plat-pill active px-3 py-1.5 rounded-lg text-xs font-semibold bg-surface-container-high text-on-surface";
+      }
+
+      const statusTag = document.getElementById("filter-status-tag");
+      const titleHeader = document.getElementById("library-title-header");
+
+      if (type === "all") {
+        if (statusTag) statusTag.textContent = "Viewing Active Public Research (511)";
+        if (titleHeader) titleHeader.textContent = "Research Library (Active Public Research)";
+      } else if (type === "primary") {
+        if (statusTag) statusTag.textContent = "Filtered: Primary 1:1 Vault (34 Records)";
+        if (titleHeader) titleHeader.textContent = "Research Library (Primary 1:1 Vault)";
+      } else if (type === "interviews") {
+        if (statusTag) statusTag.textContent = "Filtered: 1:1 Interview Notes (7 Records)";
+        if (titleHeader) titleHeader.textContent = "Research Library (1:1 Interview Notes)";
+      } else if (type === "quarantine") {
+        if (statusTag) statusTag.textContent = "Filtered: Full Safety Vault (59 Records)";
+        if (titleHeader) titleHeader.textContent = "Research Library (Safety Quarantine Vault)";
+      } else {
+        if (statusTag) statusTag.textContent = "Filtered: Secondary Research Only (511)";
+        if (titleHeader) titleHeader.textContent = "Research Library (Secondary Research)";
+      }
+
+      renderUnifiedTable(document.getElementById("library-search-input")?.value || "");
+    }
+
+    function filterByPlatform(platform) {
+      currentPlatformFilter = platform;
+      document.querySelectorAll(".plat-pill").forEach(p => {
+        p.className = "plat-pill px-3 py-1.5 rounded-lg text-xs font-medium bg-surface-container-low text-on-surface-variant hover:bg-surface-container";
+      });
+      event.target.className = "plat-pill active px-3 py-1.5 rounded-lg text-xs font-semibold bg-surface-container-high text-on-surface";
+
+      if (platform === "Google Forms" || platform === "primary") {
+        setSourceTypeFilter("primary", false);
+      } else if (platform === "interviews") {
+        setSourceTypeFilter("interviews", false);
+      } else if (currentSourceFilter === "primary" || currentSourceFilter === "interviews") {
+        setSourceTypeFilter("all", false);
+      }
+
+      renderUnifiedTable(document.getElementById("library-search-input")?.value || "");
+    }
+
+    // Render Unified Research Library Table
+    function renderUnifiedTable(searchQuery = "") {
+      const tbody = document.getElementById("unified-research-tbody");
+      if (!tbody) return;
+
+      const q = (searchQuery || "").toLowerCase().trim();
+
+      const filtered = liveRecords.filter(r => {
+        // 1. Source Category filter
+        if (currentSourceFilter === "all") {
+          // Default: active non-quarantined records
+          if (currentPlatformFilter === "all" && r.is_quarantined) return false;
+        } else if (currentSourceFilter === "primary") {
+          // All 34 primary 1:1 records (27 survey + 7 interview notes)
+          if (r.source_category !== "primary") return false;
+        } else if (currentSourceFilter === "interviews") {
+          // 7 interview notes
+          const isInt = (r.record_type === "interview_note" || (r.respondent_id && r.respondent_id.startsWith("INT-")));
+          if (!isInt) return false;
+        } else if (currentSourceFilter === "secondary") {
+          if (r.is_quarantined || r.source_category !== "secondary") return false;
+        } else if (currentSourceFilter === "quarantine") {
+          if (!r.is_quarantined) return false;
+        }
+
+        // 2. Platform filter
+        if (currentPlatformFilter !== "all") {
+          if (currentPlatformFilter === "Google Forms" || currentPlatformFilter === "primary") {
+            const isPrim = (r.source_category === "primary" || (r.source && (r.source.toLowerCase().includes("google forms") || r.source.toLowerCase().includes("primary") || r.source.toLowerCase().includes("interview"))));
+            if (!isPrim) return false;
+          } else if (currentPlatformFilter === "interviews") {
+            const isInt = (r.record_type === "interview_note" || (r.respondent_id && r.respondent_id.startsWith("INT-")));
+            if (!isInt) return false;
+          } else {
+            if (!r.source || !r.source.toLowerCase().includes(currentPlatformFilter.toLowerCase())) return false;
+          }
+        }
+
+        // 3. Search query
+        if (q) {
+          const matchId = (r.record_id || "").toLowerCase().includes(q) || (r.respondent_id || "").toLowerCase().includes(q);
+          const matchText = (r.text || "").toLowerCase().includes(q);
+          const matchTitle = (r.title || "").toLowerCase().includes(q);
+          const matchSource = (r.source || "").toLowerCase().includes(q);
+          return matchId || matchText || matchTitle || matchSource;
+        }
+        return true;
+      });
+
+      const countText = document.getElementById("library-count-text");
+      if (countText) countText.textContent = `Showing ${filtered.length} of ${liveRecords.length} records`;
+
+      if (filtered.length === 0) {
+        tbody.innerHTML = `
+          <tr>
+            <td colspan="7" class="text-center py-10 text-on-surface-variant">
+              <span class="material-symbols-outlined text-[32px] text-outline mb-1">search_off</span>
+              <p class="font-semibold">No research records found matching current filters.</p>
+              <p class="text-[11px] mt-1">Try switching to 'All Research' or clearing search.</p>
+            </td>
+          </tr>
+        `;
+        return;
+      }
+
+      tbody.innerHTML = filtered.map(r => {
+        const isInterview = (r.record_type === "interview_note" || (r.respondent_id && r.respondent_id.startsWith("INT-")));
+        const isPrimary = (r.source_category === "primary");
+        const categoryBadge = isInterview
+          ? `<span class="px-2 py-0.5 rounded-full text-[10px] font-bold bg-purple-500/15 text-purple-900 border border-purple-300">1:1 Interview</span>`
+          : isPrimary
+          ? `<span class="px-2 py-0.5 rounded-full text-[10px] font-bold bg-amber-500/15 text-amber-900 border border-amber-300">Primary Vault</span>`
+          : `<span class="px-2 py-0.5 rounded-full text-[10px] font-bold bg-secondary-container text-on-secondary-container border border-secondary-container/80">Secondary</span>`;
+
+        const displayId = r.respondent_id || (r.record_id ? r.record_id.substring(0, 10) : "REC");
+        const preview = (r.text || "").substring(0, 65) + ((r.text && r.text.length > 65) ? "..." : "");
+        const title = r.title || (isInterview ? `1:1 Interview [${displayId}]` : isPrimary ? `Survey Feedback [${displayId}]` : `${r.source} Review`);
+        const dateStr = r.publication_date || (r.created_at ? r.created_at.substring(0, 10) : "—");
+
+        return `
+          <tr class="hover:bg-surface-container-low transition-colors cursor-pointer group" onclick="openRecordDrawer('${r.record_id}')">
+            <td class="py-3 px-4 font-mono font-bold text-primary">${displayId}</td>
+            <td class="py-3 px-3 font-semibold text-on-surface truncate max-w-[180px]">${title}</td>
+            <td class="py-3 px-3">${categoryBadge}</td>
+            <td class="py-3 px-3 text-on-surface truncate max-w-[140px]">${r.source}</td>
+            <td class="py-3 px-3 text-on-surface-variant text-[11px]">${dateStr}</td>
+            <td class="py-3 px-4 text-on-surface truncate max-w-[220px]">${preview}</td>
+            <td class="py-3 px-3 text-right">
+              <button class="p-1 rounded-lg text-primary group-hover:bg-primary group-hover:text-on-primary transition-colors">
+                <span class="material-symbols-outlined text-[18px]">visibility</span>
+              </button>
+            </td>
+          </tr>
+        `;
+      }).join('');
+    }
+
+    // Record Drawer (Primary or Secondary)
+    let currentDrawerRecord = null;
+
+    function openRecordDrawer(recordId) {
+      const record = liveRecords.find(r => r.record_id === recordId);
+      if (!record) return;
+
+      currentDrawerRecord = record;
+      const isPrimary = (record.source_category === "primary");
+      const displayId = record.respondent_id || record.record_id.substring(0, 12);
+
+      document.getElementById("drawer-resp-id").textContent = record.title || `${displayId}`;
+      document.getElementById("drawer-timestamp").textContent = `Source: ${record.source} • Collected: ${record.collection_date || record.created_at || '—'}`;
+      document.getElementById("drawer-type-icon").textContent = isPrimary ? "P" : "S";
+
+      const content = document.getElementById("drawer-content");
+      content.innerHTML = `
+        <div class="bg-surface-container-low p-3 rounded-xl space-y-1">
+          <p class="text-[10px] uppercase font-bold text-on-surface-variant">Source Attribution &amp; Category</p>
+          <div class="flex items-center gap-2 mt-1">
+            <span class="px-2 py-0.5 rounded text-[10px] font-bold ${isPrimary ? 'bg-emerald-500/10 text-emerald-800' : 'bg-secondary-container text-on-secondary-container'}">
+              ${isPrimary ? 'Primary Research' : 'Secondary Research'}
+            </span>
+            <span class="font-bold text-on-surface">${record.source}</span>
+          </div>
+        </div>
+
+        ${record.source_url ? `
+          <div class="bg-surface-container-low p-3 rounded-xl space-y-1">
+            <p class="text-[10px] uppercase font-bold text-on-surface-variant">Original Source Reference / URL</p>
+            <a href="${record.source_url}" target="_blank" rel="noopener noreferrer" class="text-primary hover:underline break-all font-mono text-[11px] flex items-center gap-1">
+              <span>${record.source_url}</span>
+              <span class="material-symbols-outlined text-[14px]">open_in_new</span>
+            </a>
+          </div>
+        ` : ''}
+
+        <div class="bg-surface-container-low p-3 rounded-xl space-y-1">
+          <p class="text-[10px] uppercase font-bold text-on-surface-variant">Publication Date &amp; Method</p>
+          <p class="font-semibold text-on-surface">Date: ${record.publication_date || 'N/A'} • Method: ${record.collection_method || 'manual'}</p>
+        </div>
+
+        <div class="bg-primary/5 border border-primary/20 p-4 rounded-xl space-y-1">
+          <p class="text-[10px] uppercase font-bold text-primary">Verbatim Research Content</p>
+          <div class="text-on-surface whitespace-pre-line leading-relaxed font-medium">
+            ${record.text}
+          </div>
+        </div>
+      `;
+
+      document.getElementById("response-drawer").classList.remove("hidden");
+    }
+
+    function closeDrawer() {
+      document.getElementById("response-drawer").classList.add("hidden");
+    }
+
+    function copyDrawerQuote() {
+      if (!currentDrawerRecord) return;
+      navigator.clipboard.writeText(currentDrawerRecord.text);
+      alert("Research quote copied to clipboard!");
+    }
+
+    // Discovery Scope Switcher & Count Audits
+    function setDiscoveryScope(scope) {
+      document.querySelectorAll(".scope-btn").forEach(b => {
+        b.className = "scope-btn px-3 py-1 rounded-lg text-xs font-medium text-on-surface-variant hover:bg-surface-container";
+      });
+      document.getElementById(`scope-btn-${scope}`).className = "scope-btn active px-3 py-1 rounded-lg text-xs font-bold bg-primary text-on-primary";
+
+      updateDiscoveryCounts(scope);
+    }
+
+    function updateDiscoveryCounts(scope = "all") {
+      const secondaryCount = liveStats.secondary_records || 511;
+      const vaultCount = liveStats.quarantined_records || 52;
+      const primaryVault = liveStats.primary_quarantined_records || 27;
+
+      const pEl = document.getElementById("disc-primary-count");
+      const sEl = document.getElementById("disc-secondary-count");
+      const tEl = document.getElementById("disc-total-count");
+      const qEl = document.getElementById("disc-excluded-count");
+
+      if (pEl) pEl.textContent = `${primaryVault} in Vault`;
+      if (sEl) sEl.textContent = `${secondaryCount} Selected`;
+      if (tEl) tEl.textContent = `${secondaryCount} Records`;
+      if (qEl) qEl.textContent = `${vaultCount} Isolated`;
+    }
+
+    // Render AI Discovery Themes (Combining Primary & Secondary)
+    function renderThemes() {
+      const container = document.getElementById("themes-list-container");
+      if (!container || !window.RESEARCH_DATA) return;
+
+      const themes = window.RESEARCH_DATA.themes || [];
+      container.innerHTML = themes.map(t => {
+        return `
+          <article class="bg-surface-container-lowest rounded-2xl p-5 shadow-sm border border-outline-variant/30 hover:shadow-md transition-shadow flex flex-col gap-3.5">
+            <div class="flex items-center justify-between gap-2">
+              <span class="text-[11px] uppercase tracking-wider ${t.badgeClass} px-2.5 py-0.5 rounded-lg flex items-center gap-1.5 font-bold">
+                <span class="w-1.5 h-1.5 rounded-full bg-current inline-block"></span>
+                ${t.category}
+              </span>
+              <div class="flex items-center gap-1.5 bg-surface-container-low px-2.5 py-0.5 rounded-lg text-xs">
+                <span class="material-symbols-outlined text-[14px] text-on-surface-variant">shield_with_heart</span>
+                <span class="text-on-surface-variant font-medium">Evidence Coverage:</span>
+                <span class="font-mono font-bold text-on-surface">${t.coverage}</span>
+              </div>
+            </div>
+
+            <div>
+              <h3 class="text-base font-bold text-on-surface leading-snug">${t.title}</h3>
+              <p class="text-xs text-on-surface-variant mt-1 flex items-center gap-2">
+                <span class="material-symbols-outlined text-[16px] text-primary">inventory_2</span>
+                <span>
+                  Supported by 
+                  <strong class="text-emerald-800 font-bold">${t.primaryCount} Primary records</strong> + 
+                  <strong class="text-secondary font-bold">${t.secondaryCount} Secondary records</strong> 
+                  (${t.totalEvidenceCount} items total)
+                </span>
+              </p>
+            </div>
+
+            <!-- Structured Formulation Grid with Explicit Labels -->
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-2 text-xs">
+              <div class="bg-surface-container-low p-3 rounded-xl border border-outline-variant/20">
+                <span class="text-[10px] font-bold uppercase tracking-wider text-primary">Observed Evidence (Primary + Secondary Data)</span>
+                <p class="text-on-surface mt-1 leading-relaxed">${t.observation}</p>
+                <div class="mt-2 text-[10px] text-on-surface-variant font-mono">
+                  Primary IDs: ${t.primaryIds.slice(0, 4).join(', ')}... | Secondary: ${t.secondaryRefs.join(', ')}
+                </div>
+              </div>
+              <div class="bg-surface-container-low p-3 rounded-xl border border-outline-variant/20">
+                <span class="text-[10px] font-bold uppercase tracking-wider text-secondary">AI Interpretation &amp; Hypothesis</span>
+                <p class="text-on-surface mt-1 leading-relaxed">${t.interpretation}</p>
+              </div>
+            </div>
+
+            <div class="bg-surface-container-low rounded-xl p-3">
+              <div class="flex items-start gap-2">
+                <span class="material-symbols-outlined text-[18px] text-secondary shrink-0 mt-0.5">format_quote</span>
+                <p class="text-xs text-on-surface italic leading-relaxed">
+                  ${t.quote}
+                </p>
+              </div>
+            </div>
+
+            <div class="bg-surface-container rounded-xl p-3 flex items-start gap-2.5">
+              <span class="material-symbols-outlined text-[18px] text-tertiary shrink-0 mt-0.5">balance</span>
+              <div class="min-w-0 text-xs">
+                <span class="font-bold uppercase tracking-wider text-[10px] text-on-surface-variant">Alternative / Contradictory Evidence</span>
+                <p class="text-on-surface mt-0.5 leading-relaxed">${t.contradiction}</p>
+              </div>
+            </div>
+
+            <div class="pt-2 flex items-center justify-between gap-2 border-t border-outline-variant/20">
+              <div class="flex items-center gap-1.5 px-2.5 py-1 rounded-lg text-xs font-bold ${t.statusClass}">
+                <span class="material-symbols-outlined text-[15px]">verified</span>
+                <span>${t.status}</span>
+              </div>
+              <button onclick="switchPage('evidence-review')" class="h-9 px-3 bg-surface-container-high text-on-surface font-semibold text-xs rounded-xl flex items-center gap-1 hover:bg-surface-container-highest transition-colors">
+                <span>Validate in Review Board</span>
+                <span class="material-symbols-outlined text-[16px]">arrow_forward</span>
+              </button>
+            </div>
+          </article>
+        `;
+      }).join('');
+    }
+
+    // Modal Operations for Secondary Research Ingestion
+    function openSecondaryCollectModal() {
+      document.getElementById("secondary-collect-modal").classList.remove("hidden");
+    }
+
+    function closeSecondaryCollectModal() {
+      document.getElementById("secondary-collect-modal").classList.add("hidden");
+    }
+
+    function setModalTab(tab) {
+      if (tab === "url") {
+        document.getElementById("modal-tab-url").classList.remove("hidden");
+        document.getElementById("modal-tab-manual").classList.add("hidden");
+        document.getElementById("tab-btn-url").className = "px-3 py-1.5 rounded-lg text-xs font-bold bg-primary text-on-primary";
+        document.getElementById("tab-btn-manual").className = "px-3 py-1.5 rounded-lg text-xs font-medium text-on-surface-variant hover:bg-surface-container";
+      } else {
+        document.getElementById("modal-tab-url").classList.add("hidden");
+        document.getElementById("modal-tab-manual").classList.remove("hidden");
+        document.getElementById("tab-btn-manual").className = "px-3 py-1.5 rounded-lg text-xs font-bold bg-primary text-on-primary";
+        document.getElementById("tab-btn-url").className = "px-3 py-1.5 rounded-lg text-xs font-medium text-on-surface-variant hover:bg-surface-container";
+      }
+    }
+
+    function onPlatformSelectChange() {
+      const platform = document.getElementById("select-fetch-platform").value;
+      const inputEl = document.getElementById("input-fetch-url");
+      const labelEl = document.getElementById("label-fetch-input");
+      const hintEl = document.getElementById("platform-hint");
+
+      if (platform === "youtube") {
+        labelEl.textContent = "YouTube Video URL (e.g. https://www.youtube.com/watch?v=...):";
+        inputEl.placeholder = "https://www.youtube.com/watch?v=dQw4w9WgXcQ";
+        hintEl.textContent = "* Extracts official video metadata via YouTube oEmbed API without requiring API key.";
+      } else if (platform === "reddit") {
+        labelEl.textContent = "Reddit Discussion Post URL (r/IndiaInvestments):";
+        inputEl.placeholder = "https://www.reddit.com/r/IndiaInvestments/comments/...";
+        hintEl.textContent = "* Note: Reddit enforces strict Cloudflare anti-bot checks. If blocked, paste excerpts in Manual Entry.";
+      } else if (platform === "trustpilot") {
+        labelEl.textContent = "Trustpilot Review Page URL:";
+        inputEl.placeholder = "https://www.trustpilot.com/review/groww.in";
+        hintEl.textContent = "* Note: Trustpilot enforces Cloudflare WAF bot challenges. Clear diagnostic errors are shown on block.";
+      } else if (platform === "google_play") {
+        labelEl.textContent = "Google Play App Store URL or Package:";
+        inputEl.placeholder = "com.nextbillion.groww or https://play.google.com/store/apps/details?id=com.nextbillion.groww";
+        hintEl.textContent = "* Parses public store page for verified customer feedback excerpts.";
+      } else {
+        labelEl.textContent = "Permitted Public URL (http/https):";
+        inputEl.placeholder = "https://www.sebi.gov.in/reports/... or public review page";
+        hintEl.textContent = "* SSRF protection active: internal network and localhost requests are blocked. Respects source terms and paywalls.";
+      }
+    }
+
+    async function submitFetchUrl() {
+      const platformSelect = document.getElementById("select-fetch-platform");
+      const platform = platformSelect ? platformSelect.value : "url";
+      const urlInput = document.getElementById("input-fetch-url");
+      const sourceInput = document.getElementById("input-fetch-source");
+      const errBox = document.getElementById("fetch-error-box");
+      const btn = document.getElementById("btn-submit-fetch");
+
+      const inputVal = urlInput.value.trim();
+      if (!inputVal) {
+        errBox.textContent = "Please enter a valid URL or identifier.";
+        errBox.classList.remove("hidden");
+        return;
+      }
+
+      errBox.classList.add("hidden");
+      btn.innerHTML = '<span class="material-symbols-outlined text-[18px] animate-spin">sync</span><span>Collecting Secondary Research...</span>';
+      btn.disabled = true;
+
+      try {
+        const res = await fetch(window.APP_CONFIG.apiUrl("/api/collect-secondary"), {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            platform: platform,
+            url: inputVal.startsWith("http") ? inputVal : undefined,
+            query: !inputVal.startsWith("http") ? inputVal : undefined,
+            source_name: sourceInput.value.trim() || undefined
+          })
+        });
+
+        const data = await res.json();
+        if (!res.ok) {
+          throw new Error(data.detail || data.error || "Failed to collect secondary research.");
+        }
+
+        if (data.status === "error") {
+          throw new Error(data.detail || data.error || "Collector returned an error.");
+        }
+
+        alert(`Success! Imported secondary record: "${data.title}"`);
+        closeSecondaryCollectModal();
+        urlInput.value = "";
+        sourceInput.value = "";
+        await loadLiveDatabaseData();
+        setSourceTypeFilter("secondary");
+      } catch (err) {
+        errBox.innerHTML = `<strong>Collection Error:</strong> ${err.message}`;
+        errBox.classList.remove("hidden");
+      } finally {
+        btn.innerHTML = '<span class="material-symbols-outlined text-[18px]">download</span><span>Fetch &amp; Persist Secondary Record</span>';
+        btn.disabled = false;
+      }
+    }
+
+    async function submitManualSecondary() {
+      const titleInput = document.getElementById("input-manual-title");
+      const sourceInput = document.getElementById("input-manual-source");
+      const urlInput = document.getElementById("input-manual-url");
+      const textInput = document.getElementById("input-manual-text");
+      const errBox = document.getElementById("manual-error-box");
+      const btn = document.getElementById("btn-submit-manual");
+
+      const text = textInput.value.trim();
+      if (text.length < 15) {
+        errBox.textContent = "Research text must be at least 15 characters.";
+        errBox.classList.remove("hidden");
+        return;
+      }
+
+      errBox.classList.add("hidden");
+      btn.innerHTML = '<span class="material-symbols-outlined text-[18px] animate-spin">sync</span><span>Saving...</span>';
+      btn.disabled = true;
+
+      try {
+        const res = await fetch(window.APP_CONFIG.apiUrl("/api/manual-secondary"), {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            title: titleInput.value.trim() || undefined,
+            source_name: sourceInput.value.trim() || undefined,
+            source_url: urlInput.value.trim() || undefined,
+            text: text
+          })
+        });
+
+        const data = await res.json();
+        if (!res.ok) {
+          throw new Error(data.detail || "Failed to save manual secondary research.");
+        }
+
+        alert(`Saved secondary research record successfully!`);
+        closeSecondaryCollectModal();
+        titleInput.value = "";
+        sourceInput.value = "";
+        urlInput.value = "";
+        textInput.value = "";
+        await loadLiveDatabaseData();
+        setSourceTypeFilter("secondary");
+      } catch (err) {
+        errBox.textContent = err.message;
+        errBox.classList.remove("hidden");
+      } finally {
+        btn.innerHTML = '<span class="material-symbols-outlined text-[18px]">save</span><span>Save Secondary Research Record</span>';
+        btn.disabled = false;
+      }
+    }
+
+    // Render Review Cards
+    function renderReviewCards() {
+      const container = document.getElementById("review-cards-container");
+      if (!container || !window.RESEARCH_DATA) return;
+
+      const themes = window.RESEARCH_DATA.themes || [];
+      container.innerHTML = themes.map(t => {
+        const decision = reviewDecisions[t.id] || { status: "Pending Review", notes: "" };
+        let badgeColor = "bg-amber-500/15 text-amber-900";
+        if (decision.status === "Approved") badgeColor = "bg-emerald-500/15 text-emerald-800";
+        if (decision.status === "Rejected") badgeColor = "bg-error-container text-on-error-container";
+        if (decision.status === "Flagged") badgeColor = "bg-purple-500/15 text-purple-900";
+
+        return `
+          <div class="bg-surface-container-lowest p-5 rounded-2xl border border-outline-variant/30 space-y-4 shadow-sm">
+            <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+              <div>
+                <span class="text-[10px] font-bold uppercase tracking-wider text-primary">${t.category}</span>
+                <h3 class="text-base font-bold text-on-surface">${t.title}</h3>
+              </div>
+              <span class="text-xs font-bold px-2.5 py-1 rounded-lg ${badgeColor}">
+                ${decision.status}
+              </span>
+            </div>
+
+            <p class="text-xs text-on-surface-variant leading-relaxed">
+              <strong>Multi-Source Evidence:</strong> ${t.observation}
+            </p>
+
+            <div class="bg-surface-container-low p-3 rounded-xl text-xs italic text-on-surface border border-outline-variant/20">
+              ${t.quote}
+            </div>
+
+            <div class="space-y-2 pt-2 border-t border-outline-variant/20">
+              <label class="block text-xs font-bold text-on-surface">Researcher Validation Notes:</label>
+              <input type="text" id="note-input-${t.id}" value="${decision.notes || ''}" placeholder="Add validation context, limitations, or interview focus..." class="w-full h-9 px-3 rounded-xl bg-surface-container-low text-xs border border-outline-variant/30 focus:border-primary focus:outline-none"/>
+            </div>
+
+            <div class="flex flex-wrap items-center gap-2 pt-1">
+              <button onclick="setReviewDecision('${t.id}', 'Approved')" class="px-3.5 py-1.5 rounded-xl bg-emerald-600 text-white text-xs font-semibold hover:bg-emerald-700 transition-colors flex items-center gap-1">
+                <span class="material-symbols-outlined text-[16px]">check</span>
+                <span>Approve Theme</span>
+              </button>
+              <button onclick="setReviewDecision('${t.id}', 'Flagged')" class="px-3.5 py-1.5 rounded-xl bg-purple-100 text-purple-900 text-xs font-semibold hover:bg-purple-200 transition-colors flex items-center gap-1">
+                <span class="material-symbols-outlined text-[16px]">flag</span>
+                <span>Flag for Interview</span>
+              </button>
+              <button onclick="setReviewDecision('${t.id}', 'Rejected')" class="px-3.5 py-1.5 rounded-xl bg-red-100 text-red-900 text-xs font-semibold hover:bg-red-200 transition-colors flex items-center gap-1">
+                <span class="material-symbols-outlined text-[16px]">close</span>
+                <span>Reject / Insufficient</span>
+              </button>
+            </div>
+          </div>
+        `;
+      }).join('');
+    }
+
+    function setReviewDecision(themeId, status) {
+      const noteInput = document.getElementById(`note-input-${themeId}`);
+      const notes = noteInput ? noteInput.value : "";
+      reviewDecisions[themeId] = { status, notes, timestamp: new Date().toISOString() };
+      localStorage.setItem("continuum_review_decisions", JSON.stringify(reviewDecisions));
+
+      renderReviewCards();
+      alert(`Theme marked as "${status}". Notes saved locally.`);
+    }
+
+    // Render Problem Cards
+    function renderProblemCards() {
+      const container = document.getElementById("problem-cards-container");
+      if (!container || !window.RESEARCH_DATA) return;
+
+      const problems = window.RESEARCH_DATA.problems || [];
+      container.innerHTML = problems.map((p, idx) => {
+        const audit = p.auditTrail || {};
+        const sc = p.scores || {};
+        const verifiedEv = p.verifiedSupportingEvidence || [];
+        const metrics = p.proposedSuccessMetrics || [];
+        const questions = p.followUpInterviewQuestions || [];
+        const covCriteria = (p.confidenceCoverage && p.confidenceCoverage.transparent_criteria) ? p.confidenceCoverage.transparent_criteria : {};
+
+        const verifiedEvHtml = verifiedEv.map(ev => {
+          const urlLink = ev.source_url ? `<a href="${ev.source_url}" target="_blank" rel="noopener" class="text-primary hover:underline text-[10px] flex items-center gap-0.5 mt-0.5"><span class="material-symbols-outlined text-[12px]">open_in_new</span>View Source URL</a>` : '';
+          const isPrimary = ev.source_type && ev.source_type.toLowerCase().includes("primary");
+          const badgeClass = isPrimary ? "bg-amber-500/10 text-amber-900 border border-amber-300" : "bg-blue-500/10 text-blue-900 border border-blue-300";
+
+          return `
+            <div class="bg-surface-container-low p-3 rounded-xl border border-outline-variant/20 space-y-1.5 text-xs">
+              <div class="flex items-center justify-between gap-1 flex-wrap">
+                <span class="font-mono font-bold text-primary text-[11px] bg-surface-container px-1.5 py-0.5 rounded">${ev.research_id}</span>
+                <span class="text-[10px] font-bold px-2 py-0.5 rounded-lg ${badgeClass}">${ev.source_type}</span>
+              </div>
+              <p class="text-on-surface font-medium leading-snug">${ev.quote_or_summary}</p>
+              <p class="text-[11px] text-on-surface-variant italic">Supported: ${ev.what_source_supports}</p>
+              ${urlLink}
+            </div>
+          `;
+        }).join('');
+
+        const metricsHtml = metrics.map(m => `
+          <div class="bg-surface-container-lowest p-2.5 rounded-xl border border-outline-variant/20 space-y-1">
+            <div class="flex items-center justify-between">
+              <span class="text-[10px] font-bold uppercase tracking-wider text-primary">${m.type}</span>
+              <span class="material-symbols-outlined text-[14px] text-primary">monitoring</span>
+            </div>
+            <p class="font-bold text-xs text-on-surface">${m.metric_name}</p>
+            <p class="text-[11px] text-on-surface-variant leading-relaxed">${m.definition}</p>
+          </div>
+        `).join('');
+
+        const questionsHtml = questions.map((q, qidx) => `
+          <li class="flex items-start gap-2 text-xs text-on-surface leading-relaxed">
+            <span class="font-mono font-bold text-primary shrink-0">Q${qidx+1}.</span>
+            <span>${q}</span>
+          </li>
+        `).join('');
+
+        const fabricatedItemsHtml = (audit.fabricatedRemoved || []).map(f => `
+          <li class="text-xs text-error leading-snug flex items-start gap-1.5">
+            <span class="material-symbols-outlined text-[14px] text-error shrink-0 mt-0.5">delete</span>
+            <span><strong>Removed Fabricated/Unverified Item:</strong> ${f}</span>
+          </li>
+        `).join('');
+
+        const flaggedClaimsHtml = (audit.unsupportedClaimsFlagged || []).map(fl => `
+          <li class="text-xs text-amber-900 leading-snug flex items-start gap-1.5">
+            <span class="material-symbols-outlined text-[14px] text-amber-700 shrink-0 mt-0.5">warning</span>
+            <span><strong>Flagged &amp; Corrected:</strong> ${fl}</span>
+          </li>
+        `).join('');
+
+        return `
+          <div class="bg-surface-container-lowest p-6 rounded-3xl border border-outline-variant/30 space-y-5 shadow-sm hover:shadow-md transition-shadow">
+            
+            <!-- Header & Scorecard Disclaimer -->
+            <div class="flex flex-col lg:flex-row lg:items-center justify-between gap-3 border-b border-outline-variant/20 pb-4">
+              <div class="flex items-start gap-3">
+                <span class="w-9 h-9 rounded-2xl bg-primary text-on-primary font-mono font-bold text-sm flex items-center justify-center shrink-0 shadow-sm mt-0.5">
+                  #${idx+1}
+                </span>
+                <div>
+                  <div class="flex items-center gap-2 flex-wrap mb-1">
+                    <span class="text-[10px] uppercase tracking-wider font-bold px-2 py-0.5 rounded-lg bg-emerald-500/10 text-emerald-900 border border-emerald-300">
+                      ${p.status}
+                    </span>
+                    <span class="text-[10px] font-bold px-2 py-0.5 rounded-lg bg-amber-500/10 text-amber-900 border border-amber-300">
+                      Primary: ${p.primaryEvidenceCount} Records
+                    </span>
+                    <span class="text-[10px] font-bold px-2 py-0.5 rounded-lg bg-blue-500/10 text-blue-900 border border-blue-300">
+                      Secondary: ${p.secondaryEvidenceCount} Records
+                    </span>
+                    <span class="text-[10px] font-bold px-2 py-0.5 rounded-lg bg-purple-500/10 text-purple-900 border border-purple-300">
+                      Total: ${p.totalEvidenceCount} Verified
+                    </span>
+                  </div>
+                  <h3 class="text-lg font-bold text-on-surface tracking-tight">${p.title}</h3>
+                </div>
+              </div>
+
+              <!-- Heuristic Score Badge with Explicit Transparency -->
+              <div class="bg-primary/10 border border-primary/20 px-3.5 py-2 rounded-2xl flex flex-col items-start lg:items-end shrink-0">
+                <span class="font-mono text-sm font-bold text-primary">Discovery Score: ${p.compositeScore}/100</span>
+                <span class="text-[9px] uppercase tracking-wider text-on-surface-variant font-bold">Exploratory PM Prioritization — Not Measured Churn Impact</span>
+              </div>
+            </div>
+
+            <!-- Validated Problem Statement -->
+            <div class="bg-surface-container-low p-4 rounded-2xl border border-outline-variant/20 space-y-1.5">
+              <div class="flex items-center gap-1.5 text-primary text-xs font-bold uppercase tracking-wider">
+                <span class="material-symbols-outlined text-[16px]">psychology_alt</span>
+                <span>Audited Problem Statement</span>
+              </div>
+              <p class="text-sm font-medium text-on-surface leading-relaxed">${p.problemStatement || p.title}</p>
+            </div>
+
+            <!-- Segregation: Validated User Need vs Proposed Product Intervention -->
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-3 text-xs">
+              <div class="bg-emerald-500/5 p-4 rounded-2xl border border-emerald-400/30 space-y-1.5">
+                <div class="flex items-center gap-1.5 text-emerald-900 font-bold uppercase tracking-wider text-[11px]">
+                  <span class="material-symbols-outlined text-[16px]">fact_check</span>
+                  <span>Validated User Need (Directly Grounded in Research)</span>
+                </div>
+                <p class="text-on-surface leading-relaxed">${p.userNeed}</p>
+              </div>
+
+              <div class="bg-primary/5 p-4 rounded-2xl border border-primary/20 space-y-1.5">
+                <div class="flex items-center gap-1.5 text-primary font-bold uppercase tracking-wider text-[11px]">
+                  <span class="material-symbols-outlined text-[16px]">lightbulb</span>
+                  <span>Proposed Intervention &amp; Testable Hypothesis</span>
+                </div>
+                <p class="text-[11px] text-on-surface-variant italic leading-snug">${p.proposedIntervention}</p>
+                <p class="text-on-surface font-medium leading-relaxed mt-1"><strong>Hypothesis:</strong> ${p.hypothesis}</p>
+              </div>
+            </div>
+
+            <!-- Qualitative Synthesis Breakdown: Observation, Interpretation, Contradiction, Limitations -->
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-3 text-xs">
+              <div class="bg-surface-container-low p-3.5 rounded-2xl border border-outline-variant/20 space-y-1">
+                <p class="text-[10px] uppercase font-bold text-primary">1. Direct Observation</p>
+                <p class="text-on-surface leading-relaxed text-[11px]">${p.observation}</p>
+              </div>
+
+              <div class="bg-surface-container-low p-3.5 rounded-2xl border border-outline-variant/20 space-y-1">
+                <p class="text-[10px] uppercase font-bold text-secondary">2. AI Interpretation</p>
+                <p class="text-on-surface leading-relaxed text-[11px]">${p.interpretation}</p>
+              </div>
+
+              <div class="bg-surface-container-low p-3.5 rounded-2xl border border-outline-variant/20 space-y-1">
+                <p class="text-[10px] uppercase font-bold text-tertiary">3. Contradictory Evidence</p>
+                <p class="text-on-surface leading-relaxed text-[11px]">${p.contradictoryEvidence}</p>
+              </div>
+
+              <div class="bg-surface-container-low p-3.5 rounded-2xl border border-outline-variant/20 space-y-1">
+                <p class="text-[10px] uppercase font-bold text-on-surface-variant">4. Evidence Limitations</p>
+                <p class="text-on-surface leading-relaxed text-[11px]">${p.limitations}</p>
+              </div>
+            </div>
+
+            <!-- Verified Supporting Evidence Drawer / Grid -->
+            <div class="space-y-2.5">
+              <div class="flex items-center justify-between">
+                <span class="text-xs font-bold uppercase tracking-wider text-on-surface flex items-center gap-1.5">
+                  <span class="material-symbols-outlined text-[16px] text-primary">verified</span>
+                  <span>Verified Supporting Evidence (${verifiedEv.length} Inspected Database Records)</span>
+                </span>
+                <span class="text-[10px] text-on-surface-variant font-mono">100% matched against data/sip_discovery.db</span>
+              </div>
+              <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-2.5 max-h-80 overflow-y-auto pr-1">
+                ${verifiedEvHtml}
+              </div>
+            </div>
+
+            <!-- Prioritization Scorecard & Confidence Coverage Criteria -->
+            <div class="bg-surface-container p-4 rounded-2xl space-y-3 text-xs">
+              <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-1">
+                <div>
+                  <p class="text-[11px] uppercase font-bold text-on-surface">Exploratory Opportunity Prioritization Scorecard</p>
+                  <p class="text-[10px] text-on-surface-variant">${p.scoreRationale || ''}</p>
+                </div>
+                <span class="text-[10px] font-bold bg-surface-container-lowest px-2.5 py-1 rounded-lg text-primary border border-outline-variant/30">
+                  Coverage: ${p.confidenceCoverage ? p.confidenceCoverage.coverage_level : 'Triangulated'}
+                </span>
+              </div>
+
+              <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-2">
+                <div class="bg-surface-container-lowest p-2 rounded-xl text-center border border-outline-variant/20">
+                  <p class="text-[10px] text-on-surface-variant">Evidence (25%)</p>
+                  <p class="font-mono font-bold text-primary text-sm">${sc.evidenceStrength || 0}/100</p>
+                </div>
+                <div class="bg-surface-container-lowest p-2 rounded-xl text-center border border-outline-variant/20">
+                  <p class="text-[10px] text-on-surface-variant">Relevance (25%)</p>
+                  <p class="font-mono font-bold text-primary text-sm">${sc.relevance || 0}/100</p>
+                </div>
+                <div class="bg-surface-container-lowest p-2 rounded-xl text-center border border-outline-variant/20">
+                  <p class="text-[10px] text-on-surface-variant">Severity (15%)</p>
+                  <p class="font-mono font-bold text-primary text-sm">${sc.severity || 0}/100</p>
+                </div>
+                <div class="bg-surface-container-lowest p-2 rounded-xl text-center border border-outline-variant/20">
+                  <p class="text-[10px] text-on-surface-variant">Influence (15%)</p>
+                  <p class="font-mono font-bold text-primary text-sm">${sc.influence || 0}/100</p>
+                </div>
+                <div class="bg-surface-container-lowest p-2 rounded-xl text-center border border-outline-variant/20">
+                  <p class="text-[10px] text-on-surface-variant">Feasibility (10%)</p>
+                  <p class="font-mono font-bold text-primary text-sm">${sc.feasibility || 0}/100</p>
+                </div>
+                <div class="bg-surface-container-lowest p-2 rounded-xl text-center border border-outline-variant/20">
+                  <p class="text-[10px] text-on-surface-variant">Safety (10%)</p>
+                  <p class="font-mono font-bold text-primary text-sm">${sc.compliance || 0}/100</p>
+                </div>
+              </div>
+
+              <!-- Transparent Criteria Details -->
+              <div class="grid grid-cols-1 md:grid-cols-3 gap-2 pt-1 text-[11px] text-on-surface-variant">
+                <div class="bg-surface-container-lowest p-2 rounded-lg">
+                  <strong class="text-on-surface block text-[10px] uppercase">Primary Depth:</strong>
+                  <span>${covCriteria.primary_depth || 'Direct 1:1 survey & interview quotes'}</span>
+                </div>
+                <div class="bg-surface-container-lowest p-2 rounded-lg">
+                  <strong class="text-on-surface block text-[10px] uppercase">Secondary Rigor:</strong>
+                  <span>${covCriteria.secondary_rigor || 'Verified app reviews & regulatory studies'}</span>
+                </div>
+                <div class="bg-surface-container-lowest p-2 rounded-lg">
+                  <strong class="text-on-surface block text-[10px] uppercase">Directness of Link:</strong>
+                  <span>${covCriteria.directness_of_link || 'Evaluated link to 12-month retention'}</span>
+                </div>
+              </div>
+            </div>
+
+            <!-- Proposed Future Experiment Metrics & Neutral Interview Questions -->
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-3 text-xs">
+              <div class="bg-surface-container-low p-4 rounded-2xl border border-outline-variant/20 space-y-2">
+                <span class="text-[11px] uppercase font-bold text-primary flex items-center gap-1.5">
+                  <span class="material-symbols-outlined text-[16px]">science</span>
+                  <span>Proposed Experiment Success Metrics (Non-Speculative)</span>
+                </span>
+                <div class="space-y-2">
+                  ${metricsHtml}
+                </div>
+              </div>
+
+              <div class="bg-surface-container-low p-4 rounded-2xl border border-outline-variant/20 space-y-2">
+                <span class="text-[11px] uppercase font-bold text-secondary flex items-center gap-1.5">
+                  <span class="material-symbols-outlined text-[16px]">contact_support</span>
+                  <span>Follow-Up Neutral Interview Questions</span>
+                </span>
+                <ul class="space-y-2">
+                  ${questionsHtml}
+                </ul>
+              </div>
+            </div>
+
+            <!-- Collapsible Audit Trail & Discrepancies Corrected Drawer -->
+            <details class="bg-surface-container-lowest rounded-2xl border border-outline-variant/30 p-3.5 text-xs group">
+              <summary class="font-bold text-on-surface cursor-pointer select-none flex items-center justify-between">
+                <div class="flex items-center gap-2">
+                  <span class="material-symbols-outlined text-[16px] text-primary">history_edu</span>
+                  <span class="font-bold">Audit Trail: Preserved Original Candidate &amp; Corrections Made</span>
+                </div>
+                <span class="text-[10px] text-primary group-open:rotate-180 transition-transform material-symbols-outlined">expand_more</span>
+              </summary>
+              <div class="pt-3 space-y-3 border-t border-outline-variant/20 mt-2">
+                <div>
+                  <span class="text-[10px] font-bold uppercase tracking-wider text-on-surface-variant block mb-1">Original Un-Audited Candidate (Preserved):</span>
+                  <pre class="bg-surface-container-low p-2.5 rounded-xl font-mono text-[10px] overflow-x-auto text-on-surface-variant">${JSON.stringify(audit.originalCandidate || {}, null, 2)}</pre>
+                </div>
+
+                <div class="space-y-1">
+                  <span class="text-[10px] font-bold uppercase tracking-wider text-error block">Fabricated / Unverified References Removed:</span>
+                  <ul class="space-y-1">
+                    ${fabricatedItemsHtml || '<li class="text-xs text-on-surface-variant">None removed</li>'}
+                  </ul>
+                </div>
+
+                <div class="space-y-1">
+                  <span class="text-[10px] font-bold uppercase tracking-wider text-amber-900 block">Unsupported Claims &amp; Speculative Percentages Flagged:</span>
+                  <ul class="space-y-1">
+                    ${flaggedClaimsHtml || '<li class="text-xs text-on-surface-variant">None flagged</li>'}
+                  </ul>
+                </div>
+              </div>
+            </details>
+
+          </div>
+        `;
+      }).join('');
+    }
+
+    // Render AI Evidence Log Table
+    function renderEvidenceLog() {
+      const tbody = document.getElementById("evidence-log-tbody");
+      if (!tbody) return;
+
+      const logs = (window.RESEARCH_DATA && window.RESEARCH_DATA.evidenceLog) ? window.RESEARCH_DATA.evidenceLog : [];
+      if (logs.length === 0) {
+        tbody.innerHTML = `
+          <tr>
+            <td colspan="6" class="text-center py-8 text-on-surface-variant font-medium">
+              No audit logs recorded yet.
+            </td>
+          </tr>
+        `;
+        return;
+      }
+
+      tbody.innerHTML = logs.map(l => {
+        const aiTags = (l.aiLabels || []).map(lbl => `<span class="px-2 py-0.5 rounded text-[10px] font-semibold bg-surface-container text-on-surface-variant">${lbl}</span>`).join(' ');
+        const humanTags = (l.humanLabels || []).map(lbl => `<span class="px-2 py-0.5 rounded text-[10px] font-bold bg-primary/10 text-primary">${lbl}</span>`).join(' ');
+
+        return `
+          <tr class="hover:bg-surface-container-low transition-colors">
+            <td class="py-3 px-4 font-mono font-bold text-primary whitespace-nowrap">${l.recordId}</td>
+            <td class="py-3 px-4 text-on-surface max-w-[280px]">
+              <p class="font-medium text-xs leading-snug line-clamp-2">${l.excerpt}</p>
+              <span class="text-[10px] text-on-surface-variant font-mono mt-0.5 block">${l.source}</span>
+            </td>
+            <td class="py-3 px-4">
+              <div class="flex flex-wrap gap-1">${aiTags}</div>
+            </td>
+            <td class="py-3 px-4">
+              <div class="flex flex-wrap gap-1">${humanTags}</div>
+            </td>
+            <td class="py-3 px-4 text-on-surface-variant text-[11px] leading-snug">${l.reviewerNotes || 'Verified'}</td>
+            <td class="py-3 px-3 whitespace-nowrap">
+              <span class="px-2 py-0.5 rounded text-[10px] font-bold ${l.statusClass || 'bg-emerald-500/15 text-emerald-800'}">${l.status}</span>
+            </td>
+          </tr>
+        `;
+      }).join('');
+    }
+
+    function renderInterviewQuestions() {
+      const container = document.getElementById("interview-questions-container");
+      if (!container || !window.RESEARCH_DATA) return;
+
+      const questions = window.RESEARCH_DATA.interviewQuestions || [];
+      container.innerHTML = questions.map(q => {
+        return `
+          <div class="bg-surface-container-lowest p-5 rounded-2xl border border-outline-variant/30 space-y-3 shadow-sm">
+            <div class="flex items-center justify-between">
+              <span class="font-mono font-bold text-xs bg-primary/10 text-primary px-2.5 py-1 rounded-lg">
+                ${q.id}
+              </span>
+              <span class="text-xs text-on-surface-variant">Targets: <strong class="text-on-surface">${q.suggestedCohorts}</strong></span>
+            </div>
+
+            <p class="text-sm font-bold text-on-surface leading-snug">
+              “${q.question}”
+            </p>
+
+            <div class="bg-surface-container-low p-3 rounded-xl space-y-1 text-xs">
+              <p class="text-[10px] uppercase font-bold text-on-surface-variant">Research Objective &amp; Targeted Knowledge Gap</p>
+              <p class="text-on-surface">${q.objective}</p>
+            </div>
+          </div>
+        `;
+      }).join('');
+    }
+
+    // Render Collected Primary 1:1 Interview Responses
+    function renderInterviewResponses() {
+      const container = document.getElementById("interview-responses-container");
+      if (!container) return;
+
+      const responses = (window.RESEARCH_DATA && window.RESEARCH_DATA.interviewResponses) ? window.RESEARCH_DATA.interviewResponses : [];
+      if (responses.length === 0) {
+        container.innerHTML = `<p class="text-xs text-on-surface-variant p-6 text-center bg-surface-container-low rounded-2xl">No interview responses loaded yet.</p>`;
+        return;
+      }
+
+      container.innerHTML = responses.map((resp, idx) => {
+        const tags = (resp.tags || []).map(t => `
+          <span class="text-[10px] font-semibold bg-primary/10 text-primary px-2 py-0.5 rounded-lg border border-primary/20">
+            ${t}
+          </span>
+        `).join('');
+
+        return `
+          <div class="bg-surface-container-lowest p-5 rounded-2xl border border-outline-variant/30 space-y-4 shadow-sm hover:border-outline-variant transition-all">
+            <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2 border-b border-outline-variant/20 pb-3">
+              <div class="flex items-center gap-3">
+                <span class="w-8 h-8 rounded-xl bg-purple-500/15 text-purple-900 font-mono font-bold text-xs flex items-center justify-center border border-purple-300">
+                  #${idx+1}
+                </span>
+                <div>
+                  <h3 class="text-sm font-bold text-on-surface flex items-center gap-2">
+                    <span>${resp.respondent}</span>
+                    <span class="font-mono text-[10px] bg-surface-container px-2 py-0.5 rounded text-on-surface-variant">${resp.id}</span>
+                  </h3>
+                  <span class="text-[11px] text-on-surface-variant">${resp.cohort} • Submitted: ${resp.timestamp}</span>
+                </div>
+              </div>
+              <div class="flex flex-wrap items-center gap-1.5">
+                ${tags}
+              </div>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-3 text-xs">
+              <div class="bg-surface-container-low p-3.5 rounded-xl space-y-1 border border-outline-variant/20">
+                <p class="text-[10px] uppercase font-bold text-primary">Q1. Initial Motivation</p>
+                <p class="text-on-surface leading-relaxed">${resp.answers.q1}</p>
+              </div>
+
+              <div class="bg-surface-container-low p-3.5 rounded-xl space-y-1 border border-outline-variant/20">
+                <p class="text-[10px] uppercase font-bold text-primary">Q2. First 3-6 Months Expectations vs Portfolio</p>
+                <p class="text-on-surface leading-relaxed">${resp.answers.q2}</p>
+              </div>
+
+              <div class="bg-surface-container-low p-3.5 rounded-xl space-y-1 border border-outline-variant/20 md:col-span-2">
+                <p class="text-[10px] uppercase font-bold text-primary">Q3. Monthly Deduction Walkthrough &amp; Payment Interventions</p>
+                <p class="text-on-surface leading-relaxed font-medium">${resp.answers.q3}</p>
+              </div>
+
+              <div class="bg-surface-container-low p-3.5 rounded-xl space-y-1 border border-outline-variant/20">
+                <p class="text-[10px] uppercase font-bold text-primary">Q4. Where Do You Look for Answers &amp; Doubts?</p>
+                <p class="text-on-surface leading-relaxed">${resp.answers.q4}</p>
+              </div>
+
+              <div class="bg-surface-container-low p-3.5 rounded-xl space-y-1 border border-outline-variant/20">
+                <p class="text-[10px] uppercase font-bold text-primary">Q5. Considered Pausing, Stopping, or Withdrawing?</p>
+                <p class="text-on-surface leading-relaxed font-medium">${resp.answers.q5}</p>
+              </div>
+            </div>
+          </div>
+        `;
+      }).join('');
+    }
+
+    function exportSurveyCSV() {
+      window.location.href = "data/survey_responses_raw.csv";
+    }
+
+    function exportProblemsJSON() {
+      fetch("candidate_problems.json")
+        .then(res => {
+          if (!res.ok) throw new Error("Fetch failed");
+          return res.blob();
+        })
+        .then(blob => {
+          const url = window.URL.createObjectURL(blob);
+          const downloadAnchor = document.createElement("a");
+          downloadAnchor.setAttribute("href", url);
+          downloadAnchor.setAttribute("download", "candidate_problems.json");
+          document.body.appendChild(downloadAnchor);
+          downloadAnchor.click();
+          downloadAnchor.remove();
+          window.URL.revokeObjectURL(url);
+        })
+        .catch(() => {
+          const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(window.RESEARCH_DATA.problems, null, 2));
+          const downloadAnchor = document.createElement("a");
+          downloadAnchor.setAttribute("href", dataStr);
+          downloadAnchor.setAttribute("download", "candidate_problems.json");
+          document.body.appendChild(downloadAnchor);
+          downloadAnchor.click();
+          downloadAnchor.remove();
+        });
+    }
+
+    function testGrokConnection() {
+      const btn = document.getElementById("btn-test-connection");
+      btn.innerHTML = '<span class="material-symbols-outlined text-[18px] animate-spin">sync</span><span>Testing API Health...</span>';
+      fetch(window.APP_CONFIG.apiUrl("/api/health"))
+        .then(res => res.json())
+        .then(data => {
+          btn.innerHTML = `<span class="material-symbols-outlined text-[18px]">verified</span><span>Receiver Health: ${data.status} (DB ${data.database})</span>`;
+          btn.classList.remove("bg-primary-container");
+          btn.classList.add("bg-emerald-600");
+        })
+        .catch(err => {
+          btn.innerHTML = `<span class="material-symbols-outlined text-[18px]">error</span><span>Health check failed</span>`;
+          btn.classList.add("bg-red-600");
+        });
+    }
+
+    // ==================== RESEARCH REPORTS CLIENT HANDLERS ====================
+    let currentPreviewContent = "";
+    let currentPreviewReportType = "all";
+
+    // Toast Notification helper
+    function showToastNotification(message, isError = false) {
+      let toast = document.getElementById("continuum-toast");
+      if (!toast) {
+        toast = document.createElement("div");
+        toast.id = "continuum-toast";
+        toast.className = "fixed bottom-5 right-5 z-50 px-4 py-3 rounded-2xl shadow-xl text-xs font-semibold flex items-center gap-2 transition-all transform duration-300 translate-y-10 opacity-0 pointer-events-none";
+        document.body.appendChild(toast);
+      }
+      toast.className = `fixed bottom-5 right-5 z-50 px-4 py-3 rounded-2xl shadow-xl text-xs font-semibold flex items-center gap-2 transition-all transform duration-300 translate-y-0 opacity-100 ${
+        isError ? "bg-red-600 text-white" : "bg-emerald-700 text-white"
+      }`;
+      toast.innerHTML = `
+        <span class="material-symbols-outlined text-[18px]">${isError ? 'error' : 'check_circle'}</span>
+        <span>${message}</span>
+      `;
+      setTimeout(() => {
+        toast.className = toast.className.replace("translate-y-0 opacity-100", "translate-y-10 opacity-0 pointer-events-none");
+      }, 4000);
+    }
+
+    // Bulletproof download helper using hidden iframe + direct browser download manager
+    function triggerDirectDownload(url, filename) {
+      const fullUrl = url.startsWith("http") ? url : window.APP_CONFIG.apiUrl(url);
+      let ifr = document.getElementById("hidden-download-iframe");
+      if (!ifr) {
+        ifr = document.createElement("iframe");
+        ifr.id = "hidden-download-iframe";
+        ifr.style.display = "none";
+        document.body.appendChild(ifr);
+      }
+      ifr.src = fullUrl;
+
+      // Also trigger anchor click
+      try {
+        const a = document.createElement("a");
+        a.href = fullUrl;
+        if (filename) a.download = filename;
+        a.style.display = "none";
+        document.body.appendChild(a);
+        a.click();
+        setTimeout(() => a.remove(), 600);
+      } catch(e) {}
+
+      showToastNotification(`Started download for ${filename || 'report'}`);
+    }
+
+    function triggerBlobDownload(endpointUrl, fallbackFilename, btnElement) {
+      triggerDirectDownload(endpointUrl, fallbackFilename);
+    }
+
+    function downloadDataset(scope = 'all', format = 'csv', btnElement = null) {
+      const timestamp = new Date().toISOString().slice(0, 10).replace(/-/g, "");
+      const filename = `continuum_ai_research_${scope}_${timestamp}.${format}`;
+      const url = window.APP_CONFIG.apiUrl(`/api/reports/export?scope=${scope}&format=${format}`);
+      triggerBlobDownload(url, filename, btnElement || (window.event ? window.event.currentTarget : null));
+    }
+
+    function downloadFilteredExport(btnElement = null) {
+      const scope = document.getElementById("export-filter-scope")?.value || "all";
+      const q = encodeURIComponent(document.getElementById("export-filter-query")?.value?.trim() || "");
+      const timestamp = new Date().toISOString().slice(0, 10).replace(/-/g, "");
+      const filename = `continuum_ai_filtered_${scope}_${timestamp}.csv`;
+      const url = window.APP_CONFIG.apiUrl(`/api/reports/export?scope=${scope}&format=csv${q ? `)&q=${q}` : ''}`;
+      triggerBlobDownload(url, filename, btnElement || (window.event ? window.event.currentTarget : null));
+    }
+
+    function downloadAnalysisReport(reportType, format = 'markdown', btnElement = null) {
+      const ext = format === 'json' ? 'json' : 'md';
+      const timestamp = new Date().toISOString().slice(0, 10).replace(/-/g, "");
+      const filename = `continuum_ai_analysis_${reportType}_${timestamp}.${ext}`;
+      const url = window.APP_CONFIG.apiUrl(`/api/reports/analysis?report_type=${reportType}&format=${format}`);
+      triggerBlobDownload(url, filename, btnElement || (window.event ? window.event.currentTarget : null));
+    }
+
+    function downloadQuarantineJson(btnElement = null) {
+      const timestamp = new Date().toISOString().slice(0, 10).replace(/-/g, "");
+      const filename = `continuum_ai_quarantine_register_${timestamp}.json`;
+      const url = window.APP_CONFIG.apiUrl(`/api/reports/quarantine`);
+      triggerBlobDownload(url, filename, btnElement || (window.event ? window.event.currentTarget : null));
+    }
+
+    function downloadCurrentPreviewFile() {
+      if (!currentPreviewContent) return;
+      const type = currentPreviewReportType || "report";
+      const isJson = type === "quarantine" || currentPreviewContent.startsWith("{") || currentPreviewContent.startsWith("[");
+      const ext = isJson ? "json" : "md";
+      const mime = isJson ? "application/json" : "text/markdown";
+      const blob = new Blob([currentPreviewContent], { type: `${mime};charset=utf-8` });
+      const blobUrl = window.URL.createObjectURL(blob);
+      const a = document.createElement("a");
+      a.href = blobUrl;
+      const timestamp = new Date().toISOString().slice(0, 10).replace(/-/g, "");
+      a.download = `continuum_ai_${type}_${timestamp}.${ext}`;
+      document.body.appendChild(a);
+      a.click();
+      setTimeout(() => {
+        window.URL.revokeObjectURL(blobUrl);
+        a.remove();
+      }, 300);
+      showToastNotification(`Downloaded report file successfully!`);
+    }
+
+    async function loadReportPreview(reportType) {
+      currentPreviewReportType = reportType;
+      const modal = document.getElementById("report-preview-modal");
+      const titleEl = document.getElementById("preview-title");
+      const subEl = document.getElementById("preview-subtitle");
+      const contentEl = document.getElementById("preview-content");
+
+      const titles = {
+        "methodology": "Research Methodology & Disclosure Report",
+        "themes": "SIP Discovery Theme Summary & Taxonomy Distribution",
+        "citations": "Evidence Citations & Verbatim Quotes Register",
+        "contradictions": "Behavioral Nuance & Contradictions Analysis",
+        "problems": "Candidate Problem Statements & Composite Scoring",
+        "quarantine": "Safety Quarantine Audit Register (Synthetic Test Seeds)"
+      };
+
+      if (titleEl) titleEl.textContent = titles[reportType] || "Report Preview";
+      if (subEl) subEl.textContent = `Generated dynamically from active database records (${new Date().toLocaleDateString()})`;
+      if (contentEl) contentEl.textContent = "Loading live report from backend database...";
+      if (modal) modal.classList.remove("hidden");
+
+      try {
+        if (reportType === "quarantine") {
+          const res = await fetch(window.APP_CONFIG.apiUrl("/api/reports/quarantine"));
+          if (!res.ok) throw new Error(`HTTP ${res.status}`);
+          const data = await res.json();
+          currentPreviewContent = JSON.stringify(data, null, 2);
+        } else {
+          const res = await fetch(window.APP_CONFIG.apiUrl(`/api/reports/analysis?report_type=${reportType}&format=markdown`));
+          if (!res.ok) throw new Error(`HTTP ${res.status}`);
+          currentPreviewContent = await res.text();
+        }
+        if (contentEl) contentEl.textContent = currentPreviewContent;
+      } catch (err) {
+        const targetUrl = window.APP_CONFIG.getBackendUrl() || "configured backend API";
+        if (contentEl) contentEl.textContent = `Error loading report: ${err.message}\nMake sure backend server is running at ${targetUrl}.`;
+      }
+    }
+
+    async function previewDataset(scope) {
+      const modal = document.getElementById("report-preview-modal");
+      const titleEl = document.getElementById("preview-title");
+      const subEl = document.getElementById("preview-subtitle");
+      const contentEl = document.getElementById("preview-content");
+
+      if (titleEl) titleEl.textContent = `Dataset Preview (${scope.toUpperCase()} - Sample Records)`;
+      if (subEl) subEl.textContent = "Sample rows directly extracted from active SQLite database table";
+      if (contentEl) contentEl.textContent = "Fetching sample records...";
+      if (modal) modal.classList.remove("hidden");
+
+      try {
+        const res = await fetch(window.APP_CONFIG.apiUrl(`/api/records?source_type=${scope}&limit=5`));
+        if (!res.ok) throw new Error(`HTTP ${res.status}`);
+        const data = await res.json();
+        currentPreviewContent = JSON.stringify(data.records, null, 2);
+        if (contentEl) contentEl.textContent = currentPreviewContent;
+      } catch (err) {
+        if (contentEl) contentEl.textContent = `Error loading dataset preview: ${err.message}`;
+      }
+    }
+
+    function closeReportPreview() {
+      const modal = document.getElementById("report-preview-modal");
+      if (modal) modal.classList.add("hidden");
+    }
+
+    function copyPreviewText() {
+      if (!currentPreviewContent) return;
+      navigator.clipboard.writeText(currentPreviewContent).then(() => {
+        alert("Report copied to clipboard!");
+      });
+    }
+
+    function printPreviewReport() {
+      const printWin = window.open("", "_blank");
+      printWin.document.write(`<pre style="font-family: monospace; white-space: pre-wrap; padding: 20px;">${currentPreviewContent}</pre>`);
+      printWin.document.close();
+      printWin.print();
+    }
+  </script>
+</body>
+</html>

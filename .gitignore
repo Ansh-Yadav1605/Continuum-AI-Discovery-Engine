@@ -1,0 +1,75 @@
+# ==============================================================================
+# Continuum AI — Comprehensive .gitignore for GitHub and Deployment
+# ==============================================================================
+
+# 1. Environment and Secrets
+.env
+.env.*
+!.env.example
+*.pem
+*.key
+*.cert
+
+# 2. Local Research Data & Databases (Contains raw participant PII & local SQLite)
+data/
+*.db
+*.db-wal
+*.db-shm
+*.sqlite
+*.sqlite3
+*.db.bak
+*.bak
+
+# 3. Scratch & Temporary Scripts
+scratch/
+_backup_pre_deployment/
+
+# 4. Raw Research & Exported Artifacts containing participant info
+*.csv
+!chrome_extension/*.csv
+!docs/*.csv
+
+# 5. Python Runtime, Caches, & Build Artifacts
+__pycache__/
+*.py[cod]
+*$py.class
+*.egg-info/
+*.egg
+dist/
+build/
+.pytest_cache/
+.coverage
+htmlcov/
+.tox/
+.mypy_cache/
+
+# 6. Python Virtual Environments
+venv/
+.venv/
+env/
+ENV/
+env.bak/
+venv.bak/
+
+# 7. Frontend, Node, & Vercel Artifacts
+node_modules/
+.vercel/
+.next/
+out/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# 8. Logs & Diagnostic Dumps
+*.log
+logs/
+
+# 9. IDE & Operating System Artifacts
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+.DS_Store
+Thumbs.db
+desktop.ini
