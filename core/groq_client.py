@@ -25,8 +25,16 @@ DEFAULT_MODEL = "llama-3.3-70b-versatile"
 
 
 def get_api_key() -> Optional[str]:
-    """Retrieve Groq API key from environment, checking aliases."""
-    return os.getenv("GROQ_API_KEY") or os.getenv("GROK_API_KEY") or os.getenv("XAI_API_KEY")
+    """Retrieve Groq API key from environment, checking aliases and Streamlit secrets."""
+    key = os.getenv("GROQ_API_KEY") or os.getenv("GROK_API_KEY") or os.getenv("XAI_API_KEY")
+    if not key:
+        try:
+            import streamlit as st
+            if hasattr(st, "secrets"):
+                key = st.secrets.get("GROQ_API_KEY") or st.secrets.get("GROK_API_KEY") or st.secrets.get("XAI_API_KEY")
+        except Exception:
+            pass
+    return key
 
 
 def get_model_name() -> str:
