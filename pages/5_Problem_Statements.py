@@ -281,7 +281,7 @@ for p in all_problems:
                 with st.spinner("Formulating neutral questions with Groq AI..."):
                     questions = generate_interview_questions(problem_title=p["title"], use_ai=True)
             else:
-                questions = generate_interview_questions(problem_title=p["title"], use_ai=False)
+                questions = generate_interview_questions(problem_title=p["title"])
 
             for q_idx, q in enumerate(questions, 1):
                 st.markdown(f"**{q_idx}. [{q['area']}]** {q['question']}")

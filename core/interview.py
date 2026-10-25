@@ -66,14 +66,19 @@ def get_evidence_gaps() -> Dict[str, Any]:
 def generate_interview_questions(
     theme_name: Optional[str] = None,
     problem_title: Optional[str] = None,
-    use_ai: bool = False
+    *args,
+    **kwargs
 ) -> List[Dict[str, str]]:
     """
     Generates neutral, open-ended interview questions for target user interviews.
     Ensures zero leading questions and covers key discovery objectives.
-    Default (use_ai=False) uses instant curated discovery questions.
-    Set use_ai=True to formulate dynamic questions via Groq API.
+    Default uses instant curated discovery questions.
+    Pass use_ai=True to formulate dynamic questions via Groq API.
     """
+    use_ai = kwargs.get("use_ai", False)
+    if args and len(args) > 0 and isinstance(args[0], bool):
+        use_ai = args[0]
+
     if use_ai:
         api_key = get_api_key()
         client = get_client() if api_key and api_key != "your_key_here" else None
