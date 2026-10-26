@@ -191,6 +191,44 @@ h1, h2, h3, h4, h5, h6 {
     color: #FDE68A;
     font-size: 0.88rem;
 }
+
+/* Journey Stage Cards & Timeline */
+.journey-stage-header {
+    background: linear-gradient(135deg, rgba(99, 102, 241, 0.18) 0%, rgba(14, 165, 233, 0.12) 100%);
+    border: 1px solid rgba(99, 102, 241, 0.35);
+    border-radius: 12px;
+    padding: 16px 22px;
+    margin-bottom: 20px;
+}
+
+.stage-badge {
+    display: inline-block;
+    padding: 4px 10px;
+    background: #4F46E5;
+    color: #FFFFFF;
+    font-size: 0.75rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    border-radius: 6px;
+    margin-bottom: 8px;
+}
+
+.trace-step-node {
+    background: rgba(255, 255, 255, 0.03);
+    border-left: 4px solid #10B981;
+    border-radius: 0 10px 10px 0;
+    padding: 12px 18px;
+    margin-bottom: 12px;
+}
+
+.assessor-highlight-box {
+    background: linear-gradient(135deg, rgba(16, 185, 129, 0.12) 0%, rgba(59, 130, 246, 0.10) 100%);
+    border: 1px solid rgba(16, 185, 129, 0.35);
+    border-radius: 12px;
+    padding: 20px 24px;
+    margin-bottom: 20px;
+}
 </style>
 """
 

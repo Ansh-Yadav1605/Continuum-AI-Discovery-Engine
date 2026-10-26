@@ -24,6 +24,7 @@ data/*
 # 3. Scratch & Temporary Scripts
 scratch/
 _backup_pre_deployment/
+_backup*/
 
 # 4. Raw Research & Exported Artifacts containing participant info
 *.csv

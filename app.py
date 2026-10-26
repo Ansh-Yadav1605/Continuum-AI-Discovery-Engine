@@ -91,6 +91,27 @@ with col4:
 
 st.markdown("<br/>", unsafe_allow_html=True)
 
+# Featured: Explainable Research Journey (Beginners & Assessors)
+st.markdown(
+    """
+    <div class="assessor-highlight-box">
+        <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px;">
+            <div>
+                <span class="stage-badge" style="background: #059669;">New &bull; Assessor Mode Ready</span>
+                <h3 style="margin: 4px 0 6px 0; color: #FFFFFF; font-size: 1.3rem;">🧭 Explainable Research-to-Problem Journey</h3>
+                <p style="margin: 0; color: #CBD5E1; font-size: 0.88rem; max-width: 650px;">
+                    Step through the 5-stage transformation from raw Google Forms responses and Play Store reviews into prioritized, evidence-backed problem statements with reverse traceability.
+                </p>
+            </div>
+        </div>
+    </div>
+    """,
+    unsafe_allow_html=True
+)
+st.page_link("pages/0_🧭_Research_Journey.py", label="🚀 Launch Explainable Research Journey", icon="🧭", use_container_width=True)
+
+st.markdown("<br/>", unsafe_allow_html=True)
+
 # Navigation Quick Cards: Complete 8-Module Suite
 st.markdown("### 🧭 Full Discovery Suite Navigation")
 
