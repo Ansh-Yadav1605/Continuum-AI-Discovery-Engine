@@ -16,13 +16,13 @@ from core.groq_client import analyse_batch, get_model_name, validate_schema
 
 
 def get_unanalysed_records(limit: int = 50) -> List[Dict[str, Any]]:
-    """Fetch records that do not yet have an entry in analysis_results."""
+    """Fetch active records that do not yet have an entry in analysis_results."""
     with get_connection() as conn:
         rows = conn.execute(
             """
             SELECT r.* FROM records r
             LEFT JOIN analysis_results a ON r.record_id = a.record_id
-            WHERE a.analysis_id IS NULL
+            WHERE a.analysis_id IS NULL AND COALESCE(r.is_quarantined, 0) = 0
             ORDER BY r.created_at ASC
             LIMIT ?
             """,
