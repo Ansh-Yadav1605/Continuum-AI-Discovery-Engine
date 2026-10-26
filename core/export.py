@@ -115,7 +115,15 @@ def export_evidence_log(include_quarantined: bool = False) -> pd.DataFrame:
             ORDER BY l.reviewed_at DESC
             """
         ).fetchall()
-        return pd.DataFrame([dict(r) for r in rows])
+        cols = [
+            "log_id", "record_id", "source", "text", "ai_relevance",
+            "human_relevance", "ai_themes", "human_themes", "ai_evidence",
+            "human_evidence", "agreement", "error_category", "correction",
+            "reviewer_notes", "reviewed_at"
+        ]
+        if not rows:
+            return pd.DataFrame(columns=cols)
+        return pd.DataFrame([dict(r) for r in rows], columns=cols)
 
 
 def export_themes() -> Tuple[pd.DataFrame, str]:

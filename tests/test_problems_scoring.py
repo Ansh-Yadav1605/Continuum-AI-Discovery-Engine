@@ -83,27 +83,30 @@ class TestProblemsAndScoring(unittest.TestCase):
 
     def test_scorecard_persistence_and_ranking(self):
         pid = save_problem({"title": "Test Prioritization Candidate"})
-        score_dict = {
-            "evidence_strength": 4,
-            "sip_relevance": 5,
-            "user_severity": 4,
-            "product_influence": 4,
-            "feasibility": 4,
-            "safety_compliance": 5
-        }
-        score_id = save_score(pid, score_dict, justification="High triangulation from survey data.")
-        self.assertIsNotNone(score_id)
+        try:
+            score_dict = {
+                "evidence_strength": 4,
+                "sip_relevance": 5,
+                "user_severity": 4,
+                "product_influence": 4,
+                "feasibility": 4,
+                "safety_compliance": 5
+            }
+            score_id = save_score(pid, score_dict, justification="High triangulation from survey data.")
+            self.assertIsNotNone(score_id)
 
-        card = get_scorecard(pid)
-        self.assertEqual(card["evidence_strength"], 4)
-        self.assertEqual(card["sip_relevance"], 5)
-        self.assertGreater(card["weighted_score"], 4.0)
+            card = get_scorecard(pid)
+            self.assertEqual(card["evidence_strength"], 4)
+            self.assertEqual(card["sip_relevance"], 5)
+            self.assertGreater(card["weighted_score"], 4.0)
 
-        ranked = get_ranked_problems()
-        candidate = next((r for r in ranked if r["problem_id"] == pid), None)
-        self.assertIsNotNone(candidate)
-        self.assertFalse(candidate["safety_blocked"])
-        self.assertTrue(candidate["has_score"])
+            ranked = get_ranked_problems()
+            candidate = next((r for r in ranked if r["problem_id"] == pid), None)
+            self.assertIsNotNone(candidate)
+            self.assertFalse(candidate["safety_blocked"])
+            self.assertTrue(candidate["has_score"])
+        finally:
+            delete_problem(pid)
 
 
 if __name__ == "__main__":

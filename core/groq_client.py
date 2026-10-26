@@ -21,7 +21,7 @@ from core.prompts import SYSTEM_PROMPT, build_user_prompt, TAXONOMY_THEMES
 # Ensure .env is loaded
 load_dotenv()
 
-DEFAULT_MODEL = "llama-3.3-70b-versatile"
+DEFAULT_MODEL = "qwen/qwen3.8-27b"
 
 
 def get_api_key() -> Optional[str]:
@@ -38,8 +38,16 @@ def get_api_key() -> Optional[str]:
 
 
 def get_model_name() -> str:
-    """Retrieve configured Groq model name from environment."""
-    return os.getenv("GROQ_MODEL") or DEFAULT_MODEL
+    """Retrieve configured Groq model name from environment or Streamlit secrets."""
+    model = os.getenv("GROQ_MODEL")
+    if not model:
+        try:
+            import streamlit as st
+            if hasattr(st, "secrets"):
+                model = st.secrets.get("GROQ_MODEL")
+        except Exception:
+            pass
+    return model or DEFAULT_MODEL
 
 
 def get_client():
@@ -153,14 +161,34 @@ def test_connection() -> Dict[str, Any]:
             "message": f"Model '{target_model}' is available on Groq."
         })
     else:
-        # Check if any fallback model exists
-        steps.append({
-            "step": 4,
-            "name": "Model Availability",
-            "success": False,
-            "message": f"Model '{target_model}' not found. Available models include: {', '.join(available_models[:5])}"
-        })
-        return {"all_passed": False, "steps": steps}
+        # Check if a compatible chat model exists in available_models
+        candidate_chat_models = [
+            "qwen/qwen3.8-27b",
+            "llama-3.3-70b-versatile",
+            "llama-3.1-8b-instant",
+            "openai/gpt-oss-120b",
+            "openai/gpt-oss-20b",
+            "allam-2-7b",
+            "llama3-70b-8192",
+            "llama3-8b-8192"
+        ]
+        fallback_model = next((m for m in candidate_chat_models if m in available_models), None)
+        if fallback_model:
+            target_model = fallback_model
+            steps.append({
+                "step": 4,
+                "name": "Model Availability",
+                "success": True,
+                "message": f"Configured model not found; automatically fell back to active model '{fallback_model}'."
+            })
+        else:
+            steps.append({
+                "step": 4,
+                "name": "Model Availability",
+                "success": False,
+                "message": f"Model '{target_model}' not found. Available models include: {', '.join(available_models[:5])}"
+            })
+            return {"all_passed": False, "steps": steps}
 
     # Step 5: Test Prompt
     try:
