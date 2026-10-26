@@ -194,7 +194,9 @@ if view_mode == "🧭 5-Stage Guided Journey":
                         st.markdown(f"**Collection Date:** `{rec['collection_date'] or 'Pre-loaded'}`")
                     with m_c2:
                         st.markdown(f"**Quarantine Rationale:** *{rec['quarantine_reason'] or 'Active usable secondary record'}*")
-                        st.markdown(f"**Source URL:** {f'[{rec[\"source_url\"]}]({rec[\"source_url\"]})' if rec['source_url'] else 'Primary survey intake'}")
+                        src_url = rec.get("source_url")
+                        src_display = f"[{src_url}]({src_url})" if src_url else "Primary survey intake"
+                        st.markdown(f"**Source URL:** {src_display}")
 
         else:
             st.info("No records matched your search query.")
