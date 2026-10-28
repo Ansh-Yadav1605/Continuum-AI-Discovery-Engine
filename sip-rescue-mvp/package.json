@@ -1,0 +1,21 @@
+{
+  "name": "sip-rescue-mvp",
+  "version": "1.0.0",
+  "description": "SIP Rescue — A SIP Continuity Assistant. Standalone Indian mutual fund investor guidance MVP.",
+  "scripts": {
+    "dev": "python run.py",
+    "start": "python run.py",
+    "serve": "python run.py"
+  },
+  "keywords": [
+    "mutual-funds",
+    "sip",
+    "fintech",
+    "india",
+    "continuity",
+    "groww",
+    "zerodha"
+  ],
+  "author": "Continuum Product Team",
+  "license": "MIT"
+}

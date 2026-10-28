@@ -40,7 +40,9 @@ with get_connection() as conn:
     pending_review = conn.execute("SELECT COUNT(*) FROM analysis_results WHERE review_status = 'pending'").fetchone()[0]
     reviewed_count = conn.execute("SELECT COUNT(*) FROM analysis_results WHERE review_status = 'reviewed'").fetchone()[0]
     public_reviews = conn.execute("SELECT COUNT(*) FROM records WHERE record_type = 'public_review'").fetchone()[0]
-    survey_responses = conn.execute("SELECT COUNT(*) FROM records WHERE record_type = 'survey_response'").fetchone()[0]
+    genuine_surveys = conn.execute("SELECT COUNT(*) FROM records WHERE record_type = 'survey_response' AND respondent_id LIKE 'RESP-%'").fetchone()[0]
+    genuine_interviews = conn.execute("SELECT COUNT(*) FROM records WHERE record_type = 'interview_note' AND respondent_id LIKE 'INT-%'").fetchone()[0]
+    active_records = conn.execute("SELECT COUNT(*) FROM records WHERE COALESCE(is_quarantined, 0) = 0").fetchone()[0]
 
 # ──────────────────────────────────────────────
 # Empty State View
@@ -133,11 +135,12 @@ with kpi4:
         unsafe_allow_html=True
     )
 with kpi5:
+    total_genuine_primary = genuine_surveys + genuine_interviews
     st.markdown(
         f"""
         <div class="metric-pill">
-            <div class="metric-pill-val" style="color: #F472B6;">{survey_responses}</div>
-            <div class="metric-pill-label">Survey Responses</div>
+            <div class="metric-pill-val" style="color: #F472B6;">{genuine_surveys} <span style="font-size: 0.85rem; color: #CBD5E1;">(+{genuine_interviews} int.)</span></div>
+            <div class="metric-pill-label">Primary Research (n={total_genuine_primary})</div>
         </div>
         """,
         unsafe_allow_html=True
@@ -164,11 +167,12 @@ chart_col1, chart_col2 = st.columns([1, 1])
 
 # 1. Relevance Distribution Donut
 with chart_col1:
-    st.markdown("#### 🎯 Relevance Distribution")
+    st.markdown("#### 🎯 Relevance Distribution (Active Secondary Corpus)")
     rel_data = get_relevance_distribution()
-    unanalysed_count = max(0, total_records - analysed_records)
+    active_analysed = sum(rel_data.values())
+    unanalysed_count = max(0, active_records - active_analysed)
     
-    chart_labels = ["Directly Relevant", "Indirectly Relevant", "Not Relevant", "Ambiguous", "Unanalysed"]
+    chart_labels = ["Directly Relevant", "Indirectly Relevant", "Not Relevant", "Ambiguous", "Unanalysed in Queue"]
     chart_values = [
         rel_data.get("directly_relevant", 0),
         rel_data.get("indirectly_relevant", 0),
