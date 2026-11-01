@@ -9,7 +9,7 @@ Generates neutral discovery interview guides and logs qualitative interview note
 import streamlit as st
 import pandas as pd
 from core.database import init_db
-from core.ui_helpers import apply_custom_styles, render_sidebar_status
+from core.ui_helpers import apply_custom_styles, render_sidebar_status, format_display_name
 from core.themes import get_theme_summary
 from core.problems import (
     get_all_problems,
@@ -183,7 +183,7 @@ if ranked_data:
             flags.append("👤 Human-Authored")
 
         table_rows.append({
-            "Title": r["title"],
+            "Title": format_display_name(r["title"]),
             "Validation Status": status_label,
             "Weighted Score": score_display,
             "Evidence (25%)": r.get("evidence_strength") or "-",
@@ -213,7 +213,7 @@ for p in all_problems:
     score_val = p.get("weighted_score")
     is_blocked = p.get("safety_compliance") is not None and p.get("safety_compliance") <= 2
 
-    card_title = f"{p['title']} [{status_val.replace('_', ' ').upper()}]"
+    card_title = f"{format_display_name(p['title'])} [{status_val.replace('_', ' ').upper()}]"
     if score_val:
         card_title += f" — Score: {score_val:.2f}/5.0"
     if is_blocked:

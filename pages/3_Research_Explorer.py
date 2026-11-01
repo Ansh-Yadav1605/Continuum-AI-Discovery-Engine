@@ -14,7 +14,7 @@ import json
 import math
 
 from core.database import init_db, get_connection
-from core.ui_helpers import apply_custom_styles, render_sidebar_status
+from core.ui_helpers import apply_custom_styles, render_sidebar_status, format_display_name
 from core.analysis import run_analysis, save_manual_review, get_unanalysed_records
 from core.groq_client import get_api_key, test_connection
 from core.prompts import TAXONOMY_THEMES
@@ -100,13 +100,26 @@ with get_connection() as conn:
     all_sources = ["All"] + [r["source"] for r in src_rows]
 
 filter_source = st.sidebar.selectbox("Source Platform:", all_sources)
-filter_type = st.sidebar.selectbox("Record Type:", ["All", "public_review", "survey_response"])
+filter_type = st.sidebar.selectbox(
+    "Record Type:", 
+    ["All", "public_review", "survey_response", "interview_note"],
+    format_func=lambda x: "All" if x == "All" else format_display_name(x.replace("_", " "))
+)
 filter_relevance = st.sidebar.selectbox(
     "Relevance:",
-    ["All", "directly_relevant", "indirectly_relevant", "not_relevant", "ambiguous", "Unanalysed"]
+    ["All", "directly_relevant", "indirectly_relevant", "not_relevant", "ambiguous", "Unanalysed"],
+    format_func=lambda x: "All" if x == "All" else format_display_name(x.replace("_", " "))
 )
-filter_theme = st.sidebar.selectbox("Taxonomy Theme:", ["All"] + TAXONOMY_THEMES)
-filter_review = st.sidebar.selectbox("Review Status:", ["All", "pending", "reviewed", "corrected", "rejected"])
+filter_theme = st.sidebar.selectbox(
+    "Taxonomy Theme:", 
+    ["All"] + TAXONOMY_THEMES,
+    format_func=lambda x: "All" if x == "All" else format_display_name(x)
+)
+filter_review = st.sidebar.selectbox(
+    "Review Status:", 
+    ["All", "pending", "reviewed", "corrected", "rejected"],
+    format_func=lambda x: "All" if x == "All" else format_display_name(x.replace("_", " "))
+)
 
 # ──────────────────────────────────────────────
 # Database Query Construction

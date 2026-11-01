@@ -98,8 +98,8 @@ st.markdown(
         <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px;">
             <div>
                 <span class="stage-badge" style="background: #059669;">New &bull; Assessor Mode Ready</span>
-                <h3 style="margin: 4px 0 6px 0; color: #FFFFFF; font-size: 1.3rem;">🧭 Explainable Research-to-Problem Journey</h3>
-                <p style="margin: 0; color: #CBD5E1; font-size: 0.88rem; max-width: 650px;">
+                <h3 style="margin: 4px 0 6px 0; color: var(--ct-text-primary); font-size: 1.3rem;">🧭 Explainable Research-to-Problem Journey</h3>
+                <p style="margin: 0; color: var(--ct-text-secondary); font-size: 0.88rem; max-width: 650px;">
                     Step through the 5-stage transformation from raw Google Forms responses and Play Store reviews into prioritized, evidence-backed problem statements with reverse traceability.
                 </p>
             </div>
@@ -122,7 +122,7 @@ with r1_c1:
         """
         <div class="glass-card">
             <h4>📊 1. Dashboard</h4>
-            <p style="color: #94A3B8; font-size: 0.82rem;">Relevance distributions, source coverage, and research progress charts.</p>
+            <p style="color: var(--ct-text-muted); font-size: 0.82rem;">Relevance distributions, source coverage, and research progress charts.</p>
         </div>
         """,
         unsafe_allow_html=True
@@ -134,7 +134,7 @@ with r1_c2:
         """
         <div class="glass-card">
             <h4>📥 2. Import Data</h4>
-            <p style="color: #94A3B8; font-size: 0.82rem;">Upload public reviews CSVs or Google Forms survey CSVs with dedup.</p>
+            <p style="color: var(--ct-text-muted); font-size: 0.82rem;">Upload public reviews CSVs or Google Forms survey CSVs with dedup.</p>
         </div>
         """,
         unsafe_allow_html=True
@@ -146,7 +146,7 @@ with r1_c3:
         """
         <div class="glass-card">
             <h4>🔬 3. Explorer</h4>
-            <p style="color: #94A3B8; font-size: 0.82rem;">Filter evidence, trigger Groq batch analysis, and manual triage.</p>
+            <p style="color: var(--ct-text-muted); font-size: 0.82rem;">Filter evidence, trigger Groq batch analysis, and manual triage.</p>
         </div>
         """,
         unsafe_allow_html=True
@@ -158,7 +158,7 @@ with r1_c4:
         """
         <div class="glass-card">
             <h4>🧬 4. Themes</h4>
-            <p style="color: #94A3B8; font-size: 0.82rem;">Aggregate taxonomy themes, contrast drop-offs vs continuations.</p>
+            <p style="color: var(--ct-text-muted); font-size: 0.82rem;">Aggregate taxonomy themes, contrast drop-offs vs continuations.</p>
         </div>
         """,
         unsafe_allow_html=True
@@ -172,7 +172,7 @@ with r2_c1:
         """
         <div class="glass-card">
             <h4>🎯 5. Problems</h4>
-            <p style="color: #94A3B8; font-size: 0.82rem;">Falsifiable cards, 6-factor opportunity scorecard, and safety filter.</p>
+            <p style="color: var(--ct-text-muted); font-size: 0.82rem;">Falsifiable cards, 6-factor opportunity scorecard, and safety filter.</p>
         </div>
         """,
         unsafe_allow_html=True
@@ -184,7 +184,7 @@ with r2_c2:
         """
         <div class="glass-card">
             <h4>⚖️ 6. AI Evaluation</h4>
-            <p style="color: #94A3B8; font-size: 0.82rem;">Benchmark AI vs human labels, monitor Precision/Recall/F1 audit log.</p>
+            <p style="color: var(--ct-text-muted); font-size: 0.82rem;">Benchmark AI vs human labels, monitor Precision/Recall/F1 audit log.</p>
         </div>
         """,
         unsafe_allow_html=True
@@ -196,7 +196,7 @@ with r2_c3:
         """
         <div class="glass-card">
             <h4>🌐 7. Browser Inbox</h4>
-            <p style="color: #94A3B8; font-size: 0.82rem;">FastAPI receiver health, review and approve Chrome extension quotes.</p>
+            <p style="color: var(--ct-text-muted); font-size: 0.82rem;">FastAPI receiver health, review and approve Chrome extension quotes.</p>
         </div>
         """,
         unsafe_allow_html=True
@@ -208,7 +208,7 @@ with r2_c4:
         """
         <div class="glass-card">
             <h4>📦 8. Export Hub</h4>
-            <p style="color: #94A3B8; font-size: 0.82rem;">Download CSV, JSON, Markdown, and automated methodology report.</p>
+            <p style="color: var(--ct-text-muted); font-size: 0.82rem;">Download CSV, JSON, Markdown, and automated methodology report.</p>
         </div>
         """,
         unsafe_allow_html=True

@@ -9,7 +9,7 @@ import streamlit as st
 import plotly.express as px
 import plotly.graph_objects as go
 from core.database import init_db
-from core.ui_helpers import apply_custom_styles, render_sidebar_status
+from core.ui_helpers import apply_custom_styles, render_sidebar_status, format_display_name
 from core.themes import (
     get_theme_summary,
     get_theme_records,
@@ -73,8 +73,9 @@ if view_mode == "Compare Reviews vs Surveys Side-by-Side":
     
     comp_data = []
     for t in active_themes:
+        formatted_theme = format_display_name(t["theme"])
         comp_data.append({
-            "Theme": t["theme"][:26] + "..." if len(t["theme"]) > 28 else t["theme"],
+            "Theme": formatted_theme[:26] + "..." if len(formatted_theme) > 28 else formatted_theme,
             "Public Reviews": t["record_types"]["public_review"],
             "Survey Responses": t["record_types"]["survey_response"],
             "Interview Notes": t["record_types"]["interview_note"],
@@ -118,7 +119,7 @@ if view_mode == "Compare Reviews vs Surveys Side-by-Side":
 st.markdown("### 🗂️ Theme Detail Cards")
 
 for t in active_themes:
-    t_name = t["theme"]
+    t_name = format_display_name(t["theme"])
     count = t["record_count"]
     sources_cnt = t["distinct_sources"]
     respondents_cnt = t["distinct_respondents"]

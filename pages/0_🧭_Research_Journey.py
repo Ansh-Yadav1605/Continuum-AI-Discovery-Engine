@@ -82,8 +82,8 @@ if view_mode == "🧭 5-Stage Guided Journey":
             """
             <div class="journey-stage-header">
                 <span class="stage-badge">Stage 1 of 5</span>
-                <h3 style="margin: 0; color: #FFFFFF;">Research Sources & Boundary Realism</h3>
-                <p style="margin: 4px 0 0 0; color: #CBD5E1; font-size: 0.92rem;">
+                <h3 style="margin: 0; color: var(--ct-text-primary);">Research Sources & Boundary Realism</h3>
+                <p style="margin: 4px 0 0 0; color: var(--ct-text-secondary); font-size: 0.92rem;">
                     Census of all research records across primary and secondary channels with non-overlapping definitions and boundary disclosures.
                 </p>
             </div>
@@ -149,8 +149,8 @@ if view_mode == "🧭 5-Stage Guided Journey":
             """
             <div class="journey-stage-header">
                 <span class="stage-badge">Stage 2 of 5</span>
-                <h3 style="margin: 0; color: #FFFFFF;">Data Quality & Transparent Provenance</h3>
-                <p style="margin: 4px 0 0 0; color: #CBD5E1; font-size: 0.92rem;">
+                <h3 style="margin: 0; color: var(--ct-text-primary);">Data Quality & Transparent Provenance</h3>
+                <p style="margin: 4px 0 0 0; color: var(--ct-text-secondary); font-size: 0.92rem;">
                     Full auditability of usable, quarantined, and duplicate records. No silent deletions or unexplained exclusions.
                 </p>
             </div>
@@ -209,8 +209,8 @@ if view_mode == "🧭 5-Stage Guided Journey":
             """
             <div class="journey-stage-header">
                 <span class="stage-badge">Stage 3 of 5</span>
-                <h3 style="margin: 0; color: #FFFFFF;">Grounded Evidence-Based Themes</h3>
-                <p style="margin: 4px 0 0 0; color: #CBD5E1; font-size: 0.92rem;">
+                <h3 style="margin: 0; color: var(--ct-text-primary);">Grounded Evidence-Based Themes</h3>
+                <p style="margin: 4px 0 0 0; color: var(--ct-text-secondary); font-size: 0.92rem;">
                     Taxonomy clusters derived from analysed records. Themes with low mention volume display explicit data sufficiency warnings.
                 </p>
             </div>
@@ -263,8 +263,8 @@ if view_mode == "🧭 5-Stage Guided Journey":
             """
             <div class="journey-stage-header">
                 <span class="stage-badge">Stage 4 of 5</span>
-                <h3 style="margin: 0; color: #FFFFFF;">Evidence Synthesis (Observation vs. Interpretation)</h3>
-                <p style="margin: 4px 0 0 0; color: #CBD5E1; font-size: 0.92rem;">
+                <h3 style="margin: 0; color: var(--ct-text-primary);">Evidence Synthesis (Observation vs. Interpretation)</h3>
+                <p style="margin: 4px 0 0 0; color: var(--ct-text-secondary); font-size: 0.92rem;">
                     Enforcing disciplined PM thinking: separating direct factual observations from AI interpretations, alternative explanations, and evidence gaps.
                 </p>
             </div>
@@ -325,8 +325,8 @@ if view_mode == "🧭 5-Stage Guided Journey":
             """
             <div class="journey-stage-header">
                 <span class="stage-badge">Stage 5 of 5</span>
-                <h3 style="margin: 0; color: #FFFFFF;">Problem Statement Builder & Reverse Traceability</h3>
-                <p style="margin: 4px 0 0 0; color: #CBD5E1; font-size: 0.92rem;">
+                <h3 style="margin: 0; color: var(--ct-text-primary);">Problem Statement Builder & Reverse Traceability</h3>
+                <p style="margin: 4px 0 0 0; color: var(--ct-text-secondary); font-size: 0.92rem;">
                     Structure qualitative insights into standard PM problem syntax. Audit each claim backward to its exact database records.
                 </p>
             </div>
@@ -347,10 +347,10 @@ if view_mode == "🧭 5-Stage Guided Journey":
                 f"""
                 <div class="assessor-highlight-box">
                     <span style="font-size: 0.8rem; font-weight: 700; color: #34D399; text-transform: uppercase; letter-spacing: 0.05em;">Standard PM Problem Syntax</span>
-                    <h3 style="margin: 8px 0 12px 0; color: #FFFFFF; font-size: 1.25rem;">
+                    <h3 style="margin: 8px 0 12px 0; color: var(--ct-text-primary); font-size: 1.25rem;">
                         "{active_prob['formatted_statement']}"
                     </h3>
-                    <div style="font-size: 0.85rem; color: #CBD5E1;">
+                    <div style="font-size: 0.85rem; color: var(--ct-text-secondary);">
                         <strong>User Segment:</strong> {active_prob['syntax_breakdown']['segment']}<br/>
                         <strong>Specific Difficulty:</strong> {active_prob['syntax_breakdown']['difficulty']}<br/>
                         <strong>Context:</strong> {active_prob['syntax_breakdown']['context']}<br/>
@@ -424,8 +424,8 @@ else:
         """
         <div class="assessor-highlight-box">
             <span style="font-size: 0.8rem; font-weight: 700; color: #10B981; text-transform: uppercase; letter-spacing: 0.05em;">Executive Presentation Mode</span>
-            <h2 style="margin: 6px 0 10px 0; color: #FFFFFF;">SIP Continuation Discovery Engine — Executive Review</h2>
-            <p style="margin: 0; color: #CBD5E1; font-size: 0.95rem;">
+            <h2 style="margin: 6px 0 10px 0; color: var(--ct-text-primary);">SIP Continuation Discovery Engine — Executive Review</h2>
+            <p style="margin: 0; color: var(--ct-text-secondary); font-size: 0.95rem;">
                 A structured walkthrough of research objectives, empirical data quality decisions, verified qualitative themes, and prioritized problem statements.
             </p>
         </div>
@@ -472,7 +472,7 @@ else:
             """
             <div style="background: rgba(16, 185, 129, 0.12); border: 1px solid rgba(16, 185, 129, 0.35); border-radius: 8px; padding: 14px 18px; margin-bottom: 14px;">
                 <strong style="color: #34D399; font-size: 1.05rem;">Mandate Execution Latency, Failure Diagnostics Gaps & Payment Glitches</strong><br/>
-                <p style="margin: 8px 0 0 0; color: #E2E8F0; font-size: 0.9rem;">
+                <p style="margin: 8px 0 0 0; color: var(--ct-text-primary); font-size: 0.9rem;">
                     <em>"For novice SIP investors, opaque payment execution delays (1–3 days) and confusing debit notifications break confidence in platform automation, forcing investors into manual monthly payment workarounds that significantly increase long-term drop-off friction."</em>
                 </p>
                 <div style="margin-top: 8px; font-size: 0.82rem; color: #94A3B8;">
