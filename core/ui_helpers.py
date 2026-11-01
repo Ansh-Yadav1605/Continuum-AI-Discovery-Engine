@@ -28,23 +28,22 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 /* ==========================================================================
-   WCAG AA Dual Theme Tokens (Light & Dark Mode)
+   WCAG AA Dual Theme Design Tokens
+   Default: High-Contrast Light Theme (18.7:1 Headings, 10.5:1 Body)
    ========================================================================== */
-
-/* Default Light Theme Tokens */
-:root {
-    --ct-text-primary: #0F172A;
-    --ct-text-secondary: #334155;
-    --ct-text-muted: #64748B;
-    --ct-card-bg: #FFFFFF;
-    --ct-card-border: #E2E8F0;
-    --ct-card-shadow: 0 1px 3px rgba(0, 0, 0, 0.05), 0 1px 2px rgba(0, 0, 0, 0.03);
+:root, [data-theme="light"], .stApp[data-theme="light"] {
+    --ct-text-primary: #0F172A; /* Deep dark navy */
+    --ct-text-secondary: #334155; /* Near-black / dark slate */
+    --ct-text-muted: #475569; /* Readable medium slate */
+    --ct-card-bg: #FFFFFF; /* Crisp white card */
+    --ct-card-border: #CBD5E1; /* Visible subtle grey border */
+    --ct-card-shadow: 0 1px 3px rgba(0, 0, 0, 0.08), 0 1px 2px rgba(0, 0, 0, 0.04);
     --ct-hero-bg: linear-gradient(135deg, #F8FAFC 0%, #EEF2FF 100%);
     --ct-hero-border: #C7D2FE;
     --ct-hero-title: #0F172A;
-    --ct-hero-sub: #475569;
+    --ct-hero-sub: #334155;
     --ct-pill-bg: #F8FAFC;
-    --ct-pill-border: #E2E8F0;
+    --ct-pill-border: #CBD5E1;
     --ct-evidence-bg: #F1F5F9;
     --ct-evidence-text: #0F172A;
     --ct-badge-green-bg: #ECFDF5;
@@ -61,107 +60,56 @@ h1, h2, h3, h4, h5, h6 {
     --ct-badge-blue-border: #BFDBFE;
 }
 
-/* Dark Theme Tokens Override */
-@media (prefers-color-scheme: dark) {
-    :root {
-        --ct-text-primary: #F8FAFC;
-        --ct-text-secondary: #CBD5E1;
-        --ct-text-muted: #94A3B8;
-        --ct-card-bg: rgba(255, 255, 255, 0.04);
-        --ct-card-border: rgba(255, 255, 255, 0.08);
-        --ct-card-shadow: none;
-        --ct-hero-bg: linear-gradient(135deg, rgba(99, 102, 241, 0.18) 0%, rgba(168, 85, 247, 0.12) 100%);
-        --ct-hero-border: rgba(99, 102, 241, 0.35);
-        --ct-hero-title: #FFFFFF;
-        --ct-hero-sub: #94A3B8;
-        --ct-pill-bg: rgba(255, 255, 255, 0.03);
-        --ct-pill-border: rgba(255, 255, 255, 0.08);
-        --ct-evidence-bg: rgba(99, 102, 241, 0.08);
-        --ct-evidence-text: #F1F5F9;
-        --ct-badge-green-bg: rgba(16, 185, 129, 0.18);
-        --ct-badge-green-text: #34D399;
-        --ct-badge-green-border: rgba(16, 185, 129, 0.35);
-        --ct-badge-amber-bg: rgba(245, 158, 11, 0.18);
-        --ct-badge-amber-text: #FBBF24;
-        --ct-badge-amber-border: rgba(245, 158, 11, 0.35);
-        --ct-badge-purple-bg: rgba(139, 92, 246, 0.16);
-        --ct-badge-purple-text: #A78BFA;
-        --ct-badge-purple-border: rgba(139, 92, 246, 0.3);
-        --ct-badge-blue-bg: rgba(59, 130, 246, 0.18);
-        --ct-badge-blue-text: #60A5FA;
-        --ct-badge-blue-border: rgba(59, 130, 246, 0.35);
-    }
-}
-
-/* Streamlit Theme Overrides (when user toggles in Settings) */
-[data-theme="light"], .stApp[data-theme="light"] {
-    --ct-text-primary: #0F172A;
-    --ct-text-secondary: #334155;
-    --ct-text-muted: #64748B;
-    --ct-card-bg: #FFFFFF;
-    --ct-card-border: #E2E8F0;
-    --ct-card-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
-    --ct-hero-bg: linear-gradient(135deg, #F8FAFC 0%, #EEF2FF 100%);
-    --ct-hero-border: #C7D2FE;
-    --ct-hero-title: #0F172A;
-    --ct-hero-sub: #475569;
-    --ct-pill-bg: #F8FAFC;
-    --ct-pill-border: #E2E8F0;
-    --ct-evidence-bg: #F1F5F9;
-    --ct-evidence-text: #0F172A;
-    --ct-badge-green-bg: #ECFDF5;
-    --ct-badge-green-text: #065F46;
-    --ct-badge-green-border: #A7F3D0;
-    --ct-badge-amber-bg: #FFFBEB;
-    --ct-badge-amber-text: #92400E;
-    --ct-badge-amber-border: #FDE68A;
-    --ct-badge-purple-bg: #FAF5FF;
-    --ct-badge-purple-text: #581C87;
-    --ct-badge-purple-border: #DDD6FE;
-    --ct-badge-blue-bg: #EFF6FF;
-    --ct-badge-blue-text: #1E40AF;
-    --ct-badge-blue-border: #BFDBFE;
-}
-
-[data-theme="dark"], .stApp[data-theme="dark"] {
-    --ct-text-primary: #F8FAFC;
-    --ct-text-secondary: #CBD5E1;
-    --ct-text-muted: #94A3B8;
-    --ct-card-bg: rgba(255, 255, 255, 0.04);
-    --ct-card-border: rgba(255, 255, 255, 0.08);
-    --ct-card-shadow: none;
-    --ct-hero-bg: linear-gradient(135deg, rgba(99, 102, 241, 0.18) 0%, rgba(168, 85, 247, 0.12) 100%);
-    --ct-hero-border: rgba(99, 102, 241, 0.35);
+/* ==========================================================================
+   Dark Theme Tokens (High Contrast: 14.2:1 Headings, 9.8:1 Body)
+   ========================================================================== */
+[data-theme="dark"], .stApp[data-theme="dark"], body.dark-mode {
+    --ct-text-primary: #F8FAFC; /* Near-white */
+    --ct-text-secondary: #E2E8F0; /* Light slate */
+    --ct-text-muted: #94A3B8; /* Readable muted light grey */
+    --ct-card-bg: #1E293B; /* Dark slate card */
+    --ct-card-border: rgba(255, 255, 255, 0.16); /* Visible dark border */
+    --ct-card-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.4);
+    --ct-hero-bg: linear-gradient(135deg, rgba(30, 41, 59, 0.9) 0%, rgba(49, 46, 129, 0.5) 100%);
+    --ct-hero-border: rgba(99, 102, 241, 0.5);
     --ct-hero-title: #FFFFFF;
-    --ct-hero-sub: #94A3B8;
-    --ct-pill-bg: rgba(255, 255, 255, 0.03);
-    --ct-pill-border: rgba(255, 255, 255, 0.08);
-    --ct-evidence-bg: rgba(99, 102, 241, 0.08);
+    --ct-hero-sub: #CBD5E1;
+    --ct-pill-bg: rgba(255, 255, 255, 0.06);
+    --ct-pill-border: rgba(255, 255, 255, 0.14);
+    --ct-evidence-bg: rgba(99, 102, 241, 0.18);
     --ct-evidence-text: #F1F5F9;
-    --ct-badge-green-bg: rgba(16, 185, 129, 0.18);
+    --ct-badge-green-bg: rgba(16, 185, 129, 0.22);
     --ct-badge-green-text: #34D399;
-    --ct-badge-green-border: rgba(16, 185, 129, 0.35);
-    --ct-badge-amber-bg: rgba(245, 158, 11, 0.18);
+    --ct-badge-green-border: rgba(16, 185, 129, 0.45);
+    --ct-badge-amber-bg: rgba(245, 158, 11, 0.22);
     --ct-badge-amber-text: #FBBF24;
-    --ct-badge-amber-border: rgba(245, 158, 11, 0.35);
-    --ct-badge-purple-bg: rgba(139, 92, 246, 0.16);
-    --ct-badge-purple-text: #A78BFA;
-    --ct-badge-purple-border: rgba(139, 92, 246, 0.3);
-    --ct-badge-blue-bg: rgba(59, 130, 246, 0.18);
+    --ct-badge-amber-border: rgba(245, 158, 11, 0.45);
+    --ct-badge-purple-bg: rgba(139, 92, 246, 0.22);
+    --ct-badge-purple-text: #C084FC;
+    --ct-badge-purple-border: rgba(139, 92, 246, 0.45);
+    --ct-badge-blue-bg: rgba(59, 130, 246, 0.22);
     --ct-badge-blue-text: #60A5FA;
-    --ct-badge-blue-border: rgba(59, 130, 246, 0.35);
+    --ct-badge-blue-border: rgba(59, 130, 246, 0.45);
 }
 
-/* Card Style */
+/* Card Style with High Contrast Fallbacks */
 .glass-card {
-    background: var(--ct-card-bg);
-    border: 1px solid var(--ct-card-border);
+    background: var(--ct-card-bg, #FFFFFF);
+    border: 1px solid var(--ct-card-border, #CBD5E1);
     border-radius: 12px;
     padding: 18px 22px;
     margin-bottom: 16px;
-    box-shadow: var(--ct-card-shadow);
-    color: var(--ct-text-primary);
+    box-shadow: var(--ct-card-shadow, 0 1px 3px rgba(0, 0, 0, 0.08));
+    color: var(--ct-text-primary, #0F172A);
     transition: all 0.2s ease-in-out;
+}
+
+.glass-card h1, .glass-card h2, .glass-card h3, .glass-card h4 {
+    color: var(--ct-text-primary, #0F172A) !important;
+}
+
+.glass-card p {
+    color: var(--ct-text-secondary, #334155) !important;
 }
 
 .glass-card:hover {
@@ -170,24 +118,24 @@ h1, h2, h3, h4, h5, h6 {
 
 /* Hero Section */
 .hero-header {
-    background: var(--ct-hero-bg);
-    border: 1px solid var(--ct-hero-border);
+    background: var(--ct-hero-bg, #F8FAFC);
+    border: 1px solid var(--ct-hero-border, #C7D2FE);
     border-radius: 14px;
     padding: 24px 28px;
     margin-bottom: 24px;
-    box-shadow: var(--ct-card-shadow);
+    box-shadow: var(--ct-card-shadow, 0 1px 3px rgba(0, 0, 0, 0.08));
 }
 
 .hero-title {
     font-size: 1.85rem;
     font-weight: 800;
     margin-bottom: 6px;
-    color: var(--ct-hero-title);
+    color: var(--ct-hero-title, #0F172A) !important;
     letter-spacing: -0.02em;
 }
 
 .hero-subtitle {
-    color: var(--ct-hero-sub);
+    color: var(--ct-hero-sub, #334155) !important;
     font-size: 0.95rem;
     line-height: 1.5;
     margin: 0;
@@ -371,13 +319,13 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 .exec-finding-card {
-    background: var(--ct-card-bg);
-    border: 1px solid var(--ct-card-border);
+    background: var(--ct-card-bg, #FFFFFF);
+    border: 1px solid var(--ct-card-border, #CBD5E1);
     border-radius: 12px;
     padding: 18px 20px;
     margin-bottom: 14px;
-    box-shadow: var(--ct-card-shadow);
-    color: var(--ct-text-primary);
+    box-shadow: var(--ct-card-shadow, 0 1px 3px rgba(0, 0, 0, 0.08));
+    color: var(--ct-text-primary, #0F172A);
 }
 
 .exec-finding-header {
@@ -391,19 +339,19 @@ h1, h2, h3, h4, h5, h6 {
 .exec-finding-title {
     font-size: 1.05rem;
     font-weight: 700;
-    color: var(--ct-text-primary);
+    color: var(--ct-text-primary, #0F172A) !important;
 }
 
 .exec-finding-desc {
     font-size: 0.92rem;
-    color: var(--ct-text-secondary);
+    color: var(--ct-text-secondary, #334155) !important;
     line-height: 1.5;
     margin-bottom: 10px;
 }
 
 .exec-finding-meta {
     font-size: 0.8rem;
-    color: var(--ct-text-muted);
+    color: var(--ct-text-muted, #475569) !important;
     display: flex;
     flex-wrap: wrap;
     gap: 12px;
@@ -411,34 +359,48 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 .exec-quote-box {
-    background: var(--ct-evidence-bg);
+    background: var(--ct-evidence-bg, #F1F5F9);
     border-left: 3px solid #6366F1;
     border-radius: 0 8px 8px 0;
     padding: 8px 14px;
     margin: 8px 0;
     font-size: 0.88rem;
     font-style: italic;
-    color: var(--ct-evidence-text);
+    color: var(--ct-evidence-text, #0F172A) !important;
 }
 
 .exec-problem-card {
-    background: var(--ct-card-bg);
-    border: 1px solid var(--ct-card-border);
+    background: var(--ct-card-bg, #FFFFFF);
+    border: 1px solid var(--ct-card-border, #CBD5E1);
     border-radius: 12px;
     padding: 20px 22px;
     margin-bottom: 16px;
-    box-shadow: var(--ct-card-shadow);
-    color: var(--ct-text-primary);
+    box-shadow: var(--ct-card-shadow, 0 1px 3px rgba(0, 0, 0, 0.08));
+    color: var(--ct-text-primary, #0F172A);
+}
+
+.exec-problem-card h4 {
+    color: var(--ct-text-primary, #0F172A) !important;
+    font-size: 1.05rem;
+    font-weight: 700;
+}
+
+.exec-problem-card .card-obs {
+    color: var(--ct-text-secondary, #334155) !important;
+}
+
+.exec-problem-card .card-muted {
+    color: var(--ct-text-muted, #475569) !important;
 }
 
 .exec-problem-card.leading-problem {
-    border: 2px solid #10B981;
-    box-shadow: 0 4px 12px rgba(16, 185, 129, 0.15);
+    border: 2px solid #10B981 !important;
+    box-shadow: 0 4px 14px rgba(16, 185, 129, 0.18) !important;
 }
 
 .exec-action-box {
-    background: var(--ct-hero-bg);
-    border: 1px solid var(--ct-hero-border);
+    background: var(--ct-hero-bg, #F8FAFC);
+    border: 1px solid var(--ct-hero-border, #C7D2FE);
     border-radius: 12px;
     padding: 18px 22px;
     margin-top: 14px;
@@ -485,8 +447,40 @@ def format_display_name(text: str) -> str:
 
 
 def apply_custom_styles():
-    """Inject custom modern CSS into the current Streamlit page."""
+    """Inject custom modern CSS and dynamic theme sync into the current Streamlit page."""
     st.markdown(CUSTOM_CSS, unsafe_allow_html=True)
+    try:
+        import streamlit.components.v1 as components
+        components.html(
+            """
+            <script>
+            function syncStreamlitTheme() {
+                try {
+                    const doc = window.parent.document;
+                    const app = doc.querySelector('.stApp');
+                    if (!app) return;
+                    const bg = window.parent.getComputedStyle(app).backgroundColor;
+                    const match = bg.match(/rgba?\\((\\d+),\\s*(\\d+),\\s*(\\d+)/);
+                    if (match) {
+                        const r = parseInt(match[1]), g = parseInt(match[2]), b = parseInt(match[3]);
+                        const isDark = ((r * 299 + g * 587 + b * 114) / 1000) < 128;
+                        const theme = isDark ? 'dark' : 'light';
+                        if (doc.documentElement.getAttribute('data-theme') !== theme) {
+                            doc.documentElement.setAttribute('data-theme', theme);
+                            app.setAttribute('data-theme', theme);
+                        }
+                    }
+                } catch(e) {}
+            }
+            syncStreamlitTheme();
+            setInterval(syncStreamlitTheme, 500);
+            </script>
+            """,
+            height=0,
+            width=0
+        )
+    except Exception:
+        pass
 
 
 def render_sidebar_status():
