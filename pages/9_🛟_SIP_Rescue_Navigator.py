@@ -1,4 +1,4 @@
-"""
+﻿"""
 pages/9_🛟_SIP_Rescue_Navigator.py — Interactive SIP Rescue Navigator MVP.
 
 Part of Continuum AI — SIP Continuation Discovery Engine.
@@ -12,7 +12,7 @@ an appropriate next step more successfully than a generic pause/skip interface."
 
 import streamlit as st
 from datetime import date, timedelta
-from core.database import init_db
+# Database is not required for standalone SIP Rescue
 from core.ui_helpers import apply_custom_styles, render_sidebar_status
 from core.sip_navigator_rules import (
     evaluate_sip_guidance,
@@ -30,13 +30,13 @@ from core.sip_navigator_rules import (
 
 # 1. Page Configuration
 st.set_page_config(
-    page_title="SIP Rescue Navigator | MVP",
+    page_title="SIP Rescue Navigator — Planned Skip, Missed Payment & Flexible Contribution",
     page_icon="🛟",
     layout="wide",
     initial_sidebar_state="expanded"
 )
 
-init_db()
+# init_db() omitted in standalone mode
 apply_custom_styles()
 render_sidebar_status()
 
@@ -69,13 +69,13 @@ PRESETS = {
         "situation": "My next SIP debit is approaching, and I may not have enough money.",
         "platform": "Groww",
         "setup": "Platform-managed SIP",
-        "timing": "Within 1–2 days"
+        "timing": "Within 1ΓÇô2 days"
     },
     "2. Groww — Temporary Break with Buffer (T-4 Days)": {
         "situation": "I need a temporary break from my SIP.",
         "platform": "Groww",
         "setup": "Platform-managed SIP",
-        "timing": "Within 3–5 days"
+        "timing": "Within 3ΓÇô5 days"
     },
     "3. Zerodha Coin — Payment Failed (Diagnostics)": {
         "situation": "My SIP payment failed.",
@@ -99,7 +99,7 @@ PRESETS = {
         "situation": "I need a temporary break from my SIP.",
         "platform": "Groww",
         "setup": "AMC-registered SIP",
-        "timing": "Within 3–5 days"
+        "timing": "Within 3ΓÇô5 days"
     },
     "7. Unknown Platform / Date — General Fallback Guidance": {
         "situation": "I'm not sure what my options are.",
@@ -134,6 +134,36 @@ st.markdown(
     unsafe_allow_html=True
 )
 
+# Direct Link to Live Web Application (Search Fix & Ask SIP Rescue AI)
+col_nav1, col_nav2 = st.columns([1, 1])
+with col_nav1:
+    st.link_button("🌐 Launch Full Interactive Web App (Live)", "https://ansh-yadav1605.github.io/SIP-Rescue-Navigator/", type="primary", use_container_width=True)
+with col_nav2:
+    st.link_button("💻 View GitHub Repository", "https://github.com/Ansh-Yadav1605/SIP-Rescue-Navigator", type="secondary", use_container_width=True)
+
+
+# 4. Interactive Experience Selector
+view_mode = st.radio(
+    "Choose View:",
+    ["🌐 Interactive Web App (Live MVP with Search & AI Assistant)", "🧭 Step-by-Step Guided Wizard (Streamlit Evaluator)"],
+    horizontal=True,
+    label_visibility="collapsed"
+)
+
+if view_mode.startswith("🌐"):
+    st.markdown('''
+        <div style="background: rgba(16, 185, 129, 0.08); border: 1px solid rgba(16, 185, 129, 0.25); border-radius: 10px; padding: 12px 18px; margin-bottom: 14px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px;">
+            <div>
+                <strong style="color: #34D399; font-size: 0.95rem;">⚡ Full Interactive Application Embedded Below</strong>
+                <div style="color: #94A3B8; font-size: 0.8rem; margin-top: 2px;">Includes unified global search dropdown, independent My SIPs search, and Ask SIP Rescue floating assistant.</div>
+            </div>
+            <a href="https://ansh-yadav1605.github.io/SIP-Rescue-Navigator/" target="_blank" style="background: #10B981; color: #0F172A; font-weight: 700; font-size: 0.82rem; padding: 6px 14px; border-radius: 6px; text-decoration: none;">Open in New Tab ↗</a>
+        </div>
+    ''', unsafe_allow_html=True)
+    import streamlit.components.v1 as components
+    components.iframe("https://ansh-yadav1605.github.io/SIP-Rescue-Navigator/", height=860, scrolling=True)
+    st.stop()
+
 # 4. Assessor Quick Preset Loader
 with st.expander("⚡ Assessor & Evaluator Quick Test Presets (Load 1-Click Scenarios)", expanded=False):
     st.caption("Select a pre-configured investor scenario to immediately inspect deterministic rule evaluation:")
@@ -166,7 +196,7 @@ for idx, (label, s_num) in enumerate(step_labels):
         if st.session_state.nav_step == s_num:
             st.markdown(f"<div style='border-bottom: 3px solid #10B981; color: #FFFFFF; font-weight: 700; font-size: 0.84rem; padding-bottom: 6px; text-align: center;'>{label}</div>", unsafe_allow_html=True)
         elif st.session_state.nav_step > s_num:
-            st.markdown(f"<div style='border-bottom: 3px solid rgba(16, 185, 129, 0.4); color: #34D399; font-size: 0.84rem; padding-bottom: 6px; text-align: center;'>✓ {label.split(' ')[1]}</div>", unsafe_allow_html=True)
+            st.markdown(f"<div style='border-bottom: 3px solid rgba(16, 185, 129, 0.4); color: #34D399; font-size: 0.84rem; padding-bottom: 6px; text-align: center;'>Γ£ô {label.split(' ')[1]}</div>", unsafe_allow_html=True)
         else:
             st.markdown(f"<div style='border-bottom: 3px solid rgba(255,255,255,0.1); color: #64748B; font-size: 0.84rem; padding-bottom: 6px; text-align: center;'>{label}</div>", unsafe_allow_html=True)
 
@@ -188,7 +218,7 @@ if st.session_state.nav_step == 1:
             </p>
             <div style="background: rgba(59, 130, 246, 0.1); border-left: 4px solid #3B82F6; padding: 14px 18px; border-radius: 8px; margin-bottom: 28px;">
                 <div style="font-size: 0.88rem; color: #93C5FD; font-weight: 600; margin-bottom: 4px;">
-                    🛡️ Informational Discovery Prototype Disclosure
+                    ≡ƒ¢í∩╕Å Informational Discovery Prototype Disclosure
                 </div>
                 <div style="font-size: 0.84rem; color: #CBD5E1; line-height: 1.5;">
                     This tool is an educational research prototype. It does not connect to your live investment account,
@@ -204,7 +234,7 @@ if st.session_state.nav_step == 1:
     )
     c1, c2, c3 = st.columns([1, 2, 1])
     with c2:
-        if st.button("🚀 Find my next step", type="primary", use_container_width=True, key="btn_start_wizard"):
+        if st.button("≡ƒÜÇ Find my next step", type="primary", use_container_width=True, key="btn_start_wizard"):
             st.session_state.nav_step = 2
             st.rerun()
 
@@ -237,11 +267,11 @@ elif st.session_state.nav_step == 2:
         st.markdown("<br/>", unsafe_allow_html=True)
         col_back, col_next = st.columns([1, 1])
         with col_back:
-            if st.button("← Back to Welcome", use_container_width=True):
+            if st.button("ΓåÉ Back to Welcome", use_container_width=True):
                 st.session_state.nav_step = 1
                 st.rerun()
         with col_next:
-            if st.button("Continue to Timing & Setup →", type="primary", use_container_width=True):
+            if st.button("Continue to Timing & Setup ΓåÆ", type="primary", use_container_width=True):
                 st.session_state.nav_step = 3
                 st.rerun()
         st.markdown("</div>", unsafe_allow_html=True)
@@ -267,7 +297,7 @@ elif st.session_state.nav_step == 3:
         
         q1_col, q2_col = st.columns(2)
         with q1_col:
-            st.markdown("##### 📱 Investment Platform")
+            st.markdown("##### ≡ƒô▒ Investment Platform")
             platform_choice = st.selectbox(
                 "Platform:",
                 PLATFORM_OPTIONS,
@@ -278,7 +308,7 @@ elif st.session_state.nav_step == 3:
             st.caption("E.g. Groww, Zerodha Coin, or another app.")
 
         with q2_col:
-            st.markdown("##### ⚙️ SIP Setup Type")
+            st.markdown("##### ΓÜÖ∩╕Å SIP Setup Type")
             setup_choice = st.selectbox(
                 "Setup Type:",
                 SIP_SETUP_OPTIONS,
@@ -289,7 +319,7 @@ elif st.session_state.nav_step == 3:
             st.caption("Platform-managed (AutoPay/e-Mandate) vs Direct AMC mandate.")
 
         st.markdown("<br/>", unsafe_allow_html=True)
-        st.markdown("##### ⏳ Time Remaining Until Next Scheduled Debit")
+        st.markdown("##### ΓÅ│ Time Remaining Until Next Scheduled Debit")
         timing_choice = st.selectbox(
             "Approximate time remaining:",
             TIMING_OPTIONS,
@@ -297,13 +327,13 @@ elif st.session_state.nav_step == 3:
             label_visibility="collapsed"
         )
         st.session_state.selected_timing = timing_choice
-        st.caption("Platforms enforce strict cutoffs (typically 2 business days for apps, 10–21 days for direct AMCs).")
+        st.caption("Platforms enforce strict cutoffs (typically 2 business days for apps, 10ΓÇô21 days for direct AMCs).")
 
         st.markdown(
             """
             <div style="background: rgba(255,255,255,0.03); border: 1px dashed rgba(255,255,255,0.15); border-radius: 8px; padding: 12px 16px; margin: 20px 0;">
                 <span style="font-size: 0.82rem; color: #94A3B8;">
-                    🔒 <strong>Privacy Check:</strong> We do NOT ask for folio numbers, bank account numbers, PAN, or account balances. These selections are purely prototype scenarios.
+                    ≡ƒöÆ <strong>Privacy Check:</strong> We do NOT ask for folio numbers, bank account numbers, PAN, or account balances. These selections are purely prototype scenarios.
                 </span>
             </div>
             """,
@@ -312,11 +342,11 @@ elif st.session_state.nav_step == 3:
 
         col_back, col_next = st.columns([1, 1])
         with col_back:
-            if st.button("← Back to Situation", use_container_width=True):
+            if st.button("ΓåÉ Back to Situation", use_container_width=True):
                 st.session_state.nav_step = 2
                 st.rerun()
         with col_next:
-            if st.button("Generate My Next-Step Guidance →", type="primary", use_container_width=True):
+            if st.button("Generate My Next-Step Guidance ΓåÆ", type="primary", use_container_width=True):
                 st.session_state.nav_step = 4
                 st.rerun()
         st.markdown("</div>", unsafe_allow_html=True)
@@ -335,7 +365,7 @@ elif st.session_state.nav_step == 4:
     st.markdown(
         """
         <div style="max-width: 860px; margin: 0 auto 16px auto; display: flex; justify-content: space-between; align-items: center;">
-            <h2 style="color: #FFFFFF; font-size: 1.45rem; margin: 0;">🧭 Your Next-Step Guidance</h2>
+            <h2 style="color: #FFFFFF; font-size: 1.45rem; margin: 0;">≡ƒº¡ Your Next-Step Guidance</h2>
             <span style="font-size: 0.82rem; color: #94A3B8;">Context-Aware Rule Synthesis</span>
         </div>
         """,
@@ -420,7 +450,7 @@ elif st.session_state.nav_step == 4:
                     <div>
                         <span style="font-size: 0.78rem; color: #64748B;">Official Source:</span>
                         <a href="{card.primary_action_url or '#'}" target="_blank" style="color: #38BDF8; font-size: 0.8rem; text-decoration: underline; margin-left: 4px;">
-                            {card.applicable_rule.official_source_name} ↗
+                            {card.applicable_rule.official_source_name} Γåù
                         </a>
                     </div>
                     <div style="display: flex; gap: 8px; align-items: center;">
@@ -436,27 +466,27 @@ elif st.session_state.nav_step == 4:
         )
 
         # 7. Next Actions Bar
-        st.markdown("##### 🚀 What would you like to do next?")
+        st.markdown("##### ≡ƒÜÇ What would you like to do next?")
         act_col1, act_col2, act_col3 = st.columns([1, 1, 1])
 
         with act_col1:
             if card.primary_action_url:
-                st.link_button(f"🔗 Open {card.applicable_rule.platform} Help", card.primary_action_url, use_container_width=True)
+                st.link_button(f"≡ƒöù Open {card.applicable_rule.platform} Help", card.primary_action_url, use_container_width=True)
             else:
-                st.button("🔗 Platform Help (Unavailable)", disabled=True, use_container_width=True)
+                st.button("≡ƒöù Platform Help (Unavailable)", disabled=True, use_container_width=True)
 
         with act_col2:
-            if st.button("📅 Create Comeback Reminder", type="primary", use_container_width=True):
+            if st.button("≡ƒôà Create Comeback Reminder", type="primary", use_container_width=True):
                 st.session_state.nav_step = 5
                 st.rerun()
 
         with act_col3:
-            if st.button("🔄 Change My Answers", use_container_width=True):
+            if st.button("≡ƒöä Change My Answers", use_container_width=True):
                 st.session_state.nav_step = 2
                 st.rerun()
 
         st.markdown("<br/>", unsafe_allow_html=True)
-        with st.expander("🔍 View Complete Raw Rule Specification", expanded=False):
+        with st.expander("≡ƒöì View Complete Raw Rule Specification", expanded=False):
             st.json({
                 "rule_id": card.applicable_rule.rule_id,
                 "platform": card.applicable_rule.platform,
@@ -480,7 +510,7 @@ elif st.session_state.nav_step == 5:
     st.markdown(
         """
         <div style="max-width: 820px; margin: 0 auto;">
-            <h2 style="color: #FFFFFF; font-size: 1.45rem; margin-bottom: 6px;">📅 SIP Comeback Plan</h2>
+            <h2 style="color: #FFFFFF; font-size: 1.45rem; margin-bottom: 6px;">≡ƒôà SIP Comeback Plan</h2>
             <p style="color: #94A3B8; font-size: 0.92rem; margin-bottom: 20px;">
                 Temporary breaks are healthy when cash is tight. Set an optional, zero-pressure reminder to review your financial situation later.
             </p>
@@ -521,7 +551,7 @@ elif st.session_state.nav_step == 5:
             [
                 "Review monthly budget and decide whether to resume SIP",
                 "Check if salary credit date matches my SIP debit schedule",
-                "Consider stepping down to ₹100 or ₹500 scheme minimum",
+                "Consider stepping down to Γé╣100 or Γé╣500 scheme minimum",
                 "Decide whether to extend pause or cancel mandate"
             ]
         )
@@ -535,7 +565,7 @@ elif st.session_state.nav_step == 5:
             """
             <div style="background: rgba(245, 158, 11, 0.08); border-left: 4px solid #F59E0B; padding: 12px 16px; border-radius: 6px; margin: 16px 0;">
                 <div style="font-size: 0.82rem; color: #FCD34D; font-weight: 600;">
-                    ℹ️ Prototype Reminder Simulation Notice
+                    Γä╣∩╕Å Prototype Reminder Simulation Notice
                 </div>
                 <div style="font-size: 0.8rem; color: #CBD5E1;">
                     In this prototype, reminders are stored in your local session. To add this reminder to your actual device calendar,
@@ -546,10 +576,10 @@ elif st.session_state.nav_step == 5:
             unsafe_allow_html=True
         )
 
-        if st.button("💾 Set My Comeback Reminder", type="primary", use_container_width=True):
+        if st.button("≡ƒÆ╛ Set My Comeback Reminder", type="primary", use_container_width=True):
             reminder = create_comeback_plan(offset_days, focus_action, custom_notes)
             st.session_state.comeback_created = reminder
-            st.success(f"✅ Reminder scheduled for {reminder.target_date} ({reminder.days_from_now} days from now)!")
+            st.success(f"Γ£à Reminder scheduled for {reminder.target_date} ({reminder.days_from_now} days from now)!")
 
         if st.session_state.comeback_created:
             rem = st.session_state.comeback_created
@@ -559,7 +589,7 @@ elif st.session_state.nav_step == 5:
                 f"""
                 <div class="glass-card" style="margin-top: 16px; border-color: rgba(16, 185, 129, 0.3);">
                     <div style="color: #34D399; font-weight: 700; font-size: 0.95rem; margin-bottom: 6px;">
-                        📌 Reminder Active: Review on {rem.target_date}
+                        ≡ƒôî Reminder Active: Review on {rem.target_date}
                     </div>
                     <div style="color: #FFFFFF; font-size: 0.88rem; font-weight: 600;">{rem.focus_action}</div>
                     <p style="color: #94A3B8; font-size: 0.82rem; margin-top: 4px;">{rem.reflection_prompt}</p>
@@ -571,26 +601,26 @@ elif st.session_state.nav_step == 5:
             dcol1, dcol2 = st.columns(2)
             with dcol1:
                 st.download_button(
-                    label="📥 Download Calendar Event (.ics)",
+                    label="≡ƒôÑ Download Calendar Event (.ics)",
                     data=ics_data,
                     file_name=f"sip_comeback_{rem.target_date}.ics",
                     mime="text/calendar",
                     use_container_width=True
                 )
             with dcol2:
-                if st.button("Continue to Feedback →", type="primary", use_container_width=True):
+                if st.button("Continue to Feedback ΓåÆ", type="primary", use_container_width=True):
                     st.session_state.nav_step = 6
                     st.rerun()
 
         st.markdown("<br/>", unsafe_allow_html=True)
         col_back, col_skip = st.columns([1, 1])
         with col_back:
-            if st.button("← Back to Guidance", use_container_width=True):
+            if st.button("ΓåÉ Back to Guidance", use_container_width=True):
                 st.session_state.nav_step = 4
                 st.rerun()
         with col_skip:
             if not st.session_state.comeback_created:
-                if st.button("Skip Reminder & Give Feedback →", use_container_width=True):
+                if st.button("Skip Reminder & Give Feedback ΓåÆ", use_container_width=True):
                     st.session_state.nav_step = 6
                     st.rerun()
 
@@ -603,7 +633,7 @@ elif st.session_state.nav_step == 6:
     st.markdown(
         """
         <div style="max-width: 860px; margin: 0 auto;">
-            <h2 style="color: #FFFFFF; font-size: 1.45rem; margin-bottom: 6px;">🧪 Prototype Usability & Hypothesis Validation</h2>
+            <h2 style="color: #FFFFFF; font-size: 1.45rem; margin-bottom: 6px;">≡ƒº¬ Prototype Usability & Hypothesis Validation</h2>
             <p style="color: #94A3B8; font-size: 0.92rem; margin-bottom: 20px;">
                 Help us evaluate our core discovery hypothesis: Does context-aware guidance reduce uncertainty compared to a generic pause button?
             </p>
@@ -647,7 +677,7 @@ elif st.session_state.nav_step == 6:
                 st.markdown(
                     """
                     <div style="font-size: 0.78rem; color: #64748B; margin-top: 10px;">
-                        🔒 All responses are anonymous and stored locally for usability research. No personal or financial identifiers are recorded.
+                        ≡ƒöÆ All responses are anonymous and stored locally for usability research. No personal or financial identifiers are recorded.
                     </div>
                     """,
                     unsafe_allow_html=True
@@ -672,13 +702,13 @@ elif st.session_state.nav_step == 6:
                     st.rerun()
 
         else:
-            st.success("✅ Your feedback has been logged in the research dataset.")
+            st.success("Γ£à Your feedback has been logged in the research dataset.")
 
         # ---------------------------------------------------------------------------
         # Section 9: Live Prototype Usability Metrics Panel
         # ---------------------------------------------------------------------------
         st.markdown("---")
-        st.markdown("### 📊 Documented Usability Measurement Plan & Live Results")
+        st.markdown("### ≡ƒôè Documented Usability Measurement Plan & Live Results")
         st.caption("Heuristic usability metrics computed from recorded discovery testing sessions. (Not fabricated churn reduction metrics).")
 
         metrics = get_discovery_metrics()
@@ -718,7 +748,7 @@ elif st.session_state.nav_step == 6:
 
         st.markdown("<br/>", unsafe_allow_html=True)
 
-        with st.expander("📐 Measurement Plan: Metric Formulas, Numerators & Denominators", expanded=True):
+        with st.expander("≡ƒôÉ Measurement Plan: Metric Formulas, Numerators & Denominators", expanded=True):
             st.markdown(
                 """
                 | Metric | Formula (Numerator / Denominator) | Purpose in Testing | What It Proves vs Disproves |
@@ -732,19 +762,19 @@ elif st.session_state.nav_step == 6:
                 """
             )
             st.warning(
-                "⚠️ **Research Boundary Notice:** Real-world 90-day SIP resumption, missed-instalment recovery rates, "
+                "ΓÜá∩╕Å **Research Boundary Notice:** Real-world 90-day SIP resumption, missed-instalment recovery rates, "
                 "and churn reduction cannot be validated using an isolated prototype. Real validation requires integrating "
                 "with live broker telemetry, conducting controlled A/B experiments against a generic pause button, "
-                "and tracking longitudinal debit outcomes over 3–6 months."
+                "and tracking longitudinal debit outcomes over 3ΓÇô6 months."
             )
 
         st.markdown("<br/>", unsafe_allow_html=True)
         rcol1, rcol2 = st.columns([1, 1])
         with rcol1:
-            if st.button("🔄 Start New Guidance Session", type="primary", use_container_width=True):
+            if st.button("≡ƒöä Start New Guidance Session", type="primary", use_container_width=True):
                 reset_journey()
                 st.rerun()
         with rcol2:
-            st.page_link("pages/5_Problem_Statements.py", label="← Return to Problem Statements", icon="🎯", use_container_width=True)
+            st.page_link("pages/5_Problem_Statements.py", label="ΓåÉ Return to Problem Statements", icon="≡ƒÄ»", use_container_width=True)
 
         st.markdown("</div>", unsafe_allow_html=True)
